@@ -63,7 +63,12 @@ export default function Contact() {
       {/* Contact Header */}
       <section className="bg-blue-600 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl font-bold text-white mb-4">Contact Us</h1>
+          <div className="flex items-center justify-center mb-6">
+            <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mr-4">
+              <Phone className="h-8 w-8 text-white" />
+            </div>
+            <h1 className="text-5xl font-bold text-white">Contact Us</h1>
+          </div>
           <p className="text-xl text-blue-100 max-w-2xl mx-auto">
             Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
           </p>

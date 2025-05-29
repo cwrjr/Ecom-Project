@@ -27,7 +27,7 @@ const getProductImage = (imagePath: string, productName: string) => {
   if (productName === "Wireless Phone Charger") {
     return chargerImage;
   }
-  if (productName === "Investment Trends") {
+  if (productName === "Investment Trends" || productName === "Investment Card Collection") {
     return investmentImage;
   }
   if (productName === "Smart Home Assistant") {
@@ -60,7 +60,7 @@ export default function Shop() {
     queryKey: ["/api/categories"],
   });
 
-  const categoryTabs = ["All Products", "Featured", "New Arrivals", "Best Sellers", ...categories.map((cat: any) => cat.name)];
+  const categoryTabs = ["All Products", "Featured", "New Arrivals", "Best Sellers", ...(categories as any[]).map((cat: any) => cat.name)];
 
   const filteredAndSortedProducts = products
     .filter(product => {

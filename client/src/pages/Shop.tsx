@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { useCart } from "@/components/CartContext";
 import { useToast } from "@/hooks/use-toast";
 import type { Product } from "@shared/schema";
+import shopBannerImage from "@assets/images/pexels-n-voitkevich-6214476.jpg";
 
 export default function Shop() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -56,13 +57,24 @@ export default function Shop() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Shop Header */}
-      <section className="bg-blue-600 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl font-bold text-white mb-4">Shop</h1>
-          <p className="text-xl text-blue-100 max-w-2xl mx-auto">
-            Discover our collection of high-quality products designed with care and precision. 
-            From essentials to specialty items, we have something for everyone.
-          </p>
+      <section 
+        className="relative py-20 bg-cover bg-center"
+        style={{ backgroundImage: `url(${shopBannerImage})` }}
+      >
+        {/* Translucent overlay with backdrop blur */}
+        <div className="absolute inset-0 bg-white/70 backdrop-blur-sm"></div>
+        
+        {/* Content */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="bg-white/90 backdrop-blur-md rounded-3xl p-12 shadow-2xl border border-white/20">
+            <h1 className="text-6xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent mb-6">
+              Shop
+            </h1>
+            <p className="text-xl text-gray-700 max-w-2xl mx-auto leading-relaxed">
+              Discover our collection of high-quality products designed with care and precision. 
+              From essentials to specialty items, we have something for everyone.
+            </p>
+          </div>
         </div>
       </section>
 

@@ -114,7 +114,7 @@ export class MemStorage implements IStorage {
         price: 899.99,
         originalPrice: null,
         category: "Electronics",
-        image: "https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?w=500&h=500&fit=crop&auto=format",
+        image: "@assets/Firefly_Professional Camera Kit 664369.jpg",
         tags: ["photography", "professional", "kit"],
         featured: false,
         inStock: true,

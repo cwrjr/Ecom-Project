@@ -13,6 +13,7 @@ import headphonesImage from "@assets/A sleek black pair of premium wireless head
 import chargerImage from "@assets/magicstudio-art (1).jpg";
 import investmentImage from "@assets/pexels-alesiakozik-6772024.jpg";
 import smartHomeImage from "@assets/Firefly_realistic and clear glow smart speaker on a Highrise table with Seattle night skyline 787022.jpg";
+import cameraKitImage from "@assets/Firefly_Professional Camera Kit 664369.jpg";
 
 // Image resolver to map product images to actual imported assets
 const getProductImage = (imagePath: string, productName: string) => {
@@ -27,6 +28,9 @@ const getProductImage = (imagePath: string, productName: string) => {
   }
   if (productName === "Smart Home Assistant") {
     return smartHomeImage;
+  }
+  if (productName === "Professional Camera Kit") {
+    return cameraKitImage;
   }
   return imagePath; // fallback to original path
 };

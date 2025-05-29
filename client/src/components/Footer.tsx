@@ -1,5 +1,6 @@
 import { Link } from "wouter";
 import { Instagram, Linkedin, Mail, Phone, MapPin } from "lucide-react";
+import trellisLogo from "@assets/logi.webp";
 
 export default function Footer() {
   return (
@@ -79,7 +80,7 @@ export default function Footer() {
           <div className="flex flex-col items-center text-center space-y-4">
             <div className="flex items-center space-x-2">
               <img 
-                src="@assets/logi.webp" 
+                src={trellisLogo} 
                 alt="Trellis Logo" 
                 className="w-8 h-8 object-contain"
               />

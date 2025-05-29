@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Search, Filter, Star, ShoppingCart } from "lucide-react";
+import { Search, Filter, Star, ShoppingCart, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useCart } from "@/components/CartContext";
 import { useToast } from "@/hooks/use-toast";
 import CartTest from "@/components/CartTest";
@@ -46,6 +47,7 @@ const getProductImage = (imagePath: string, productName: string) => {
 export default function Shop() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All Products");
+  const [sortBy, setSortBy] = useState("name");
   const { addToCart } = useCart();
   const { toast } = useToast();
 
@@ -59,16 +61,28 @@ export default function Shop() {
 
   const categoryTabs = ["All Products", "Featured", "New Arrivals", "Best Sellers", ...categories.map((cat: any) => cat.name)];
 
-  const filteredProducts = products.filter(product => {
-    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         product.description.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesCategory = selectedCategory === "All Products" ||
-                           (selectedCategory === "Featured" && product.featured) ||
-                           product.category === selectedCategory;
-    
-    return matchesSearch && matchesCategory;
-  });
+  const filteredAndSortedProducts = products
+    .filter(product => {
+      const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           product.description.toLowerCase().includes(searchTerm.toLowerCase());
+      
+      const matchesCategory = selectedCategory === "All Products" ||
+                             (selectedCategory === "Featured" && product.featured) ||
+                             product.category === selectedCategory;
+      
+      return matchesSearch && matchesCategory;
+    })
+    .sort((a, b) => {
+      switch (sortBy) {
+        case "price-low":
+          return a.price - b.price;
+        case "price-high":
+          return b.price - a.price;
+        case "name":
+        default:
+          return a.name.localeCompare(b.name);
+      }
+    });
 
   const handleAddToCart = (product: Product) => {
     addToCart(product.id, 1);
@@ -148,9 +162,26 @@ export default function Shop() {
           </div>
         </div>
 
+        {/* Sort Dropdown */}
+        <div className="flex justify-between items-center mb-6">
+          <p className="text-gray-600">
+            Showing {filteredAndSortedProducts.length} product{filteredAndSortedProducts.length !== 1 ? 's' : ''}
+          </p>
+          <Select value={sortBy} onValueChange={setSortBy}>
+            <SelectTrigger className="w-48">
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="name">Name (A-Z)</SelectItem>
+              <SelectItem value="price-low">Price (Low to High)</SelectItem>
+              <SelectItem value="price-high">Price (High to Low)</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
         {/* Products Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredProducts.map((product) => (
+          {filteredAndSortedProducts.map((product) => (
             <div key={product.id} className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
               <div className="relative overflow-hidden">
                 {product.name === "Smart Home Assistant" ? (
@@ -220,12 +251,12 @@ export default function Shop() {
         </div>
 
         {/* No Results */}
-        {filteredProducts.length === 0 && (
+        {filteredAndSortedProducts.length === 0 && (
           <div className="text-center py-16">
             <div className="text-6xl mb-4">🔍</div>
             <h3 className="text-2xl font-bold text-gray-900 mb-2">No products found</h3>
             <p className="text-gray-600 mb-6">Try adjusting your search or filter criteria</p>
-            <Button onClick={() => { setSearchTerm(""); setSelectedCategory("All Products"); }}>
+            <Button onClick={() => { setSearchTerm(""); setSelectedCategory("All Products"); setSortBy("name"); }}>
               Clear Filters
             </Button>
           </div>
@@ -235,7 +266,7 @@ export default function Shop() {
         <CartTest />
 
         {/* Call to Action */}
-        {filteredProducts.length > 0 && (
+        {filteredAndSortedProducts.length > 0 && (
           <div className="mt-16 text-center bg-blue-50 rounded-2xl p-8">
             <h3 className="text-2xl font-bold text-blue-600 mb-4">Can't find what you're looking for?</h3>
             <p className="text-gray-600 mb-6">

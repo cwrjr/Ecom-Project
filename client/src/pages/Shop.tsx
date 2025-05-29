@@ -1,14 +1,20 @@
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { Search, Filter, Star, ShoppingCart, ChevronDown } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Search, Filter, Star, ShoppingCart, Heart, Eye, BarChart3, Grid, List } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useCart } from "@/components/CartContext";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
+import { apiRequest } from "@/lib/queryClient";
 import CartTest from "@/components/CartTest";
 import Footer from "@/components/Footer";
 import ProductRating from "@/components/ProductRating";
+import AdvancedSearch from "@/components/AdvancedSearch";
+import ProductComparison from "@/components/ProductComparison";
+import ProductQuickView from "@/components/ProductQuickView";
+import FavoritesButton from "@/components/FavoritesButton";
 import type { Product } from "@shared/schema";
 import shopBannerImage from "@assets/images/pexels-n-voitkevich-6214476.jpg";
 import headphonesImage from "@assets/A sleek black pair of premium wireless headphones displayed on a clean white background with soft sh.jpeg";
@@ -49,8 +55,20 @@ export default function Shop() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All Products");
   const [sortBy, setSortBy] = useState("name");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [filters, setFilters] = useState({
+    query: "",
+    priceRange: [0, 1000] as [number, number],
+    categories: [] as string[],
+    minRating: 0,
+    inStockOnly: false,
+    sortBy: "relevance",
+  });
+  
   const { addToCart } = useCart();
   const { toast } = useToast();
+  const { user, isAuthenticated } = useAuth();
+  const queryClient = useQueryClient();
 
   const { data: products = [], isLoading } = useQuery<Product[]>({
     queryKey: ["/api/products"],

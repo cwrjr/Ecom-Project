@@ -122,6 +122,11 @@ export default function Shop() {
                   src={product.image} 
                   alt={product.name}
                   className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                  onError={(e) => {
+                    console.log('Image failed to load:', product.image);
+                    e.currentTarget.src = 'https://via.placeholder.com/500x500/e2e8f0/64748b?text=' + encodeURIComponent(product.name);
+                  }}
+                  onLoad={() => console.log('Image loaded:', product.image)}
                 />
                 {product.originalPrice && (
                   <div className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">

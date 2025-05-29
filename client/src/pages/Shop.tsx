@@ -149,16 +149,29 @@ export default function Shop() {
           {filteredProducts.map((product) => (
             <div key={product.id} className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
               <div className="relative overflow-hidden">
-                <img 
-                  src={getProductImage(product.image, product.name)} 
-                  alt={product.name}
-                  className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
-                  onError={(e) => {
-                    console.log('Image failed to load:', product.image);
-                    e.currentTarget.src = 'https://via.placeholder.com/500x500/e2e8f0/64748b?text=' + encodeURIComponent(product.name);
-                  }}
-                  onLoad={() => console.log('Image loaded:', product.image)}
-                />
+                {product.name === "Smart Home Assistant" ? (
+                  <video
+                    src={getProductImage(product.image, product.name)}
+                    className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    onError={() => console.log('Video failed to load:', product.image)}
+                    onLoadedData={() => console.log('Video loaded:', product.image)}
+                  />
+                ) : (
+                  <img 
+                    src={getProductImage(product.image, product.name)} 
+                    alt={product.name}
+                    className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                    onError={(e) => {
+                      console.log('Image failed to load:', product.image);
+                      e.currentTarget.src = 'https://via.placeholder.com/500x500/e2e8f0/64748b?text=' + encodeURIComponent(product.name);
+                    }}
+                    onLoad={() => console.log('Image loaded:', product.image)}
+                  />
+                )}
                 {product.originalPrice && (
                   <div className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
                     SALE

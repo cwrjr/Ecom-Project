@@ -78,26 +78,75 @@ export default function Shop() {
     queryKey: ["/api/categories"],
   });
 
+  const { data: recentlyViewed = [] } = useQuery({
+    queryKey: ["/api/recently-viewed"],
+  });
+
+  // Track recently viewed products
+  const addToRecentlyViewedMutation = useMutation({
+    mutationFn: (productId: number) =>
+      apiRequest("POST", "/api/recently-viewed", { productId }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/recently-viewed"] });
+    },
+  });
+
+  const addToComparisonMutation = useMutation({
+    mutationFn: (productIds: number[]) =>
+      apiRequest("POST", "/api/comparison", { productIds }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/comparison"] });
+    },
+  });
+
   const categoryTabs = ["All Products", "Featured", "New Arrivals", "Best Sellers", ...(categories as any[]).map((cat: any) => cat.name)];
+
+  const handleFiltersChange = (newFilters: any) => {
+    setFilters(newFilters);
+  };
+
+  const handleProductView = (productId: number) => {
+    addToRecentlyViewedMutation.mutate(productId);
+  };
+
+  const addToComparison = (productId: number) => {
+    // Get current comparison and add product
+    addToComparisonMutation.mutate([productId]);
+    toast({
+      title: "Added to comparison",
+      description: "Product added to comparison. Click the comparison button to view.",
+    });
+  };
 
   const filteredAndSortedProducts = products
     .filter(product => {
-      const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           product.description.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesSearch = product.name.toLowerCase().includes(filters.query.toLowerCase()) ||
+                           product.description.toLowerCase().includes(filters.query.toLowerCase());
       
       const matchesCategory = selectedCategory === "All Products" ||
                              (selectedCategory === "Featured" && product.featured) ||
-                             product.category === selectedCategory;
+                             product.category === selectedCategory ||
+                             filters.categories.includes(product.category);
       
-      return matchesSearch && matchesCategory;
+      const matchesPrice = product.price >= filters.priceRange[0] && product.price <= filters.priceRange[1];
+      
+      const matchesStock = !filters.inStockOnly || product.inStock;
+      
+      return matchesSearch && matchesCategory && matchesPrice && matchesStock;
     })
     .sort((a, b) => {
-      switch (sortBy) {
+      switch (filters.sortBy) {
         case "price-low":
           return a.price - b.price;
         case "price-high":
           return b.price - a.price;
+        case "rating":
+          return 0; // Could implement rating sort
+        case "newest":
+          return new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime();
         case "name":
+          return a.name.localeCompare(b.name);
+        case "relevance":
         default:
           return a.name.localeCompare(b.name);
       }
@@ -144,6 +193,22 @@ export default function Shop() {
         </div>
       </section>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Recently Viewed Section */}
+        {recentlyViewed.length > 0 && (
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Recently Viewed</h2>
+            <div className="flex gap-4 overflow-x-auto pb-4">
+              {recentlyViewed.slice(0, 5).map((item: any) => (
+                <div key={item.id} className="flex-shrink-0 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
+                  <img src={getImagePath(item.product?.image)} alt={item.product?.name} className="w-full h-32 object-cover rounded mb-2" />
+                  <h3 className="text-sm font-medium text-gray-900 dark:text-white truncate">{item.product?.name}</h3>
+                  <p className="text-lg font-bold text-blue-600">${item.product?.price}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Search and Filter */}
         <div className="mb-8">
           <div className="flex flex-col md:flex-row gap-4 mb-6">

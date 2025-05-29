@@ -43,6 +43,7 @@ export function CartProvider({ children }: CartProviderProps) {
   // Fetch cart items
   const { data: cartItems = [], isLoading } = useQuery({
     queryKey: ["/api/cart", sessionId],
+    queryFn: () => fetch(`/api/cart/${sessionId}`, { credentials: "include" }).then(res => res.json()),
     enabled: !!sessionId,
   });
 

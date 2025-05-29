@@ -200,9 +200,14 @@ export default function Home() {
       {/* Call to Action */}
       <section className="py-20 bg-blue-600">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-bold text-white mb-6">
-            Ready to Experience Excellence?
-          </h2>
+          <div className="flex items-center justify-center mb-6">
+            <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mr-4">
+              <Star className="h-8 w-8 text-white" />
+            </div>
+            <h2 className="text-4xl font-bold text-white">
+              Ready to Experience Excellence?
+            </h2>
+          </div>
           <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
             Join thousands of satisfied customers who trust Trellis for their premium product needs.
           </p>

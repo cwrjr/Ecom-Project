@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/components/CartContext";
 import { useToast } from "@/hooks/use-toast";
+import CartTest from "@/components/CartTest";
 import Footer from "@/components/Footer";
 import type { Product } from "@shared/schema";
 import shopBannerImage from "@assets/images/pexels-n-voitkevich-6214476.jpg";
@@ -200,6 +201,9 @@ export default function Shop() {
             </Button>
           </div>
         )}
+
+        {/* Cart Badge Test */}
+        <CartTest />
 
         {/* Call to Action */}
         {filteredProducts.length > 0 && (

@@ -66,15 +66,13 @@ export default function Shop() {
         
         {/* Content */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="bg-white/90 backdrop-blur-md rounded-3xl p-12 shadow-2xl border border-white/20">
-            <h1 className="text-6xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent mb-6">
-              Shop
-            </h1>
-            <p className="text-xl text-gray-700 max-w-2xl mx-auto leading-relaxed">
-              Discover our collection of high-quality products designed with care and precision. 
-              From essentials to specialty items, we have something for everyone.
-            </p>
-          </div>
+          <h1 className="text-6xl font-bold text-white mb-6 drop-shadow-lg">
+            Shop
+          </h1>
+          <p className="text-xl text-white max-w-2xl mx-auto leading-relaxed drop-shadow-md">
+            Discover our collection of high-quality products designed with care and precision. 
+            From essentials to specialty items, we have something for everyone.
+          </p>
         </div>
       </section>
 

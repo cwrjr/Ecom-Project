@@ -12,6 +12,7 @@ import shopBannerImage from "@assets/images/pexels-n-voitkevich-6214476.jpg";
 import headphonesImage from "@assets/A sleek black pair of premium wireless headphones displayed on a clean white background with soft sh.jpeg";
 import chargerImage from "@assets/magicstudio-art (1).jpg";
 import investmentImage from "@assets/pexels-alesiakozik-6772024.jpg";
+import smartHomeImage from "@assets/Screenshot_29-5-2025_9296_www.veed.io.jpeg";
 
 // Image resolver to map product images to actual imported assets
 const getProductImage = (imagePath: string, productName: string) => {
@@ -23,6 +24,9 @@ const getProductImage = (imagePath: string, productName: string) => {
   }
   if (productName === "Investment Trends") {
     return investmentImage;
+  }
+  if (productName === "Smart Home Assistant") {
+    return smartHomeImage;
   }
   return imagePath; // fallback to original path
 };

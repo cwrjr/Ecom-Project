@@ -101,7 +101,7 @@ export class MemStorage implements IStorage {
         price: 89.99,
         originalPrice: null,
         category: "Electronics",
-        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop&auto=format",
+        image: "@assets/Screenshot_29-5-2025_9296_www.veed.io.jpeg",
         tags: ["smart", "home", "ai"],
         featured: true,
         inStock: true,

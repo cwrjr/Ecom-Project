@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import Footer from "@/components/Footer";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -217,6 +218,8 @@ export default function Contact() {
           </div>
         </div>
       </div>
+      
+      <Footer />
     </div>
   );
 }

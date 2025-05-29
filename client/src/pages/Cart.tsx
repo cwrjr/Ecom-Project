@@ -5,6 +5,7 @@ import { Trash2, Plus, Minus, ShoppingBag, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/components/CartContext";
 import { useToast } from "@/hooks/use-toast";
+import Footer from "@/components/Footer";
 import type { Product } from "@shared/schema";
 
 export default function Cart() {
@@ -87,6 +88,8 @@ export default function Cart() {
             </Link>
           </div>
         </div>
+        
+        <Footer />
       </div>
     );
   }
@@ -251,6 +254,8 @@ export default function Cart() {
           </div>
         </div>
       </div>
+      
+      <Footer />
     </div>
   );
 }

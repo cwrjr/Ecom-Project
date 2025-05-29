@@ -197,21 +197,29 @@ export default function ProductRating({ productId, productName }: ProductRatingP
             </DialogHeader>
             <div className="space-y-4">
               {ratings.map((rating) => (
-                <Card key={rating.id}>
+                <Card key={rating.id} className="border-l-4 border-l-blue-500">
                   <CardHeader className="pb-3">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <User className="h-4 w-4 text-gray-500" />
-                        <span className="font-medium">{rating.userName}</span>
+                        <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                          <User className="h-4 w-4 text-blue-600" />
+                        </div>
+                        <div>
+                          <span className="font-medium text-gray-900">{rating.userName}</span>
+                          <div className="text-xs text-gray-500">
+                            {rating.createdAt ? new Date(rating.createdAt).toLocaleDateString() : 'Recently'}
+                          </div>
+                        </div>
                       </div>
                       <div className="flex items-center gap-1">
                         {renderStars(rating.rating, false, "h-4 w-4")}
+                        <span className="text-sm text-gray-600 ml-1">({rating.rating}/5)</span>
                       </div>
                     </div>
                   </CardHeader>
                   {rating.review && (
                     <CardContent className="pt-0">
-                      <p className="text-gray-700">{rating.review}</p>
+                      <p className="text-gray-700 leading-relaxed">{rating.review}</p>
                     </CardContent>
                   )}
                 </Card>

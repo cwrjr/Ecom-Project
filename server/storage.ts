@@ -227,6 +227,92 @@ export class MemStorage implements IStorage {
     sampleProducts.forEach(product => {
       this.products.set(product.id, product);
     });
+
+    // Initialize sample ratings and reviews
+    this.initializeSampleRatings();
+  }
+
+  private initializeSampleRatings() {
+    const sampleReviews = [
+      // Premium Wireless Headphones (Product ID: 1)
+      { productId: 1, userName: "Sarah M.", rating: 5, review: "Absolutely amazing headphones! The noise cancellation is incredible and the battery life exceeds expectations. Worth every penny." },
+      { productId: 1, userName: "Mike T.", rating: 4, review: "Great sound quality and comfortable for long listening sessions. Only minor complaint is the case could be more compact." },
+      { productId: 1, userName: "Jessica L.", rating: 5, review: "Perfect for working from home. The noise cancellation blocks out all distractions and the sound is crystal clear." },
+      { productId: 1, userName: "David K.", rating: 4, review: "Excellent build quality and the wireless connection is very stable. Highly recommended for music enthusiasts." },
+      { productId: 1, userName: "Amanda R.", rating: 5, review: "Best headphones I've ever owned! The bass is deep but not overwhelming, and the highs are crisp." },
+      { productId: 1, userName: "Tom S.", rating: 3, review: "Good headphones overall but took some time to get used to the fit. Sound quality is definitely impressive." },
+      { productId: 1, userName: "Lisa H.", rating: 5, review: "Love these! Great for travel, gym, and daily commute. The quick charge feature is a lifesaver." },
+      { productId: 1, userName: "Chris P.", rating: 4, review: "Solid headphones with premium feel. The app for customizing sound profiles is a nice touch." },
+      { productId: 1, userName: "Rachel W.", rating: 5, review: "Amazing product! The customer service was also excellent when I had questions about setup." },
+      { productId: 1, userName: "Kevin M.", rating: 4, review: "Great value for the price. The noise cancellation works better than more expensive alternatives I've tried." },
+
+      // Smart Home Assistant (Product ID: 2)
+      { productId: 2, userName: "Jennifer A.", rating: 5, review: "This smart assistant has transformed our home! Voice recognition is spot-on and it controls all our devices seamlessly." },
+      { productId: 2, userName: "Robert C.", rating: 4, review: "Very responsive and easy to set up. The sound quality for music is surprisingly good for the size." },
+      { productId: 2, userName: "Maria G.", rating: 5, review: "Love how it integrates with all our smart home devices. The kids enjoy asking it questions and playing games." },
+      { productId: 2, userName: "Steve B.", rating: 3, review: "Works well but sometimes struggles with accents. Overall satisfied with the purchase for the price point." },
+      { productId: 2, userName: "Nicole F.", rating: 5, review: "Exceeded expectations! The voice assistant is incredibly helpful for cooking, weather, and managing our schedule." },
+      { productId: 2, userName: "James D.", rating: 4, review: "Great addition to our smart home ecosystem. Setup was straightforward and it responds quickly to commands." },
+      { productId: 2, userName: "Karen L.", rating: 5, review: "Perfect for our kitchen. We use it daily for timers, music, and getting quick answers while cooking." },
+      { productId: 2, userName: "Paul R.", rating: 4, review: "Impressed with the AI capabilities. It learns our preferences and gets better over time." },
+      { productId: 2, userName: "Linda S.", rating: 5, review: "Fantastic product! The privacy controls give us peace of mind while still enjoying all the smart features." },
+      { productId: 2, userName: "Mark W.", rating: 4, review: "Solid smart assistant. The integration with our lighting and thermostat works flawlessly." },
+
+      // Wireless Phone Charger (Product ID: 3)
+      { productId: 3, userName: "Emily J.", rating: 4, review: "Convenient wireless charging pad. Works great with my phone case on. Clean design that looks good on my desk." },
+      { productId: 3, userName: "Daniel T.", rating: 5, review: "Fast charging and the LED indicator is helpful. Much more convenient than dealing with cables every time." },
+      { productId: 3, userName: "Sophie M.", rating: 3, review: "Does the job but can be finicky about phone placement. Once positioned correctly, it charges reliably." },
+      { productId: 3, userName: "Alex P.", rating: 4, review: "Great build quality and charges my phone overnight without any issues. The non-slip surface is a nice touch." },
+      { productId: 3, userName: "Michelle K.", rating: 5, review: "Love this charger! No more worn-out charging cables. It's become an essential part of my bedside setup." },
+      { productId: 3, userName: "Ryan H.", rating: 4, review: "Reliable wireless charging with a sleek design. Works well with multiple phone models in our household." },
+      { productId: 3, userName: "Tracy L.", rating: 5, review: "Perfect for my office desk. Keeps my phone charged throughout the day without the clutter of cables." },
+      { productId: 3, userName: "Brian S.", rating: 3, review: "Good charger but wish it charged a bit faster. Still convenient for overnight charging though." },
+
+      // Business Investment Guide (Product ID: 4)
+      { productId: 4, userName: "Richard B.", rating: 5, review: "Excellent investment resource! The strategies are practical and well-explained. Already seeing results from the advice." },
+      { productId: 4, userName: "Catherine D.", rating: 4, review: "Comprehensive guide with real-world examples. Great for both beginners and experienced investors." },
+      { productId: 4, userName: "William F.", rating: 5, review: "This book changed my approach to investing. The risk management section alone was worth the purchase price." },
+      { productId: 4, userName: "Helen M.", rating: 4, review: "Well-researched content with actionable insights. I appreciate the focus on long-term wealth building." },
+      { productId: 4, userName: "Thomas G.", rating: 5, review: "Outstanding guide! The author's experience really shows through. I've recommended it to several colleagues." },
+      { productId: 4, userName: "Susan R.", rating: 3, review: "Good information but some concepts could be explained more simply. Still valuable for serious investors." },
+      { productId: 4, userName: "Andrew N.", rating: 4, review: "Solid investment fundamentals with practical examples. The case studies really help illustrate the concepts." },
+
+      // Professional Camera Kit (Product ID: 5)
+      { productId: 5, userName: "Photography Pro", rating: 5, review: "Professional-grade equipment at an amazing price! The image quality is outstanding and the lens variety covers all my needs." },
+      { productId: 5, userName: "Lisa Camera", rating: 4, review: "Excellent starter kit for serious photographers. The camera body feels solid and the included lenses are sharp." },
+      { productId: 5, userName: "Mark Shooter", rating: 5, review: "This kit has everything needed for professional work. The low-light performance is particularly impressive." },
+      { productId: 5, userName: "Sarah Photo", rating: 4, review: "Great value for a complete camera system. The autofocus is fast and accurate for both stills and video." },
+      { productId: 5, userName: "Joe Lens", rating: 5, review: "Incredible image quality and build construction. The weather sealing has saved me in challenging conditions." },
+      { productId: 5, userName: "Emma Click", rating: 4, review: "Perfect for wedding photography. The dual card slots and battery life give me confidence during long shoots." },
+
+      // Minimalist Desk Lamp (Product ID: 6)
+      { productId: 6, userName: "Design Lover", rating: 5, review: "Beautiful minimalist design that complements any workspace. The adjustable brightness levels are perfect for different tasks." },
+      { productId: 6, userName: "Office Worker", rating: 4, review: "Excellent task lighting with a sleek profile. The touch controls are intuitive and the build quality feels premium." },
+      { productId: 6, userName: "Student Life", rating: 5, review: "Perfect study lamp! The warm light setting is easy on the eyes during long reading sessions." },
+      { productId: 6, userName: "Remote Pro", rating: 4, review: "Great addition to my home office. The adjustable arm positions exactly where I need light for video calls." },
+      { productId: 6, userName: "Night Owl", rating: 5, review: "Love the dimming feature for late-night work. The minimalist design doesn't clutter my clean desk setup." },
+
+      // Monitors (Product ID: 7)
+      { productId: 7, userName: "Tech Enthusiast", rating: 5, review: "Stunning display quality! The color accuracy is exceptional for both work and gaming. Highly recommend for professionals." },
+      { productId: 7, userName: "Gamer Pro", rating: 4, review: "Great gaming monitor with smooth refresh rates. The curved design provides an immersive experience." },
+      { productId: 7, userName: "Designer", rating: 5, review: "Perfect for graphic design work. The color reproduction is accurate and the screen real estate boosts productivity." },
+      { productId: 7, userName: "Developer", rating: 4, review: "Excellent for coding with plenty of screen space. The adjustable stand makes it easy to find the perfect viewing angle." },
+      { productId: 7, userName: "Video Editor", rating: 5, review: "Outstanding monitor for video editing. The high resolution shows every detail and the color accuracy is spot-on." },
+      { productId: 7, userName: "Office Manager", rating: 4, review: "Great monitors for the office. Multiple employees use these daily and they've been reliable and sharp." }
+    ];
+
+    // Add all sample reviews
+    sampleReviews.forEach(reviewData => {
+      const rating: Rating = {
+        id: this.currentRatingId++,
+        productId: reviewData.productId,
+        userName: reviewData.userName,
+        rating: reviewData.rating,
+        review: reviewData.review,
+        createdAt: new Date(Date.now() - Math.random() * 90 * 24 * 60 * 60 * 1000), // Random date within last 90 days
+      };
+      this.ratings.set(rating.id, rating);
+    });
   }
 
   async getProducts(): Promise<Product[]> {

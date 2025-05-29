@@ -22,29 +22,67 @@ import { db } from "./db";
 import { eq, avg, and } from "drizzle-orm";
 
 export interface IStorage {
+  // Product operations
   getProducts(): Promise<Product[]>;
   getProductsByCategory(category: string): Promise<Product[]>;
   getFeaturedProducts(): Promise<Product[]>;
   getProduct(id: number): Promise<Product | undefined>;
   createProduct(product: InsertProduct): Promise<Product>;
   
+  // Category operations
   getCategories(): Promise<Category[]>;
   createCategory(category: InsertCategory): Promise<Category>;
   
+  // Cart operations
   getCartItems(sessionId: string): Promise<CartItem[]>;
   addToCart(item: InsertCartItem): Promise<CartItem>;
   updateCartItem(id: number, quantity: number): Promise<CartItem | undefined>;
   removeFromCart(id: number): Promise<boolean>;
   clearCart(sessionId: string): Promise<boolean>;
   
+  // Order operations
   createOrder(order: InsertOrder): Promise<Order>;
   getOrders(): Promise<Order[]>;
   
+  // Contact operations
   createContactSubmission(submission: InsertContactSubmission): Promise<ContactSubmission>;
   
+  // Rating operations
   getRatings(productId: number): Promise<Rating[]>;
   addRating(rating: InsertRating): Promise<Rating>;
   getAverageRating(productId: number): Promise<number>;
+  
+  // User operations (mandatory for Replit Auth)
+  getUser(id: string): Promise<User | undefined>;
+  upsertUser(user: UpsertUser): Promise<User>;
+  
+  // Favorites operations
+  getUserFavorites(userId: string): Promise<Favorite[]>;
+  addToFavorites(userId: string, productId: number): Promise<Favorite>;
+  removeFromFavorites(userId: string, productId: number): Promise<boolean>;
+  
+  // Recently viewed operations
+  getRecentlyViewed(userId?: string, sessionId?: string): Promise<RecentlyViewed[]>;
+  addToRecentlyViewed(data: InsertRecentlyViewed): Promise<RecentlyViewed>;
+  
+  // Product comparison operations
+  getComparison(userId?: string, sessionId?: string): Promise<Comparison | undefined>;
+  saveComparison(data: InsertComparison): Promise<Comparison>;
+  
+  // Product specs operations
+  getProductSpecs(productId: number): Promise<ProductSpec[]>;
+  addProductSpec(spec: InsertProductSpec): Promise<ProductSpec>;
+  
+  // Enhanced order operations
+  createEnhancedOrder(order: InsertEnhancedOrder): Promise<EnhancedOrder>;
+  getEnhancedOrder(id: number): Promise<EnhancedOrder | undefined>;
+  getEnhancedOrderByNumber(orderNumber: string): Promise<EnhancedOrder | undefined>;
+  getUserOrders(userId: string): Promise<EnhancedOrder[]>;
+  updateOrderStatus(id: number, status: string, trackingNumber?: string): Promise<EnhancedOrder | undefined>;
+  
+  // Order items operations
+  addOrderItem(item: InsertOrderItem): Promise<OrderItem>;
+  getOrderItems(orderId: number): Promise<OrderItem[]>;
 }
 
 export class DatabaseStorage implements IStorage {

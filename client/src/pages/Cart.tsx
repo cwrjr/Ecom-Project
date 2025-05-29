@@ -7,6 +7,7 @@ import { useCart } from "@/components/CartContext";
 import { useToast } from "@/hooks/use-toast";
 import Footer from "@/components/Footer";
 import type { Product } from "@shared/schema";
+import smartHomeImage from "@assets/Firefly_realistic and clear glow smart speaker on a Highrise table with Seattle night skyline 787022.jpg";
 
 export default function Cart() {
   const { cartItems, cartTotal, updateQuantity, removeFromCart, clearCart, isLoading } = useCart();
@@ -19,6 +20,14 @@ export default function Cart() {
 
   const getProductDetails = (productId: number) => {
     return products.find(p => p.id === productId);
+  };
+
+  const getCartProductImage = (product: Product) => {
+    // Use the previous Seattle skyline image for Smart Home Assistant in cart
+    if (product.name === "Smart Home Assistant") {
+      return smartHomeImage;
+    }
+    return product.image;
   };
 
   const handleQuantityChange = (cartItemId: number, currentQuantity: number, change: number) => {
@@ -137,7 +146,7 @@ export default function Cart() {
                     <div key={item.id} className="p-6">
                       <div className="flex items-center space-x-4">
                         <img 
-                          src={product.image} 
+                          src={getCartProductImage(product)} 
                           alt={product.name}
                           className="w-20 h-20 object-cover rounded-lg"
                         />

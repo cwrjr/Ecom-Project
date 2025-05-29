@@ -7,6 +7,7 @@ import aboutImage from "@assets/images/pexels-karolina-grabowska-5632382.jpg";
 import headphonesImage from "@assets/A sleek black pair of premium wireless headphones displayed on a clean white background with soft sh.jpeg";
 import chargerImage from "@assets/magicstudio-art (1).jpg";
 import investmentImage from "@assets/pexels-alesiakozik-6772024.jpg";
+import smartHomeVideo from "@assets/f62dd8e7-7056-4c64-9252-8cb45c3210ef (1).mp4";
 import { Button } from "@/components/ui/button";
 import Footer from "@/components/Footer";
 
@@ -20,6 +21,9 @@ const getProductImage = (imagePath: string, productName: string) => {
   }
   if (productName === "Investment Trends") {
     return investmentImage;
+  }
+  if (productName === "Smart Home Assistant") {
+    return smartHomeVideo;
   }
   return imagePath; // fallback to original path
 };
@@ -110,11 +114,22 @@ export default function Home() {
             {featuredProducts.slice(0, 6).map((product) => (
               <div key={product.id} className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden group">
                 <div className="relative overflow-hidden">
-                  <img 
-                    src={getProductImage(product.image, product.name)} 
-                    alt={product.name}
-                    className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
+                  {product.name === "Smart Home Assistant" ? (
+                    <video
+                      src={getProductImage(product.image, product.name)}
+                      className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                    />
+                  ) : (
+                    <img 
+                      src={getProductImage(product.image, product.name)} 
+                      alt={product.name}
+                      className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  )}
                   {product.originalPrice && (
                     <div className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
                       SALE

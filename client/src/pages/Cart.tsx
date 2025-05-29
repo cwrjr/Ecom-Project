@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import Footer from "@/components/Footer";
 import type { Product } from "@shared/schema";
 import smartHomeImage from "@assets/Firefly_realistic and clear glow smart speaker on a Highrise table with Seattle night skyline 787022.jpg";
+import monitorImage from "@assets/minimalist_expensive_desk_with_curved_monitor_that.jpg";
 
 export default function Cart() {
   const { cartItems, cartTotal, updateQuantity, removeFromCart, clearCart, isLoading } = useCart();
@@ -26,6 +27,9 @@ export default function Cart() {
     // Use the previous Seattle skyline image for Smart Home Assistant in cart
     if (product.name === "Smart Home Assistant") {
       return smartHomeImage;
+    }
+    if (product.name === "Monitors") {
+      return monitorImage;
     }
     return product.image;
   };

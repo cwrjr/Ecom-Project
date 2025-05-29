@@ -7,6 +7,15 @@ import { useCart } from "@/components/CartContext";
 import { useToast } from "@/hooks/use-toast";
 import type { Product } from "@shared/schema";
 import shopBannerImage from "@assets/images/pexels-n-voitkevich-6214476.jpg";
+import headphonesImage from "@assets/A sleek black pair of premium wireless headphones displayed on a clean white background with soft sh.jpeg";
+
+// Image resolver to map product images to actual imported assets
+const getProductImage = (imagePath: string, productName: string) => {
+  if (productName === "Premium Wireless Headphones") {
+    return headphonesImage;
+  }
+  return imagePath; // fallback to original path
+};
 
 export default function Shop() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -119,7 +128,7 @@ export default function Shop() {
             <div key={product.id} className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
               <div className="relative overflow-hidden">
                 <img 
-                  src={product.image} 
+                  src={getProductImage(product.image, product.name)} 
                   alt={product.name}
                   className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
                   onError={(e) => {

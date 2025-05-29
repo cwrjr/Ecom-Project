@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import { ShoppingBag, ArrowRight, Star, Zap, Shield } from "lucide-react";
+import { ShoppingBag, ArrowRight, Star, Zap, Shield, Phone } from "lucide-react";
 import type { Product } from "@shared/schema";
 import bannerImage from "@assets/images/pexels-n-voitkevich-6214476.jpg";
 import aboutImage from "@assets/images/pexels-karolina-grabowska-5632382.jpg";
@@ -220,6 +220,7 @@ export default function Home() {
             </Link>
             <Link href="/contact">
               <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 font-bold px-8 py-4 border-2 border-white">
+                <Phone className="h-5 w-5 mr-2" />
                 Contact Us
               </Button>
             </Link>

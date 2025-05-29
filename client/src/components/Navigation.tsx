@@ -20,17 +20,15 @@ export default function Navigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           <div className="flex items-center">
-            <Link href="/">
-              <a className="flex items-center space-x-3">
-                <img 
-                  src={logoPath} 
-                  alt="Trellis Logo" 
-                  className="h-12 w-auto"
-                />
-                <span className="text-3xl font-bold text-blue-600 hover:text-blue-700 transition-colors">
-                  Trellis
-                </span>
-              </a>
+            <Link href="/" className="flex items-center space-x-3">
+              <img 
+                src={logoPath} 
+                alt="Trellis Logo" 
+                className="h-12 w-auto"
+              />
+              <span className="text-3xl font-bold text-blue-600 hover:text-blue-700 transition-colors">
+                Trellis
+              </span>
             </Link>
           </div>
 
@@ -40,46 +38,40 @@ export default function Navigation() {
               const Icon = item.icon;
               const isActive = location === item.href;
               return (
-                <Link key={item.name} href={item.href}>
-                  <a
-                    className={`flex items-center space-x-2 px-4 py-3 rounded-lg text-lg font-bold transition-all duration-200 ${
-                      isActive
-                        ? "bg-blue-600 text-white shadow-lg"
-                        : "text-blue-600 hover:bg-blue-50 hover:shadow-md border-2 border-transparent hover:border-blue-600"
-                    }`}
-                  >
-                    <Icon className="h-5 w-5" />
-                    <span>{item.name}</span>
-                  </a>
+                <Link key={item.name} href={item.href}
+                  className={`flex items-center space-x-2 px-4 py-3 rounded-lg text-lg font-bold transition-all duration-200 ${
+                    isActive
+                      ? "bg-blue-600 text-white shadow-lg"
+                      : "text-blue-600 hover:bg-blue-50 hover:shadow-md border-2 border-transparent hover:border-blue-600"
+                  }`}
+                >
+                  <Icon className="h-5 w-5" />
+                  <span>{item.name}</span>
                 </Link>
               );
             })}
             
             {/* Cart Icon */}
-            <Link href="/cart">
-              <a className="relative flex items-center space-x-2 px-4 py-3 rounded-lg text-lg font-bold text-blue-600 hover:bg-blue-50 hover:shadow-md border-2 border-transparent hover:border-blue-600 transition-all duration-200">
-                <ShoppingCart className="h-5 w-5" />
-                <span>Cart</span>
-                {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center font-bold">
-                    {cartCount}
-                  </span>
-                )}
-              </a>
+            <Link href="/cart" className="relative flex items-center space-x-2 px-4 py-3 rounded-lg text-lg font-bold text-blue-600 hover:bg-blue-50 hover:shadow-md border-2 border-transparent hover:border-blue-600 transition-all duration-200">
+              <ShoppingCart className="h-5 w-5" />
+              <span>Cart</span>
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center font-bold">
+                  {cartCount}
+                </span>
+              )}
             </Link>
           </div>
 
           {/* Mobile menu button */}
           <div className="md:hidden flex items-center space-x-4">
-            <Link href="/cart">
-              <a className="relative p-2">
-                <ShoppingCart className="h-6 w-6 text-blue-600" />
-                {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
-                    {cartCount}
-                  </span>
-                )}
-              </a>
+            <Link href="/cart" className="relative p-2">
+              <ShoppingCart className="h-6 w-6 text-blue-600" />
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                  {cartCount}
+                </span>
+              )}
             </Link>
             
             <button

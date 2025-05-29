@@ -101,7 +101,7 @@ export class MemStorage implements IStorage {
         price: 89.99,
         originalPrice: null,
         category: "Electronics",
-        image: "@assets/Firefly_realistic and clear glow smart speaker on a Highrise table with Seattle night skyline 787022.jpg",
+        image: "@assets/f62dd8e7-7056-4c64-9252-8cb45c3210ef (1).mp4",
         tags: ["smart", "home", "ai"],
         featured: true,
         inStock: true,

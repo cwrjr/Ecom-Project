@@ -192,7 +192,7 @@ export class MemStorage implements IStorage {
         price: 89.99,
         originalPrice: null,
         category: "Home & Garden",
-        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop&auto=format",
+        image: "@assets/minimalist_expensive_desk_lamp_main_attraction_on.jpg",
         tags: ["modern", "led", "desk"],
         featured: false,
         inStock: true,

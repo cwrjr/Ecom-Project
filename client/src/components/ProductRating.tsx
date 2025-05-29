@@ -25,12 +25,12 @@ export default function ProductRating({ productId, productName }: ProductRatingP
 
   // Fetch ratings for this product
   const { data: ratings = [], isLoading } = useQuery<Rating[]>({
-    queryKey: ["/api/products", productId, "ratings"],
+    queryKey: [`/api/products/${productId}/ratings`],
   });
 
   // Fetch average rating
   const { data: averageData } = useQuery<{ averageRating: number }>({
-    queryKey: ["/api/products", productId, "average-rating"],
+    queryKey: [`/api/products/${productId}/average-rating`],
   });
 
   const averageRating = averageData?.averageRating || 0;
@@ -46,8 +46,8 @@ export default function ProductRating({ productId, productName }: ProductRatingP
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/products", productId, "ratings"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/products", productId, "average-rating"] });
+      queryClient.invalidateQueries({ queryKey: [`/api/products/${productId}/ratings`] });
+      queryClient.invalidateQueries({ queryKey: [`/api/products/${productId}/average-rating`] });
       setUserRating(0);
       setUserName("");
       setReview("");

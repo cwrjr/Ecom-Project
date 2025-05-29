@@ -88,7 +88,7 @@ export class MemStorage implements IStorage {
         price: 149.99,
         originalPrice: 199.99,
         category: "Electronics",
-        image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&h=500&fit=crop&auto=format",
+        image: "@assets/A sleek black pair of premium wireless headphones displayed on a clean white background with soft sh.jpeg",
         tags: ["sale", "wireless", "audio"],
         featured: true,
         inStock: true,

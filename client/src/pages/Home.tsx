@@ -8,6 +8,7 @@ import headphonesImage from "@assets/A sleek black pair of premium wireless head
 import chargerImage from "@assets/magicstudio-art (1).jpg";
 import investmentImage from "@assets/pexels-alesiakozik-6772024.jpg";
 import smartHomeVideo from "@assets/f62dd8e7-7056-4c64-9252-8cb45c3210ef (1).mp4";
+import monitorImage from "@assets/minimalist_expensive_desk_with_curved_monitor_that.jpg";
 import { Button } from "@/components/ui/button";
 import Footer from "@/components/Footer";
 
@@ -24,6 +25,9 @@ const getProductImage = (imagePath: string, productName: string) => {
   }
   if (productName === "Smart Home Assistant") {
     return smartHomeVideo;
+  }
+  if (productName === "Monitors") {
+    return monitorImage;
   }
   return imagePath; // fallback to original path
 };

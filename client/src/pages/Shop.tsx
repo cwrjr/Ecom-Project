@@ -15,6 +15,7 @@ import investmentImage from "@assets/pexels-alesiakozik-6772024.jpg";
 import smartHomeImage from "@assets/f62dd8e7-7056-4c64-9252-8cb45c3210ef (1).mp4";
 import cameraKitImage from "@assets/Firefly_Professional Camera Kit 664369.jpg";
 import deskLampImage from "@assets/minimalist_expensive_desk_lamp_main_attraction_on.jpg";
+import monitorImage from "@assets/minimalist_expensive_desk_with_curved_monitor_that.jpg";
 
 // Image resolver to map product images to actual imported assets
 const getProductImage = (imagePath: string, productName: string) => {
@@ -35,6 +36,9 @@ const getProductImage = (imagePath: string, productName: string) => {
   }
   if (productName === "Minimalist Desk Lamp") {
     return deskLampImage;
+  }
+  if (productName === "Monitors") {
+    return monitorImage;
   }
   return imagePath; // fallback to original path
 };

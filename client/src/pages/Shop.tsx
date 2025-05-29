@@ -33,7 +33,7 @@ const getProductImage = (imagePath: string, productName: string) => {
   if (productName === "Wireless Phone Charger") {
     return chargerImage;
   }
-  if (productName === "Investment Trends" || productName === "Investment Card Collection") {
+  if (productName === "Investment Trends") {
     return investmentImage;
   }
   if (productName === "Smart Home Assistant") {

@@ -8,6 +8,7 @@ import headphonesImage from "@assets/A sleek black pair of premium wireless head
 import chargerImage from "@assets/magicstudio-art (1).jpg";
 import investmentImage from "@assets/pexels-alesiakozik-6772024.jpg";
 import { Button } from "@/components/ui/button";
+import Footer from "@/components/Footer";
 
 // Image resolver to map product images to actual imported assets
 const getProductImage = (imagePath: string, productName: string) => {
@@ -220,6 +221,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <Footer />
     </div>
   );
 }

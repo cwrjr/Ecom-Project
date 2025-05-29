@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/components/CartContext";
 import { useToast } from "@/hooks/use-toast";
+import Footer from "@/components/Footer";
 import type { Product } from "@shared/schema";
 import shopBannerImage from "@assets/images/pexels-n-voitkevich-6214476.jpg";
 import headphonesImage from "@assets/A sleek black pair of premium wireless headphones displayed on a clean white background with soft sh.jpeg";
@@ -213,6 +214,8 @@ export default function Shop() {
           </div>
         )}
       </div>
+      
+      <Footer />
     </div>
   );
 }

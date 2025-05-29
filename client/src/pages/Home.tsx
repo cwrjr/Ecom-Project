@@ -106,7 +106,7 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-            {featuredProducts.slice(0, 4).map((product) => (
+            {featuredProducts.slice(0, 6).map((product) => (
               <div key={product.id} className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden group">
                 <div className="relative overflow-hidden">
                   <img 

@@ -168,7 +168,7 @@ export class MemStorage implements IStorage {
         category: "Fashion",
         image: "https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?w=500&h=500&fit=crop&auto=format",
         tags: ["luxury", "watch", "premium"],
-        featured: true,
+        featured: false,
         inStock: true,
         createdAt: new Date(),
       },

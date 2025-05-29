@@ -101,7 +101,7 @@ export class MemStorage implements IStorage {
         price: 89.99,
         originalPrice: null,
         category: "Electronics",
-        image: "@assets/Screenshot_29-5-2025_9296_www.veed.io.jpeg",
+        image: "@assets/Firefly_realistic and clear glow smart speaker on a Highrise table with Seattle night skyline 787022.jpg",
         tags: ["smart", "home", "ai"],
         featured: true,
         inStock: true,

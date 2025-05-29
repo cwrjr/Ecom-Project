@@ -128,12 +128,12 @@ export class DatabaseStorage implements IStorage {
 
   async removeFromCart(id: number): Promise<boolean> {
     const result = await db.delete(cartItems).where(eq(cartItems.id, id));
-    return result.rowCount > 0;
+    return (result.rowCount || 0) > 0;
   }
 
   async clearCart(sessionId: string): Promise<boolean> {
     const result = await db.delete(cartItems).where(eq(cartItems.sessionId, sessionId));
-    return result.rowCount > 0;
+    return (result.rowCount || 0) > 0;
   }
 
   async createOrder(insertOrder: InsertOrder): Promise<Order> {

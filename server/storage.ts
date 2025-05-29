@@ -5,6 +5,13 @@ import {
   orders, 
   contactSubmissions,
   ratings,
+  users,
+  favorites,
+  recentlyViewed,
+  comparisons,
+  enhancedOrders,
+  orderItems,
+  productSpecs,
   type Product, 
   type InsertProduct,
   type Category,
@@ -16,10 +23,24 @@ import {
   type ContactSubmission,
   type InsertContactSubmission,
   type Rating,
-  type InsertRating
+  type InsertRating,
+  type User,
+  type UpsertUser,
+  type Favorite,
+  type InsertFavorite,
+  type RecentlyViewed,
+  type InsertRecentlyViewed,
+  type Comparison,
+  type InsertComparison,
+  type EnhancedOrder,
+  type InsertEnhancedOrder,
+  type OrderItem,
+  type InsertOrderItem,
+  type ProductSpec,
+  type InsertProductSpec
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, avg, and } from "drizzle-orm";
+import { eq, avg, and, desc, or, inArray } from "drizzle-orm";
 
 export interface IStorage {
   // Product operations
@@ -213,6 +234,176 @@ export class DatabaseStorage implements IStorage {
       .where(eq(ratings.productId, productId));
     
     return Number(result[0]?.average) || 0;
+  }
+
+  // User operations (mandatory for Replit Auth)
+  async getUser(id: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user;
+  }
+
+  async upsertUser(userData: UpsertUser): Promise<User> {
+    const [user] = await db
+      .insert(users)
+      .values(userData)
+      .onConflictDoUpdate({
+        target: users.id,
+        set: {
+          ...userData,
+          updatedAt: new Date(),
+        },
+      })
+      .returning();
+    return user;
+  }
+
+  // Favorites operations
+  async getUserFavorites(userId: string): Promise<Favorite[]> {
+    return await db.select().from(favorites).where(eq(favorites.userId, userId));
+  }
+
+  async addToFavorites(userId: string, productId: number): Promise<Favorite> {
+    const [favorite] = await db
+      .insert(favorites)
+      .values({ userId, productId })
+      .returning();
+    return favorite;
+  }
+
+  async removeFromFavorites(userId: string, productId: number): Promise<boolean> {
+    const result = await db
+      .delete(favorites)
+      .where(and(eq(favorites.userId, userId), eq(favorites.productId, productId)));
+    return result.rowCount > 0;
+  }
+
+  // Recently viewed operations
+  async getRecentlyViewed(userId?: string, sessionId?: string): Promise<RecentlyViewed[]> {
+    const conditions = [];
+    if (userId) conditions.push(eq(recentlyViewed.userId, userId));
+    if (sessionId) conditions.push(eq(recentlyViewed.sessionId, sessionId));
+    
+    if (conditions.length === 0) return [];
+    
+    return await db
+      .select()
+      .from(recentlyViewed)
+      .where(conditions.length === 1 ? conditions[0] : or(...conditions))
+      .orderBy(desc(recentlyViewed.viewedAt))
+      .limit(10);
+  }
+
+  async addToRecentlyViewed(data: InsertRecentlyViewed): Promise<RecentlyViewed> {
+    if (data.userId) {
+      await db
+        .delete(recentlyViewed)
+        .where(and(eq(recentlyViewed.userId, data.userId), eq(recentlyViewed.productId, data.productId)));
+    }
+    if (data.sessionId) {
+      await db
+        .delete(recentlyViewed)
+        .where(and(eq(recentlyViewed.sessionId, data.sessionId), eq(recentlyViewed.productId, data.productId)));
+    }
+
+    const [viewed] = await db
+      .insert(recentlyViewed)
+      .values(data)
+      .returning();
+    return viewed;
+  }
+
+  // Product comparison operations
+  async getComparison(userId?: string, sessionId?: string): Promise<Comparison | undefined> {
+    const conditions = [];
+    if (userId) conditions.push(eq(comparisons.userId, userId));
+    if (sessionId) conditions.push(eq(comparisons.sessionId, sessionId));
+    
+    if (conditions.length === 0) return undefined;
+    
+    const [comparison] = await db
+      .select()
+      .from(comparisons)
+      .where(conditions.length === 1 ? conditions[0] : or(...conditions))
+      .orderBy(desc(comparisons.createdAt))
+      .limit(1);
+    
+    return comparison;
+  }
+
+  async saveComparison(data: InsertComparison): Promise<Comparison> {
+    if (data.userId) {
+      await db.delete(comparisons).where(eq(comparisons.userId, data.userId));
+    }
+    if (data.sessionId) {
+      await db.delete(comparisons).where(eq(comparisons.sessionId, data.sessionId));
+    }
+
+    const [comparison] = await db
+      .insert(comparisons)
+      .values(data)
+      .returning();
+    return comparison;
+  }
+
+  // Product specs operations
+  async getProductSpecs(productId: number): Promise<ProductSpec[]> {
+    return await db.select().from(productSpecs).where(eq(productSpecs.productId, productId));
+  }
+
+  async addProductSpec(spec: InsertProductSpec): Promise<ProductSpec> {
+    const [newSpec] = await db
+      .insert(productSpecs)
+      .values(spec)
+      .returning();
+    return newSpec;
+  }
+
+  // Enhanced order operations
+  async createEnhancedOrder(order: InsertEnhancedOrder): Promise<EnhancedOrder> {
+    const [newOrder] = await db
+      .insert(enhancedOrders)
+      .values(order)
+      .returning();
+    return newOrder;
+  }
+
+  async getEnhancedOrder(id: number): Promise<EnhancedOrder | undefined> {
+    const [order] = await db.select().from(enhancedOrders).where(eq(enhancedOrders.id, id));
+    return order;
+  }
+
+  async getEnhancedOrderByNumber(orderNumber: string): Promise<EnhancedOrder | undefined> {
+    const [order] = await db.select().from(enhancedOrders).where(eq(enhancedOrders.orderNumber, orderNumber));
+    return order;
+  }
+
+  async getUserOrders(userId: string): Promise<EnhancedOrder[]> {
+    return await db.select().from(enhancedOrders).where(eq(enhancedOrders.userId, userId)).orderBy(desc(enhancedOrders.createdAt));
+  }
+
+  async updateOrderStatus(id: number, status: string, trackingNumber?: string): Promise<EnhancedOrder | undefined> {
+    const updateData: any = { status, updatedAt: new Date() };
+    if (trackingNumber) updateData.trackingNumber = trackingNumber;
+
+    const [updatedOrder] = await db
+      .update(enhancedOrders)
+      .set(updateData)
+      .where(eq(enhancedOrders.id, id))
+      .returning();
+    return updatedOrder;
+  }
+
+  // Order items operations
+  async addOrderItem(item: InsertOrderItem): Promise<OrderItem> {
+    const [newItem] = await db
+      .insert(orderItems)
+      .values(item)
+      .returning();
+    return newItem;
+  }
+
+  async getOrderItems(orderId: number): Promise<OrderItem[]> {
+    return await db.select().from(orderItems).where(eq(orderItems.orderId, orderId));
   }
 }
 

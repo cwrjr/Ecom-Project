@@ -77,7 +77,12 @@ export default function Footer() {
         {/* Bottom Section */}
         <div className="border-t border-gray-700 mt-12 pt-8 pb-0">
           <div className="flex flex-col items-center text-center space-y-4">
-            <div className="flex items-center">
+            <div className="flex items-center space-x-2">
+              <img 
+                src="@assets/logi.webp" 
+                alt="Trellis Logo" 
+                className="w-8 h-8 object-contain"
+              />
               <span className="text-xl font-bold">Trellis</span>
             </div>
             

@@ -66,7 +66,7 @@ export default function Shop() {
         
         {/* Content */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-6xl font-bold text-white mb-6 drop-shadow-lg">
+          <h1 className="text-6xl font-bold mb-6 drop-shadow-lg text-[#2563eb]">
             Shop
           </h1>
           <p className="text-xl text-white max-w-2xl mx-auto leading-relaxed drop-shadow-md">
@@ -75,7 +75,6 @@ export default function Shop() {
           </p>
         </div>
       </section>
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Search and Filter */}
         <div className="mb-8">

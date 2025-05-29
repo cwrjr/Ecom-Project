@@ -4,6 +4,7 @@ import {
   cartItems, 
   orders, 
   contactSubmissions,
+  ratings,
   type Product, 
   type InsertProduct,
   type Category,
@@ -13,7 +14,9 @@ import {
   type Order,
   type InsertOrder,
   type ContactSubmission,
-  type InsertContactSubmission
+  type InsertContactSubmission,
+  type Rating,
+  type InsertRating
 } from "@shared/schema";
 
 export interface IStorage {
@@ -36,6 +39,10 @@ export interface IStorage {
   getOrders(): Promise<Order[]>;
   
   createContactSubmission(submission: InsertContactSubmission): Promise<ContactSubmission>;
+  
+  getRatings(productId: number): Promise<Rating[]>;
+  addRating(rating: InsertRating): Promise<Rating>;
+  getAverageRating(productId: number): Promise<number>;
 }
 
 export class MemStorage implements IStorage {
@@ -44,11 +51,13 @@ export class MemStorage implements IStorage {
   private cartItems: Map<number, CartItem>;
   private orders: Map<number, Order>;
   private contactSubmissions: Map<number, ContactSubmission>;
+  private ratings: Map<number, Rating>;
   private currentProductId: number;
   private currentCategoryId: number;
   private currentCartId: number;
   private currentOrderId: number;
   private currentContactId: number;
+  private currentRatingId: number;
 
   constructor() {
     this.products = new Map();
@@ -56,11 +65,13 @@ export class MemStorage implements IStorage {
     this.cartItems = new Map();
     this.orders = new Map();
     this.contactSubmissions = new Map();
+    this.ratings = new Map();
     this.currentProductId = 1;
     this.currentCategoryId = 1;
     this.currentCartId = 1;
     this.currentOrderId = 1;
     this.currentContactId = 1;
+    this.currentRatingId = 1;
     this.initializeData();
   }
 
@@ -348,6 +359,31 @@ export class MemStorage implements IStorage {
     };
     this.contactSubmissions.set(id, submission);
     return submission;
+  }
+
+  async getRatings(productId: number): Promise<Rating[]> {
+    return Array.from(this.ratings.values())
+      .filter(rating => rating.productId === productId)
+      .sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
+  }
+
+  async addRating(insertRating: InsertRating): Promise<Rating> {
+    const id = this.currentRatingId++;
+    const rating: Rating = {
+      ...insertRating,
+      id,
+      createdAt: new Date(),
+    };
+    this.ratings.set(id, rating);
+    return rating;
+  }
+
+  async getAverageRating(productId: number): Promise<number> {
+    const productRatings = await this.getRatings(productId);
+    if (productRatings.length === 0) return 0;
+    
+    const sum = productRatings.reduce((acc, rating) => acc + rating.rating, 0);
+    return Math.round((sum / productRatings.length) * 10) / 10; // Round to 1 decimal place
   }
 }
 

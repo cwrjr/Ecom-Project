@@ -8,6 +8,7 @@ import { useCart } from "@/components/CartContext";
 import { useToast } from "@/hooks/use-toast";
 import CartTest from "@/components/CartTest";
 import Footer from "@/components/Footer";
+import ProductRating from "@/components/ProductRating";
 import type { Product } from "@shared/schema";
 import shopBannerImage from "@assets/images/pexels-n-voitkevich-6214476.jpg";
 import headphonesImage from "@assets/A sleek black pair of premium wireless headphones displayed on a clean white background with soft sh.jpeg";
@@ -231,11 +232,10 @@ export default function Shop() {
                     )}
                     <span className="text-2xl font-bold text-blue-600">${product.price}</span>
                   </div>
-                  <div className="flex items-center">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                    ))}
-                  </div>
+                </div>
+                
+                <div className="mb-4">
+                  <ProductRating productId={product.id} productName={product.name} />
                 </div>
 
                 <Button 

@@ -177,6 +177,54 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Ratings routes
+  app.get("/api/products/:id/ratings", async (req, res) => {
+    try {
+      const productId = parseInt(req.params.id);
+      if (isNaN(productId)) {
+        return res.status(400).json({ error: "Invalid product ID" });
+      }
+      
+      const ratings = await storage.getRatings(productId);
+      res.json(ratings);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch ratings" });
+    }
+  });
+
+  app.post("/api/products/:id/ratings", async (req, res) => {
+    try {
+      const productId = parseInt(req.params.id);
+      if (isNaN(productId)) {
+        return res.status(400).json({ error: "Invalid product ID" });
+      }
+
+      const result = insertRatingSchema.safeParse({ ...req.body, productId });
+      if (!result.success) {
+        return res.status(400).json({ error: "Invalid rating data", issues: result.error.issues });
+      }
+      
+      const rating = await storage.addRating(result.data);
+      res.status(201).json(rating);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to submit rating" });
+    }
+  });
+
+  app.get("/api/products/:id/average-rating", async (req, res) => {
+    try {
+      const productId = parseInt(req.params.id);
+      if (isNaN(productId)) {
+        return res.status(400).json({ error: "Invalid product ID" });
+      }
+      
+      const averageRating = await storage.getAverageRating(productId);
+      res.json({ averageRating });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch average rating" });
+    }
+  });
+
   // Contact routes
   app.post("/api/contact", async (req, res) => {
     try {

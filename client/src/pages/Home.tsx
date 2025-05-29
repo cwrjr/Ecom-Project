@@ -11,6 +11,7 @@ import smartHomeVideo from "@assets/f62dd8e7-7056-4c64-9252-8cb45c3210ef (1).mp4
 import monitorImage from "@assets/minimalist_expensive_desk_with_curved_monitor_that.jpg";
 import { Button } from "@/components/ui/button";
 import Footer from "@/components/Footer";
+import ProductRating from "@/components/ProductRating";
 
 // Image resolver to map product images to actual imported assets
 const getProductImage = (imagePath: string, productName: string) => {
@@ -143,19 +144,15 @@ export default function Home() {
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-gray-900 mb-2">{product.name}</h3>
                   <p className="text-gray-600 mb-4 line-clamp-2">{product.description}</p>
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center space-x-2">
                       {product.originalPrice && (
                         <span className="text-gray-400 line-through">${product.originalPrice}</span>
                       )}
                       <span className="text-2xl font-bold text-blue-600">${product.price}</span>
                     </div>
-                    <div className="flex items-center">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                      ))}
-                    </div>
                   </div>
+                  <ProductRating productId={product.id} productName={product.name} />
                 </div>
               </div>
             ))}

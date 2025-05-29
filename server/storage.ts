@@ -129,7 +129,7 @@ export class MemStorage implements IStorage {
         category: "Home & Garden",
         image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=500&h=500&fit=crop&auto=format",
         tags: ["new", "office", "ergonomic"],
-        featured: true,
+        featured: false,
         inStock: true,
         createdAt: new Date(),
       },

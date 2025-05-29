@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Search, Filter, Star, ShoppingCart, Heart, Eye, BarChart3, Grid, List } from "lucide-react";
+import { Search, Filter, Star, ShoppingCart, Heart, Eye, BarChart3, Grid, List, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Slider } from "@/components/ui/slider";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useCart } from "@/components/CartContext";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
@@ -56,6 +59,7 @@ export default function Shop() {
   const [selectedCategory, setSelectedCategory] = useState("All Products");
   const [sortBy, setSortBy] = useState("name");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState({
     query: "",
     priceRange: [0, 1000] as [number, number],
@@ -222,10 +226,89 @@ export default function Shop() {
                 className="pl-10 h-12 text-lg"
               />
             </div>
-            <Button variant="outline" className="h-12 px-6">
-              <Filter className="h-5 w-5 mr-2" />
-              Filters
-            </Button>
+            <Popover open={showFilters} onOpenChange={setShowFilters}>
+              <PopoverTrigger asChild>
+                <Button variant="outline" className="h-12 px-6">
+                  <Filter className="h-5 w-5 mr-2" />
+                  Filters
+                  <ChevronDown className="h-4 w-4 ml-2" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-80 p-4" align="end">
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="font-medium mb-2">Price Range</h3>
+                    <div className="px-2">
+                      <Slider
+                        value={filters.priceRange}
+                        onValueChange={(value) => setFilters(prev => ({ ...prev, priceRange: value as [number, number] }))}
+                        max={1000}
+                        min={0}
+                        step={10}
+                        className="w-full"
+                      />
+                      <div className="flex justify-between text-sm text-gray-500 mt-1">
+                        <span>${filters.priceRange[0]}</span>
+                        <span>${filters.priceRange[1]}</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h3 className="font-medium mb-2">Minimum Rating</h3>
+                    <div className="flex gap-1">
+                      {[1, 2, 3, 4, 5].map((rating) => (
+                        <Button
+                          key={rating}
+                          variant={filters.minRating >= rating ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setFilters(prev => ({ ...prev, minRating: rating }))}
+                          className="p-1"
+                        >
+                          <Star className="h-3 w-3" />
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="in-stock"
+                      checked={filters.inStockOnly}
+                      onCheckedChange={(checked) => setFilters(prev => ({ ...prev, inStockOnly: !!checked }))}
+                    />
+                    <label htmlFor="in-stock" className="text-sm font-medium">
+                      In stock only
+                    </label>
+                  </div>
+                  
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setFilters({
+                        query: "",
+                        priceRange: [0, 1000],
+                        categories: [],
+                        minRating: 0,
+                        inStockOnly: false,
+                        sortBy: "relevance",
+                      })}
+                      className="flex-1"
+                    >
+                      Clear All
+                    </Button>
+                    <Button
+                      size="sm"
+                      onClick={() => setShowFilters(false)}
+                      className="flex-1"
+                    >
+                      Apply
+                    </Button>
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
           </div>
 
           {/* Category Tabs */}

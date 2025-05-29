@@ -69,7 +69,7 @@ export default function Shop() {
           <h1 className="text-6xl font-bold mb-6 drop-shadow-lg text-[#2563eb]">
             Shop
           </h1>
-          <p className="text-xl text-white max-w-2xl mx-auto leading-relaxed drop-shadow-md">
+          <p className="text-xl max-w-2xl mx-auto leading-relaxed drop-shadow-md text-[black]">
             Discover our collection of high-quality products designed with care and precision. 
             From essentials to specialty items, we have something for everyone.
           </p>

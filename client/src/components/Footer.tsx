@@ -46,7 +46,9 @@ export default function Footer() {
             <div className="space-y-3 text-gray-300 text-sm">
               <div className="flex items-center space-x-2">
                 <Mail className="h-4 w-4" />
-                <span>Thoma260@wwu.edu</span>
+                <a href="mailto:Thoma260@wwu.edu" className="hover:text-white transition-colors">
+                  Thoma260@wwu.edu
+                </a>
               </div>
               <div className="flex items-center space-x-2">
                 <Phone className="h-4 w-4" />

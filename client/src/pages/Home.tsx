@@ -5,12 +5,16 @@ import type { Product } from "@shared/schema";
 import bannerImage from "@assets/images/pexels-n-voitkevich-6214476.jpg";
 import aboutImage from "@assets/images/pexels-karolina-grabowska-5632382.jpg";
 import headphonesImage from "@assets/A sleek black pair of premium wireless headphones displayed on a clean white background with soft sh.jpeg";
+import chargerImage from "@assets/magicstudio-art (1).jpg";
 import { Button } from "@/components/ui/button";
 
 // Image resolver to map product images to actual imported assets
 const getProductImage = (imagePath: string, productName: string) => {
   if (productName === "Premium Wireless Headphones") {
     return headphonesImage;
+  }
+  if (productName === "Wireless Phone Charger") {
+    return chargerImage;
   }
   return imagePath; // fallback to original path
 };

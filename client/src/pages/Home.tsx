@@ -42,7 +42,7 @@ export default function Home() {
     <div className="min-h-screen">
       {/* Hero Banner */}
       <section 
-        className="relative h-[80vh] flex items-center justify-center bg-cover bg-center"
+        className="relative h-[80vh] flex items-center justify-center bg-cover bg-center bg-fixed"
         style={{ backgroundImage: `url(${bannerImage})` }}
       >
         <div className="absolute inset-0 bg-black bg-opacity-50"></div>

@@ -428,8 +428,74 @@ export default function Shop() {
           </div>
         )}
 
-        {/* Cart Badge Test */}
-        <CartTest />
+
+
+        {/* Shipping Information Section */}
+        <div id="shipping" className="mt-16 bg-white rounded-2xl shadow-lg p-8">
+          <h3 className="text-3xl font-bold text-blue-600 mb-8 text-center">Shipping & Returns Information</h3>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Shipping Information */}
+            <div className="text-center">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+              </div>
+              <h4 className="text-xl font-bold text-gray-900 mb-3">Free Shipping</h4>
+              <p className="text-gray-600">
+                Free standard shipping on all orders. Most items ship within 1-2 business days.
+              </p>
+            </div>
+
+            {/* Returns & Exchanges */}
+            <div className="text-center">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+              </div>
+              <h4 className="text-xl font-bold text-gray-900 mb-3">Easy Returns</h4>
+              <p className="text-gray-600">
+                30-day return policy for all unused items in original packaging. No questions asked.
+              </p>
+            </div>
+
+            {/* Order Tracking */}
+            <div className="text-center">
+              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                </svg>
+              </div>
+              <h4 className="text-xl font-bold text-gray-900 mb-3">Track Your Order</h4>
+              <p className="text-gray-600">
+                Real-time tracking updates sent to your email. Monitor your package every step of the way.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-8 pt-8 border-t border-gray-200">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div>
+                <h5 className="text-lg font-bold text-gray-900 mb-3">Shipping Times</h5>
+                <ul className="space-y-2 text-gray-600">
+                  <li>• Standard: 3-5 business days</li>
+                  <li>• Express: 1-2 business days</li>
+                  <li>• Same-day delivery available in Seattle metro area</li>
+                </ul>
+              </div>
+              <div>
+                <h5 className="text-lg font-bold text-gray-900 mb-3">Return Process</h5>
+                <ul className="space-y-2 text-gray-600">
+                  <li>• Contact us to initiate return</li>
+                  <li>• Print prepaid return label</li>
+                  <li>• Refund processed within 3-5 business days</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* Call to Action */}
         {filteredAndSortedProducts.length > 0 && (

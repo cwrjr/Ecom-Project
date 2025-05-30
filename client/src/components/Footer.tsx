@@ -11,7 +11,7 @@ export default function Footer() {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold mb-4">About Trellis</h3>
             <ul className="space-y-3 text-gray-300">
-              <li><Link href="/about" className="hover:text-white transition-colors">Our Story</Link></li>
+              <li><a href="/#about" className="hover:text-white transition-colors">Our Story</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Careers</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Press</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Investor Relations</a></li>
@@ -23,10 +23,9 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-4">Customer Service</h3>
             <ul className="space-y-3 text-gray-300">
               <li><Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
-              <li><a href="#" className="hover:text-white transition-colors">Shipping Information</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Returns & Exchanges</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Size Guide</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Track Your Order</a></li>
+              <li><a href="/shop#shipping" className="hover:text-white transition-colors">Shipping Information</a></li>
+              <li><a href="/shop#shipping" className="hover:text-white transition-colors">Returns & Exchanges</a></li>
+              <li><a href="/shop#shipping" className="hover:text-white transition-colors">Track Your Order</a></li>
             </ul>
           </div>
 
@@ -37,7 +36,7 @@ export default function Footer() {
               <li><Link href="/" className="hover:text-white transition-colors">Home</Link></li>
               <li><Link href="/shop" className="hover:text-white transition-colors">Shop</Link></li>
               <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
-              <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
+              <li><a href="/#about" className="hover:text-white transition-colors">About Us</a></li>
             </ul>
           </div>
 
@@ -57,7 +56,14 @@ export default function Footer() {
               </div>
               <div className="flex items-center space-x-2">
                 <MapPin className="h-4 w-4" />
-                <span>Seattle, WA</span>
+                <a 
+                  href="https://www.google.com/maps/dir//Seattle,+WA" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition-colors cursor-pointer"
+                >
+                  Seattle, WA
+                </a>
               </div>
             </div>
             

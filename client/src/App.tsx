@@ -10,12 +10,14 @@ import Cart from "@/pages/Cart";
 import NotFound from "@/pages/not-found";
 import Navigation from "@/components/Navigation";
 import { CartProvider } from "@/components/CartContext";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 function Router() {
   const [location, setLocation] = useLocation();
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const cursorGlowRef = useRef<HTMLDivElement>(null);
 
   const pages = ["/", "/shop", "/contact", "/cart"];
   const currentIndex = pages.indexOf(location);
@@ -43,22 +45,42 @@ function Router() {
     }
   };
 
+  const handleMouseMove = (e: MouseEvent) => {
+    setMousePosition({ x: e.clientX, y: e.clientY });
+    if (cursorGlowRef.current) {
+      cursorGlowRef.current.style.transform = `translate(${e.clientX - 100}px, ${e.clientY - 100}px)`;
+    }
+  };
+
   useEffect(() => {
     document.addEventListener('touchstart', handleTouchStart);
     document.addEventListener('touchmove', handleTouchMove);
     document.addEventListener('touchend', handleTouchEnd);
+    document.addEventListener('mousemove', handleMouseMove);
 
     return () => {
       document.removeEventListener('touchstart', handleTouchStart);
       document.removeEventListener('touchmove', handleTouchMove);
       document.removeEventListener('touchend', handleTouchEnd);
+      document.removeEventListener('mousemove', handleMouseMove);
     };
   }, [touchStart, touchEnd, currentIndex]);
 
   return (
-    <div className="min-h-screen bg-white w-full overflow-x-hidden">
+    <div className="min-h-screen w-full overflow-x-hidden relative">
+      {/* Animated Background */}
+      <div className="animated-bg"></div>
+      
+      {/* Floating Shapes */}
+      <div className="floating-shape" style={{ zIndex: -1 }}></div>
+      <div className="floating-shape" style={{ zIndex: -1 }}></div>
+      <div className="floating-shape" style={{ zIndex: -1 }}></div>
+      
+      {/* Cursor Glow */}
+      <div ref={cursorGlowRef} className="cursor-glow"></div>
+      
       <Navigation />
-      <div className="w-full">
+      <div className="w-full relative">
         <Switch>
           <Route path="/" component={Home} />
           <Route path="/shop" component={Shop} />

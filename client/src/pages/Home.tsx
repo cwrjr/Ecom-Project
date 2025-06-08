@@ -73,7 +73,7 @@ export default function Home() {
   }, [isWhyChooseVisible]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50/30 via-white/80 to-gray-50/40 backdrop-blur-sm">
+    <div className="min-h-screen relative">
       {/* Hero Banner */}
       <section 
         className="relative h-[80vh] flex items-center justify-center bg-cover bg-center bg-fixed"

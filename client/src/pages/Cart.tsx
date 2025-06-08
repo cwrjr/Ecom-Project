@@ -108,12 +108,13 @@ export default function Cart() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen relative">
       {/* Cart Header */}
-      <section className="bg-blue-600 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl font-bold text-white mb-4">Shopping Cart</h1>
-          <p className="text-xl text-blue-100">
+      <section className="bg-gradient-to-r from-blue-600/90 to-purple-600/90 backdrop-blur-lg relative py-16">
+        <div className="absolute inset-0 bg-blue-600/20 backdrop-blur-sm"></div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-5xl font-bold text-white interactive-heading mb-4">Shopping Cart</h1>
+          <p className="text-xl text-blue-100 glass-card p-4 max-w-2xl mx-auto">
             Review your items and proceed to checkout when you're ready.
           </p>
         </div>
@@ -123,7 +124,7 @@ export default function Cart() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Cart Items */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+            <div className="glass-card overflow-hidden">
               <div className="p-6 border-b border-gray-200">
                 <div className="flex items-center justify-between">
                   <h2 className="text-2xl font-bold text-gray-900">
@@ -208,8 +209,8 @@ export default function Cart() {
 
           {/* Order Summary */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-24">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Order Summary</h3>
+            <div className="glass-card p-6 sticky top-24">
+              <h3 className="text-2xl font-bold interactive-heading mb-6">Order Summary</h3>
               
               <div className="space-y-4 mb-6">
                 <div className="flex justify-between">
@@ -237,7 +238,7 @@ export default function Cart() {
               <Button 
                 onClick={handleCheckout}
                 disabled={isCheckingOut}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 text-lg"
+                className="w-full btn-glass text-white font-bold py-4 text-lg"
               >
                 {isCheckingOut ? (
                   <div className="flex items-center">

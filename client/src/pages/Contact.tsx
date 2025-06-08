@@ -59,7 +59,7 @@ export default function Contact() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50/30 via-white/80 to-gray-50/40 backdrop-blur-sm">
+    <div className="min-h-screen relative">
       {/* Contact Header */}
       <section className="bg-gradient-to-r from-blue-600/90 to-purple-600/90 backdrop-blur-lg relative py-16">
         <div className="absolute inset-0 bg-blue-600/20 backdrop-blur-sm"></div>
@@ -68,7 +68,7 @@ export default function Contact() {
             <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mr-4">
               <Phone className="h-8 w-8 text-white" />
             </div>
-            <h1 className="text-5xl font-bold text-white">Contact Us</h1>
+            <h1 className="text-5xl font-bold text-white interactive-heading">Contact Us</h1>
           </div>
           <p className="text-xl text-blue-100 max-w-2xl mx-auto">
             Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
@@ -193,8 +193,8 @@ export default function Contact() {
 
           {/* Contact Form */}
           <div>
-            <div className="bg-white rounded-2xl shadow-lg p-8">
-              <h3 className="text-2xl font-bold text-blue-600 mb-6">Send us a Message</h3>
+            <div className="contact-form p-8">
+              <h3 className="text-2xl font-bold interactive-heading mb-6">Send us a Message</h3>
               
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>

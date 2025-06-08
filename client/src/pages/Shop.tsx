@@ -183,10 +183,10 @@ export default function Shop() {
         
         {/* Content */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-6xl font-bold mb-6 drop-shadow-lg text-[#2563eb]">
+          <h1 className="text-6xl font-bold mb-6 interactive-heading text-white">
             Shop
           </h1>
-          <p className="text-xl max-w-2xl mx-auto leading-relaxed drop-shadow-md text-[black]">
+          <p className="text-xl max-w-2xl mx-auto leading-relaxed glass-card p-6 text-white">
             Discover our collection of high-quality products designed with care and precision. 
             From essentials to specialty items, we have something for everyone.
           </p>
@@ -345,7 +345,7 @@ export default function Shop() {
         {/* Products Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredAndSortedProducts.map((product) => (
-            <div key={product.id} className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
+            <div key={product.id} className="product-card">
               <div className="relative overflow-hidden">
                 {product.name === "Smart Home Assistant" ? (
                   <video

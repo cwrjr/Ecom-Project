@@ -68,7 +68,7 @@ export default function Contact() {
             <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mr-4">
               <Phone className="h-8 w-8 text-white" />
             </div>
-            <h1 className="text-5xl font-bold text-white interactive-heading">Contact Us</h1>
+            <h1 className="text-5xl font-bold text-white">Contact Us</h1>
           </div>
           <p className="text-xl text-blue-100 max-w-2xl mx-auto">
             Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
@@ -194,7 +194,7 @@ export default function Contact() {
           {/* Contact Form */}
           <div>
             <div className="contact-form p-8">
-              <h3 className="text-2xl font-bold interactive-heading mb-6">Send us a Message</h3>
+              <h3 className="text-2xl font-bold text-blue-600 mb-6">Send us a Message</h3>
               
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>

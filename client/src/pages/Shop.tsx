@@ -183,10 +183,10 @@ export default function Shop() {
         
         {/* Content */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-6xl font-bold mb-6 interactive-heading text-white">
+          <h1 className="text-6xl font-bold mb-6 drop-shadow-lg text-[#2563eb]">
             Shop
           </h1>
-          <p className="text-xl max-w-2xl mx-auto leading-relaxed glass-card p-6 text-white">
+          <p className="text-xl max-w-2xl mx-auto leading-relaxed drop-shadow-md text-[black]">
             Discover our collection of high-quality products designed with care and precision. 
             From essentials to specialty items, we have something for everyone.
           </p>

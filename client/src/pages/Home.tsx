@@ -81,7 +81,7 @@ export default function Home() {
       >
         <div className="absolute inset-0 glass"></div>
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
-          <h1 className="text-6xl md:text-8xl font-bold mb-6 interactive-heading text-white">
+          <h1 className="text-6xl md:text-8xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-white to-blue-600 bg-clip-text text-transparent">
             Welcome!
           </h1>
           <p className="text-xl md:text-2xl text-white mb-8 font-medium backdrop-blur-sm bg-white/10 rounded-lg p-4">
@@ -102,7 +102,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="glass-card p-8">
-              <h2 className="text-4xl font-bold interactive-heading mb-6 text-center lg:text-left">
+              <h2 className="text-4xl font-bold text-blue-600 mb-6 text-center lg:text-left">
                 About Trellis
               </h2>
               <p className="text-lg text-gray-700 mb-6 leading-relaxed">
@@ -142,7 +142,7 @@ export default function Home() {
       <section className="py-20 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold interactive-heading mb-4">Featured Products</h2>
+            <h2 className="text-4xl font-bold text-blue-600 mb-4">Featured Products</h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto glass-card p-6">
               Discover our handpicked selection of premium products that combine quality, 
               innovation, and style.
@@ -213,7 +213,7 @@ export default function Home() {
           <div className={`text-center mb-16 transform transition-all duration-1000 ${
             isWhyChooseVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
           }`}>
-            <h2 className="text-4xl font-bold interactive-heading mb-4">Why Choose Trellis?</h2>
+            <h2 className="text-4xl font-bold text-blue-600 mb-4">Why Choose Trellis?</h2>
             <p className="text-xl text-gray-700 max-w-2xl mx-auto glass-card p-6">
               We're committed to providing an exceptional shopping experience with every purchase.
             </p>

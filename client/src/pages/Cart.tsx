@@ -113,7 +113,7 @@ export default function Cart() {
       <section className="bg-gradient-to-r from-blue-600/90 to-purple-600/90 backdrop-blur-lg relative py-16">
         <div className="absolute inset-0 bg-blue-600/20 backdrop-blur-sm"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl font-bold text-white interactive-heading mb-4">Shopping Cart</h1>
+          <h1 className="text-5xl font-bold text-white mb-4">Shopping Cart</h1>
           <p className="text-xl text-blue-100 glass-card p-4 max-w-2xl mx-auto">
             Review your items and proceed to checkout when you're ready.
           </p>
@@ -210,7 +210,7 @@ export default function Cart() {
           {/* Order Summary */}
           <div className="lg:col-span-1">
             <div className="glass-card p-6 sticky top-24">
-              <h3 className="text-2xl font-bold interactive-heading mb-6">Order Summary</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">Order Summary</h3>
               
               <div className="space-y-4 mb-6">
                 <div className="flex justify-between">

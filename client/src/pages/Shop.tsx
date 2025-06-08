@@ -172,14 +172,14 @@ export default function Shop() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50/30 via-white/80 to-gray-50/40 backdrop-blur-sm">
       {/* Shop Header */}
       <section 
         className="relative py-20 bg-cover bg-center"
         style={{ backgroundImage: `url(${shopBannerImage})` }}
       >
         {/* Translucent overlay with backdrop blur */}
-        <div className="absolute inset-0 bg-white/70 backdrop-blur-sm"></div>
+        <div className="absolute inset-0 bg-white/20 backdrop-blur-lg"></div>
         
         {/* Content */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -199,7 +199,7 @@ export default function Shop() {
             <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Recently Viewed</h2>
             <div className="flex gap-4 overflow-x-auto pb-4">
               {recentlyViewed.slice(0, 5).map((item: any) => (
-                <div key={item.id} className="flex-shrink-0 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
+                <div key={item.id} className="flex-shrink-0 w-48 bg-white/80 backdrop-blur-sm dark:bg-gray-800/80 rounded-lg shadow-md p-4">
                   <img src={getImagePath(item.product?.image)} alt={item.product?.name} className="w-full h-32 object-cover rounded mb-2" />
                   <h3 className="text-sm font-medium text-gray-900 dark:text-white truncate">{item.product?.name}</h3>
                   <p className="text-lg font-bold text-blue-600">${item.product?.price}</p>
@@ -315,8 +315,8 @@ export default function Shop() {
                 onClick={() => setSelectedCategory(category)}
                 className={`px-4 py-2 rounded-full font-medium transition-all ${
                   selectedCategory === category
-                    ? "bg-blue-600 text-white"
-                    : "bg-white text-blue-600 hover:bg-blue-50 border border-blue-200"
+                    ? "bg-blue-600 text-white backdrop-blur-sm"
+                    : "bg-white/80 backdrop-blur-sm text-blue-600 hover:bg-blue-50/80 border border-blue-200"
                 }`}
               >
                 {category}
@@ -345,7 +345,7 @@ export default function Shop() {
         {/* Products Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredAndSortedProducts.map((product) => (
-            <div key={product.id} className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
+            <div key={product.id} className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
               <div className="relative overflow-hidden">
                 {product.name === "Smart Home Assistant" ? (
                   <video

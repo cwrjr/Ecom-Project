@@ -59,12 +59,13 @@ export default function Contact() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50/30 via-white/80 to-gray-50/40 backdrop-blur-sm">
       {/* Contact Header */}
-      <section className="bg-blue-600 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <section className="bg-gradient-to-r from-blue-600/90 to-purple-600/90 backdrop-blur-lg relative py-16">
+        <div className="absolute inset-0 bg-blue-600/20 backdrop-blur-sm"></div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="flex items-center justify-center mb-6">
-            <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mr-4">
+            <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mr-4">
               <Phone className="h-8 w-8 text-white" />
             </div>
             <h1 className="text-5xl font-bold text-white">Contact Us</h1>

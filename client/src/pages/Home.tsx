@@ -79,16 +79,16 @@ export default function Home() {
         className="relative h-[80vh] flex items-center justify-center bg-cover bg-center bg-fixed"
         style={{ backgroundImage: `url(${bannerImage})` }}
       >
-        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+        <div className="absolute inset-0 glass"></div>
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
-          <h1 className="text-6xl md:text-8xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-white to-blue-600 bg-clip-text text-transparent">
+          <h1 className="text-6xl md:text-8xl font-bold mb-6 interactive-heading text-white">
             Welcome!
           </h1>
-          <p className="text-xl md:text-2xl text-white mb-8 font-medium">
+          <p className="text-xl md:text-2xl text-white mb-8 font-medium backdrop-blur-sm bg-white/10 rounded-lg p-4">
             Discover premium products designed with care and precision
           </p>
           <Link href="/shop">
-            <Button size="lg" className="text-lg px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-full shadow-lg hover:shadow-xl transition-all duration-200">
+            <Button size="lg" className="btn-glass text-white font-bold text-lg px-8 py-4 rounded-full">
               <ShoppingBag className="h-5 w-5 mr-2" />
               Start Shopping
               <ArrowRight className="h-5 w-5 ml-2" />
@@ -98,11 +98,11 @@ export default function Home() {
       </section>
 
       {/* About Trellis Section */}
-      <section id="about" className="py-20 bg-white/20 backdrop-blur-sm">
+      <section id="about" className="py-20 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <h2 className="text-4xl font-bold text-blue-600 mb-6 text-center lg:text-left">
+            <div className="glass-card p-8">
+              <h2 className="text-4xl font-bold interactive-heading mb-6 text-center lg:text-left">
                 About Trellis
               </h2>
               <p className="text-lg text-gray-700 mb-6 leading-relaxed">
@@ -123,13 +123,13 @@ export default function Home() {
                 </Button>
               </Link>
             </div>
-            <div className="relative">
+            <div className="relative reveal-on-hover">
               <img 
                 src={aboutImage} 
                 alt="About Trellis" 
-                className="rounded-3xl shadow-2xl w-full"
+                className="rounded-3xl shadow-2xl w-full smooth-transition"
               />
-              <div className="absolute -bottom-6 -right-6 bg-blue-600 text-white p-6 rounded-2xl shadow-lg">
+              <div className="absolute -bottom-6 -right-6 glass-card text-white p-6 reveal-content">
                 <div className="text-3xl font-bold">500+</div>
                 <div className="text-sm">Happy Customers</div>
               </div>
@@ -139,11 +139,11 @@ export default function Home() {
       </section>
 
       {/* Featured Products */}
-      <section className="py-20 bg-white/10 backdrop-blur-sm">
+      <section className="py-20 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-blue-600 mb-4">Featured Products</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <h2 className="text-4xl font-bold interactive-heading mb-4">Featured Products</h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto glass-card p-6">
               Discover our handpicked selection of premium products that combine quality, 
               innovation, and style.
             </p>
@@ -151,7 +151,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
             {featuredProducts.slice(0, 6).map((product) => (
-              <div key={product.id} className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden group">
+              <div key={product.id} className="product-card">
                 <div className="relative overflow-hidden">
                   {product.name === "Smart Home Assistant" ? (
                     <video
@@ -213,14 +213,14 @@ export default function Home() {
           <div className={`text-center mb-16 transform transition-all duration-1000 ${
             isWhyChooseVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
           }`}>
-            <h2 className="text-4xl font-bold text-blue-600 mb-4">Why Choose Trellis?</h2>
-            <p className="text-xl text-gray-700 max-w-2xl mx-auto">
+            <h2 className="text-4xl font-bold interactive-heading mb-4">Why Choose Trellis?</h2>
+            <p className="text-xl text-gray-700 max-w-2xl mx-auto glass-card p-6">
               We're committed to providing an exceptional shopping experience with every purchase.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className={`text-center p-8 bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg transform transition-all duration-1000 delay-300 ${
+            <div className={`text-center p-8 glass-card transform transition-all duration-1000 delay-300 ${
               isWhyChooseVisible ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-16 opacity-0 scale-95'
             }`}>
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
@@ -232,7 +232,7 @@ export default function Home() {
               </p>
             </div>
 
-            <div className={`text-center p-8 bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg transform transition-all duration-1000 delay-500 ${
+            <div className={`text-center p-8 glass-card transform transition-all duration-1000 delay-500 ${
               isWhyChooseVisible ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-16 opacity-0 scale-95'
             }`}>
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
@@ -244,7 +244,7 @@ export default function Home() {
               </p>
             </div>
 
-            <div className={`text-center p-8 bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg transform transition-all duration-1000 delay-700 ${
+            <div className={`text-center p-8 glass-card transform transition-all duration-1000 delay-700 ${
               isWhyChooseVisible ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-16 opacity-0 scale-95'
             }`}>
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">

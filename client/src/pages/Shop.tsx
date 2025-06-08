@@ -172,7 +172,7 @@ export default function Shop() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50/30 via-white/80 to-gray-50/40 backdrop-blur-sm">
+    <div className="min-h-screen relative">
       {/* Shop Header */}
       <section 
         className="relative py-20 bg-cover bg-center"

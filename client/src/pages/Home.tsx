@@ -1,5 +1,6 @@
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
+import { useEffect, useRef, useState } from "react";
 import { ShoppingBag, ArrowRight, Star, Zap, Shield, Phone } from "lucide-react";
 import type { Product } from "@shared/schema";
 import bannerImage from "@assets/images/pexels-n-voitkevich-6214476.jpg";
@@ -38,8 +39,41 @@ export default function Home() {
     queryKey: ["/api/products/featured"],
   });
 
+  const [isWhyChooseVisible, setIsWhyChooseVisible] = useState(false);
+  const [scrollLocked, setScrollLocked] = useState(false);
+  const whyChooseRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !isWhyChooseVisible) {
+            setIsWhyChooseVisible(true);
+            setScrollLocked(true);
+            document.body.style.overflow = 'hidden';
+            
+            setTimeout(() => {
+              setScrollLocked(false);
+              document.body.style.overflow = 'unset';
+            }, 3000);
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+
+    if (whyChooseRef.current) {
+      observer.observe(whyChooseRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+      document.body.style.overflow = 'unset';
+    };
+  }, [isWhyChooseVisible]);
+
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50/30 via-white/80 to-gray-50/40 backdrop-blur-sm">
       {/* Hero Banner */}
       <section 
         className="relative h-[80vh] flex items-center justify-center bg-cover bg-center bg-fixed"
@@ -64,7 +98,7 @@ export default function Home() {
       </section>
 
       {/* About Trellis Section */}
-      <section className="py-20 bg-gray-50">
+      <section id="about" className="py-20 bg-white/20 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
@@ -105,7 +139,7 @@ export default function Home() {
       </section>
 
       {/* Featured Products */}
-      <section className="py-20">
+      <section className="py-20 bg-white/10 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-blue-600 mb-4">Featured Products</h2>
@@ -117,7 +151,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
             {featuredProducts.slice(0, 6).map((product) => (
-              <div key={product.id} className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden group">
+              <div key={product.id} className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden group">
                 <div className="relative overflow-hidden">
                   {product.name === "Smart Home Assistant" ? (
                     <video
@@ -170,18 +204,26 @@ export default function Home() {
       </section>
 
       {/* Why Choose Trellis */}
-      <section className="py-20 bg-blue-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+      <section 
+        ref={whyChooseRef}
+        className="py-20 bg-gradient-to-r from-blue-600/20 to-purple-600/20 backdrop-blur-lg relative overflow-hidden"
+      >
+        <div className="absolute inset-0 bg-blue-50/30 backdrop-blur-sm"></div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className={`text-center mb-16 transform transition-all duration-1000 ${
+            isWhyChooseVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
+          }`}>
             <h2 className="text-4xl font-bold text-blue-600 mb-4">Why Choose Trellis?</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-700 max-w-2xl mx-auto">
               We're committed to providing an exceptional shopping experience with every purchase.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center p-8 bg-white rounded-2xl shadow-lg">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <div className={`text-center p-8 bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg transform transition-all duration-1000 delay-300 ${
+              isWhyChooseVisible ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-16 opacity-0 scale-95'
+            }`}>
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
                 <Zap className="h-8 w-8 text-blue-600" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-4">Fast Delivery</h3>
@@ -190,8 +232,10 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="text-center p-8 bg-white rounded-2xl shadow-lg">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <div className={`text-center p-8 bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg transform transition-all duration-1000 delay-500 ${
+              isWhyChooseVisible ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-16 opacity-0 scale-95'
+            }`}>
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
                 <Shield className="h-8 w-8 text-blue-600" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-4">Quality Guarantee</h3>
@@ -200,8 +244,10 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="text-center p-8 bg-white rounded-2xl shadow-lg">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <div className={`text-center p-8 bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg transform transition-all duration-1000 delay-700 ${
+              isWhyChooseVisible ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-16 opacity-0 scale-95'
+            }`}>
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
                 <Star className="h-8 w-8 text-blue-600" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-4">Premium Support</h3>
@@ -210,14 +256,23 @@ export default function Home() {
               </p>
             </div>
           </div>
+          
+          {scrollLocked && (
+            <div className="absolute inset-0 pointer-events-none">
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-blue-600/30 text-sm font-medium animate-pulse">
+                Scroll locked - Experiencing Trellis
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
       {/* Call to Action */}
-      <section className="py-20 bg-blue-600">
-        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+      <section className="py-20 bg-gradient-to-r from-blue-600/90 to-purple-600/90 backdrop-blur-lg relative">
+        <div className="absolute inset-0 bg-blue-600/20 backdrop-blur-sm"></div>
+        <div className="relative max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-center mb-6">
-            <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mr-4">
+            <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mr-4 backdrop-blur-sm">
               <Star className="h-8 w-8 text-white" />
             </div>
             <h2 className="text-4xl font-bold text-white">
@@ -229,13 +284,13 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/shop">
-              <Button size="lg" variant="secondary" className="bg-white text-blue-600 hover:bg-gray-100 font-bold px-8 py-4">
+              <Button size="lg" variant="secondary" className="bg-white/90 backdrop-blur-sm text-blue-600 hover:bg-white hover:text-blue-700 font-bold px-8 py-4 shadow-lg">
                 <ShoppingBag className="h-5 w-5 mr-2" />
                 Shop Now
               </Button>
             </Link>
             <Link href="/contact">
-              <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 font-bold px-8 py-4 border-2 border-white">
+              <Button size="lg" className="bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 font-bold px-8 py-4 border-2 border-white/60 shadow-lg">
                 <Phone className="h-5 w-5 mr-2" />
                 Contact Us
               </Button>

@@ -178,8 +178,8 @@ export default function Shop() {
         className="relative py-20 bg-cover bg-center"
         style={{ backgroundImage: `url(${shopBannerImage})` }}
       >
-        {/* Translucent overlay with backdrop blur */}
-        <div className="absolute inset-0 bg-white/20 backdrop-blur-lg"></div>
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-white/50"></div>
         
         {/* Content */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

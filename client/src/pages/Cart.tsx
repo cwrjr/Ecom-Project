@@ -110,8 +110,7 @@ export default function Cart() {
   return (
     <div className="min-h-screen relative">
       {/* Cart Header */}
-      <section className="bg-gradient-to-r from-blue-600/90 to-purple-600/90 backdrop-blur-lg relative py-16">
-        <div className="absolute inset-0 bg-blue-600/20 backdrop-blur-sm"></div>
+      <section className="bg-blue-600 py-16">
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-5xl font-bold text-white mb-4">Shopping Cart</h1>
           <p className="text-xl text-blue-100 glass-card p-4 max-w-2xl mx-auto">

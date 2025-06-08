@@ -61,8 +61,7 @@ export default function Contact() {
   return (
     <div className="min-h-screen relative">
       {/* Contact Header */}
-      <section className="bg-gradient-to-r from-blue-600/90 to-purple-600/90 backdrop-blur-lg relative py-16">
-        <div className="absolute inset-0 bg-blue-600/20 backdrop-blur-sm"></div>
+      <section className="bg-blue-600 py-16">
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="flex items-center justify-center mb-6">
             <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mr-4">

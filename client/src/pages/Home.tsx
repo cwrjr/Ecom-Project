@@ -55,7 +55,7 @@ export default function Home() {
             setTimeout(() => {
               setScrollLocked(false);
               document.body.style.overflow = 'unset';
-            }, 3000);
+            }, 2500);
           }
         });
       },
@@ -79,7 +79,7 @@ export default function Home() {
         className="relative h-[80vh] flex items-center justify-center bg-cover bg-center bg-fixed"
         style={{ backgroundImage: `url(${bannerImage})` }}
       >
-        <div className="absolute inset-0 glass"></div>
+        <div className="absolute inset-0 bg-black/30"></div>
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
           <h1 className="text-6xl md:text-8xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-white to-blue-600 bg-clip-text text-transparent">
             Welcome!
@@ -208,7 +208,9 @@ export default function Home() {
         ref={whyChooseRef}
         className="py-20 bg-gradient-to-r from-blue-600/20 to-purple-600/20 backdrop-blur-lg relative overflow-hidden"
       >
-        <div className="absolute inset-0 bg-blue-50/30 backdrop-blur-sm"></div>
+        <div className={`absolute inset-0 bg-blue-50/30 backdrop-blur-sm transition-opacity duration-2000 ${
+          scrollLocked ? 'opacity-100' : 'opacity-0'
+        }`}></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className={`text-center mb-16 transform transition-all duration-1000 ${
             isWhyChooseVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
@@ -259,8 +261,8 @@ export default function Home() {
           
           {scrollLocked && (
             <div className="absolute inset-0 pointer-events-none">
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-blue-600/30 text-sm font-medium animate-pulse">
-                Scroll locked - Experiencing Trellis
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white/60 text-sm font-medium animate-pulse backdrop-blur-sm bg-black/20 px-4 py-2 rounded-lg">
+                Experiencing Trellis...
               </div>
             </div>
           )}

@@ -193,7 +193,7 @@ export default function Contact() {
 
           {/* Contact Form */}
           <div>
-            <div className="bg-white rounded-2xl shadow-lg p-8">
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-8">
               <h3 className="text-2xl font-bold text-blue-600 mb-6">Send us a Message</h3>
               
               <form onSubmit={handleSubmit} className="space-y-6">

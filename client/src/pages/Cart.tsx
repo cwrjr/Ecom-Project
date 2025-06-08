@@ -83,9 +83,9 @@ export default function Cart() {
 
   if (cartItems.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 py-16">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50/30 via-white/80 to-gray-50/40 backdrop-blur-sm py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="bg-white rounded-2xl shadow-lg p-12">
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-12">
             <div className="text-6xl mb-6">🛒</div>
             <h1 className="text-3xl font-bold text-gray-900 mb-4">Your cart is empty</h1>
             <p className="text-xl text-gray-600 mb-8">
@@ -108,10 +108,11 @@ export default function Cart() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50/30 via-white/80 to-gray-50/40 backdrop-blur-sm">
       {/* Cart Header */}
-      <section className="bg-blue-600 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <section className="bg-gradient-to-r from-blue-600/90 to-purple-600/90 backdrop-blur-lg relative py-16">
+        <div className="absolute inset-0 bg-blue-600/20 backdrop-blur-sm"></div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-5xl font-bold text-white mb-4">Shopping Cart</h1>
           <p className="text-xl text-blue-100">
             Review your items and proceed to checkout when you're ready.
@@ -123,7 +124,7 @@ export default function Cart() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Cart Items */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden">
               <div className="p-6 border-b border-gray-200">
                 <div className="flex items-center justify-between">
                   <h2 className="text-2xl font-bold text-gray-900">
@@ -208,7 +209,7 @@ export default function Cart() {
 
           {/* Order Summary */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-24">
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6 sticky top-24">
               <h3 className="text-2xl font-bold text-gray-900 mb-6">Order Summary</h3>
               
               <div className="space-y-4 mb-6">

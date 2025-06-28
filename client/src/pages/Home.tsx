@@ -78,7 +78,7 @@ export default function Home() {
           }
         });
       },
-      { threshold: 0.5 }
+      { threshold: 0.8 }
     );
 
     if (whyChooseRef.current) {
@@ -235,7 +235,7 @@ export default function Home() {
             isWhyChooseVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
           }`}>
             <h2 className="text-4xl font-bold text-blue-600 mb-4">Why Choose Trellis?</h2>
-            <p className="text-xl text-gray-700 max-w-2xl mx-auto glass-card p-6">
+            <p className="text-xl text-gray-700 max-w-2xl mx-auto bg-white/20 backdrop-blur-md rounded-2xl border border-white/30 shadow-xl p-6">
               We're committed to providing an exceptional shopping experience with every purchase.
             </p>
           </div>

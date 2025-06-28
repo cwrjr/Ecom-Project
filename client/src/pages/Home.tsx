@@ -225,8 +225,18 @@ export default function Home() {
       {/* Why Choose Trellis */}
       <section 
         ref={whyChooseRef}
-        className="py-20 bg-gradient-to-r from-blue-600/20 to-purple-600/20 backdrop-blur-lg relative overflow-hidden animate-gradient-x"
+        className="py-20 bg-gradient-to-r from-blue-600/20 via-indigo-500/25 to-purple-600/20 backdrop-blur-lg relative overflow-hidden animate-gradient-x"
       >
+        {/* Animated gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-purple-500/10 animate-gradient-x-reverse"></div>
+        
+        {/* Floating orbs */}
+        <div className="absolute top-10 left-10 w-32 h-32 bg-blue-400/20 rounded-full blur-xl animate-float"></div>
+        <div className="absolute bottom-10 right-10 w-40 h-40 bg-purple-400/20 rounded-full blur-xl animate-float-delayed"></div>
+        <div className="absolute top-1/2 left-1/3 w-24 h-24 bg-indigo-400/20 rounded-full blur-xl animate-float-slow"></div>
+        <div className="absolute top-20 right-1/4 w-28 h-28 bg-cyan-400/15 rounded-full blur-xl animate-float-delayed"></div>
+        <div className="absolute bottom-20 left-1/4 w-36 h-36 bg-violet-400/15 rounded-full blur-xl animate-float-slow"></div>
+        
         <div className={`absolute inset-0 bg-white/10 backdrop-blur-sm transition-opacity duration-2000 ${
           scrollLocked ? 'opacity-100' : 'opacity-0'
         }`}></div>
@@ -234,7 +244,7 @@ export default function Home() {
           <div className={`text-center mb-16 transform transition-all duration-1000 ${
             isWhyChooseVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
           }`}>
-            <h2 className="text-4xl font-bold text-blue-600 mb-4">Why Choose Trellis?</h2>
+            <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent animate-gradient-text">Why Choose Trellis?</h2>
             <p className="text-xl text-gray-700 max-w-2xl mx-auto bg-white/20 backdrop-blur-md rounded-2xl border border-white/30 shadow-xl p-6">
               We're committed to providing an exceptional shopping experience with every purchase.
             </p>

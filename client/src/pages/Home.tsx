@@ -93,9 +93,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen relative">
-      {/* Animated Gradient Bar */}
-      <div className="h-2 bg-gradient-to-r from-blue-600 via-blue-500 to-purple-600 animate-gradient-x"></div>
-
       {/* Hero Banner */}
       <section 
         className="relative h-[80vh] flex items-center justify-center bg-cover bg-center bg-fixed"
@@ -103,7 +100,7 @@ export default function Home() {
       >
         <div className="absolute inset-0 bg-black/30"></div>
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
-          <h1 className="text-6xl md:text-8xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-600 bg-clip-text text-transparent animate-gradient-text">
+          <h1 className="text-6xl md:text-8xl font-bold mb-6 bg-gradient-to-r from-slate-100 via-blue-100 to-slate-100 bg-clip-text text-transparent animate-gradient-text">
             Welcome!
           </h1>
           <p className="text-xl md:text-2xl text-white mb-8 font-medium backdrop-blur-sm bg-white/10 rounded-lg p-4">
@@ -228,7 +225,7 @@ export default function Home() {
       {/* Why Choose Trellis */}
       <section 
         ref={whyChooseRef}
-        className="py-20 bg-gradient-to-r from-blue-600/20 to-purple-600/20 backdrop-blur-lg relative overflow-hidden"
+        className="py-20 bg-gradient-to-r from-blue-600/20 to-purple-600/20 backdrop-blur-lg relative overflow-hidden animate-gradient-x"
       >
         <div className={`absolute inset-0 bg-white/10 backdrop-blur-sm transition-opacity duration-2000 ${
           scrollLocked ? 'opacity-100' : 'opacity-0'

@@ -51,11 +51,30 @@ export default function Home() {
             setIsWhyChooseVisible(true);
             setScrollLocked(true);
             document.body.style.overflow = 'hidden';
+            document.documentElement.style.overflow = 'hidden';
+            
+            // Prevent all scroll events during lock
+            const preventScroll = (e: Event) => {
+              e.preventDefault();
+              e.stopPropagation();
+              return false;
+            };
+            
+            document.addEventListener('wheel', preventScroll, { passive: false });
+            document.addEventListener('touchmove', preventScroll, { passive: false });
+            document.addEventListener('keydown', (e) => {
+              if ([32, 33, 34, 35, 36, 37, 38, 39, 40].includes(e.keyCode)) {
+                e.preventDefault();
+              }
+            });
             
             setTimeout(() => {
               setScrollLocked(false);
               document.body.style.overflow = 'unset';
-            }, 2500);
+              document.documentElement.style.overflow = 'unset';
+              document.removeEventListener('wheel', preventScroll);
+              document.removeEventListener('touchmove', preventScroll);
+            }, 3000);
           }
         });
       },
@@ -208,7 +227,7 @@ export default function Home() {
         ref={whyChooseRef}
         className="py-20 bg-gradient-to-r from-blue-600/20 to-purple-600/20 backdrop-blur-lg relative overflow-hidden"
       >
-        <div className={`absolute inset-0 bg-blue-50/30 backdrop-blur-sm transition-opacity duration-2000 ${
+        <div className={`absolute inset-0 bg-white/10 backdrop-blur-sm transition-opacity duration-2000 ${
           scrollLocked ? 'opacity-100' : 'opacity-0'
         }`}></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -222,37 +241,61 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className={`text-center p-8 glass-card transform transition-all duration-1000 delay-300 ${
-              isWhyChooseVisible ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-16 opacity-0 scale-95'
+            <div className={`text-center p-8 bg-white/20 backdrop-blur-md rounded-2xl border border-white/30 shadow-xl transform transition-all duration-1000 hover:scale-105 hover:bg-white/30 ${
+              scrollLocked 
+                ? 'delay-300 animate-bounce' 
+                : isWhyChooseVisible 
+                  ? 'translate-y-0 opacity-100 scale-100 delay-300' 
+                  : 'translate-y-16 opacity-0 scale-95'
             }`}>
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+              <div className={`w-16 h-16 bg-blue-600/30 rounded-full flex items-center justify-center mx-auto mb-6 backdrop-blur-sm transition-all duration-500 ${
+                scrollLocked ? 'animate-pulse scale-110' : ''
+              }`}>
                 <Zap className="h-8 w-8 text-blue-600" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Fast Delivery</h3>
+              <h3 className={`text-xl font-bold text-gray-900 mb-4 transition-all duration-500 ${
+                scrollLocked ? 'animate-pulse' : ''
+              }`}>Fast Delivery</h3>
               <p className="text-gray-600">
                 Get your orders delivered quickly with our expedited shipping options and reliable logistics partners.
               </p>
             </div>
 
-            <div className={`text-center p-8 glass-card transform transition-all duration-1000 delay-500 ${
-              isWhyChooseVisible ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-16 opacity-0 scale-95'
+            <div className={`text-center p-8 bg-white/20 backdrop-blur-md rounded-2xl border border-white/30 shadow-xl transform transition-all duration-1000 hover:scale-105 hover:bg-white/30 ${
+              scrollLocked 
+                ? 'delay-500 animate-bounce' 
+                : isWhyChooseVisible 
+                  ? 'translate-y-0 opacity-100 scale-100 delay-500' 
+                  : 'translate-y-16 opacity-0 scale-95'
             }`}>
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+              <div className={`w-16 h-16 bg-blue-600/30 rounded-full flex items-center justify-center mx-auto mb-6 backdrop-blur-sm transition-all duration-500 ${
+                scrollLocked ? 'animate-pulse scale-110' : ''
+              }`}>
                 <Shield className="h-8 w-8 text-blue-600" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Quality Guarantee</h3>
+              <h3 className={`text-xl font-bold text-gray-900 mb-4 transition-all duration-500 ${
+                scrollLocked ? 'animate-pulse' : ''
+              }`}>Quality Guarantee</h3>
               <p className="text-gray-600">
                 Every product is carefully inspected and comes with our satisfaction guarantee for your peace of mind.
               </p>
             </div>
 
-            <div className={`text-center p-8 glass-card transform transition-all duration-1000 delay-700 ${
-              isWhyChooseVisible ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-16 opacity-0 scale-95'
+            <div className={`text-center p-8 bg-white/20 backdrop-blur-md rounded-2xl border border-white/30 shadow-xl transform transition-all duration-1000 hover:scale-105 hover:bg-white/30 ${
+              scrollLocked 
+                ? 'delay-700 animate-bounce' 
+                : isWhyChooseVisible 
+                  ? 'translate-y-0 opacity-100 scale-100 delay-700' 
+                  : 'translate-y-16 opacity-0 scale-95'
             }`}>
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+              <div className={`w-16 h-16 bg-blue-600/30 rounded-full flex items-center justify-center mx-auto mb-6 backdrop-blur-sm transition-all duration-500 ${
+                scrollLocked ? 'animate-pulse scale-110' : ''
+              }`}>
                 <Star className="h-8 w-8 text-blue-600" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Premium Support</h3>
+              <h3 className={`text-xl font-bold text-gray-900 mb-4 transition-all duration-500 ${
+                scrollLocked ? 'animate-pulse' : ''
+              }`}>Premium Support</h3>
               <p className="text-gray-600">
                 Our dedicated customer service team is here to help you with any questions or concerns you may have.
               </p>
@@ -270,8 +313,8 @@ export default function Home() {
       </section>
 
       {/* Call to Action */}
-      <section className="py-20 bg-gradient-to-r from-blue-600/90 to-purple-600/90 backdrop-blur-lg relative">
-        <div className="absolute inset-0 bg-blue-600/20 backdrop-blur-sm"></div>
+      <section className="py-20 bg-gradient-to-r from-blue-600 via-blue-500 to-purple-600 relative overflow-hidden animate-gradient-x">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/30 via-indigo-500/30 to-purple-500/30 animate-gradient-x-reverse"></div>
         <div className="relative max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-center mb-6">
             <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mr-4 backdrop-blur-sm">

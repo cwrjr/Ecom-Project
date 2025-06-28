@@ -248,6 +248,11 @@
     animation: gradient-x-reverse 6s ease infinite;
   }
 
+  .animate-gradient-text {
+    background-size: 400% 400%;
+    animation: gradient-x 3s ease infinite;
+  }
+
   .product-card::before {
     content: '';
     position: absolute;

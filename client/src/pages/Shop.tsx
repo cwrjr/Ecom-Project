@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Link } from "wouter";
 import { Search, Filter, Star, ShoppingCart, Heart, Eye, BarChart3, Grid, List, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -364,62 +365,69 @@ export default function Shop() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredAndSortedProducts.map((product) => (
             <div key={product.id} className="product-card">
-              <div className="relative overflow-hidden">
-                {product.name === "Smart Home Assistant" ? (
-                  <video
-                    src={getProductImage(product.image, product.name)}
-                    className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    onError={() => console.log('Video failed to load:', product.image)}
-                    onLoadedData={() => console.log('Video loaded:', product.image)}
-                  />
-                ) : (
-                  <img 
-                    src={getProductImage(product.image, product.name)} 
-                    alt={product.name}
-                    className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
-                    onError={(e) => {
-                      console.log('Image failed to load:', product.image);
-                      e.currentTarget.src = 'https://via.placeholder.com/500x500/e2e8f0/64748b?text=' + encodeURIComponent(product.name);
-                    }}
-                    onLoad={() => console.log('Image loaded:', product.image)}
-                  />
-                )}
-                {product.originalPrice && (
-                  <div className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
-                    SALE
-                  </div>
-                )}
-                {product.tags?.includes("new") && (
-                  <div className="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold">
-                    NEW
-                  </div>
-                )}
-              </div>
-              
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{product.name}</h3>
-                <p className="text-gray-600 mb-4 line-clamp-2">{product.description}</p>
-                <p className="text-sm text-blue-600 font-medium mb-4">{product.category}</p>
-                
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center space-x-2">
-                    {product.originalPrice && (
-                      <span className="text-gray-400 line-through text-lg">${product.originalPrice}</span>
-                    )}
-                    <span className="text-2xl font-bold text-blue-600">${product.price}</span>
-                  </div>
+              <Link href={`/product/${product.id}`}>
+                <div className="relative overflow-hidden cursor-pointer">
+                  {product.name === "Smart Home Assistant" ? (
+                    <video
+                      src={getProductImage(product.image, product.name)}
+                      className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      onError={() => console.log('Video failed to load:', product.image)}
+                      onLoadedData={() => console.log('Video loaded:', product.image)}
+                    />
+                  ) : (
+                    <img 
+                      src={getProductImage(product.image, product.name)} 
+                      alt={product.name}
+                      className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                      onError={(e) => {
+                        console.log('Image failed to load:', product.image);
+                        e.currentTarget.src = 'https://via.placeholder.com/500x500/e2e8f0/64748b?text=' + encodeURIComponent(product.name);
+                      }}
+                      onLoad={() => console.log('Image loaded:', product.image)}
+                    />
+                  )}
+                  {product.originalPrice && (
+                    <div className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                      SALE
+                    </div>
+                  )}
+                  {product.tags?.includes("new") && (
+                    <div className="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                      NEW
+                    </div>
+                  )}
                 </div>
                 
-                <div className="mb-4">
-                  <ProductRating productId={product.id} productName={product.name} />
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">{product.name}</h3>
+                  <p className="text-gray-600 mb-4 line-clamp-2">{product.description}</p>
+                  <p className="text-sm text-blue-600 font-medium mb-4">{product.category}</p>
+                  
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center space-x-2">
+                      {product.originalPrice && (
+                        <span className="text-gray-400 line-through text-lg">${product.originalPrice}</span>
+                      )}
+                      <span className="text-2xl font-bold text-blue-600">${product.price}</span>
+                    </div>
+                  </div>
+                  
+                  <div className="mb-4">
+                    <ProductRating productId={product.id} productName={product.name} />
+                  </div>
                 </div>
+              </Link>
 
+              <div className="px-6 pb-6">
                 <Button 
-                  onClick={() => handleAddToCart(product)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleAddToCart(product);
+                  }}
                   className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3"
                 >
                   <ShoppingCart className="h-5 w-5 mr-2" />

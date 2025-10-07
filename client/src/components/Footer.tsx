@@ -22,7 +22,7 @@ export default function Footer() {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold mb-4">Customer Service</h3>
             <ul className="space-y-3 text-gray-300">
-              <li><Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
+              <li><Link href="/contact" onClick={() => window.scrollTo(0, 0)} className="hover:text-white transition-colors">Contact Us</Link></li>
               <li><a href="/contact#shipping" className="hover:text-white transition-colors">Shipping Information</a></li>
               <li><a href="/contact#shipping" className="hover:text-white transition-colors">Returns & Exchanges</a></li>
               <li><a href="/contact#shipping" className="hover:text-white transition-colors">Track Your Order</a></li>
@@ -35,7 +35,7 @@ export default function Footer() {
             <ul className="space-y-3 text-gray-300">
               <li><Link href="/" className="hover:text-white transition-colors">Home</Link></li>
               <li><Link href="/shop" className="hover:text-white transition-colors">Shop</Link></li>
-              <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
+              <li><Link href="/contact" onClick={() => window.scrollTo(0, 0)} className="hover:text-white transition-colors">Contact</Link></li>
               <li><a href="/#about" className="hover:text-white transition-colors">About Us</a></li>
             </ul>
           </div>

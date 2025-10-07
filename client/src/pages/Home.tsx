@@ -334,7 +334,7 @@ export default function Home() {
                 Shop Now
               </Button>
             </Link>
-            <Link href="/contact">
+            <Link href="/contact" onClick={() => window.scrollTo(0, 0)}>
               <Button size="lg" className="bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 font-bold px-8 py-4 border-2 border-white/60 shadow-lg">
                 <Phone className="h-5 w-5 mr-2" />
                 Contact Us

@@ -101,8 +101,35 @@ The application is configured for deployment on Replit with the following setup:
 - **Connection Pooling**: Neon serverless PostgreSQL with connection pooling
 - **Session Storage**: PostgreSQL-based session management for authentication
 
+## Recent Improvements
+
+### Newsletter Signup (October 2025)
+- **Newsletter Modal**: Auto-triggered modal after 8 seconds on homepage
+- **LocalStorage Persistence**: Shows only once per user
+- **Email Collection**: Form validation with toast notifications
+- **Responsive Design**: Mobile-friendly dialog with Radix UI
+
+### Mobile Menu Enhancements (October 2025)
+- **Smooth Animations**: Implemented Framer Motion for slide-down effects
+- **Staggered Menu Items**: Each navigation link animates with cascading delay
+- **Auto-close on Navigation**: Menu automatically closes after link click or search
+- **Dark Mode Support**: Full dark mode support in mobile menu
+
+### SEO Implementation (October 2025)
+- **react-helmet-async**: Integrated for dynamic meta tags
+- **Page-specific SEO**: Unique titles and descriptions for all pages
+- **Open Graph Tags**: Social media sharing optimization
+- **Product-specific Meta**: Dynamic SEO for individual product pages
+
+### Performance Optimizations (October 2025)
+- **Lazy Loading**: Native browser lazy loading for images
+- **Loading States**: Skeleton screens for Shop and ProductDetail pages
+- **Stock Indicators**: Real-time inventory badges with "Out of Stock" handling
+- **Disabled States**: Non-functional buttons when products unavailable
+
 ## Changelog
-- June 28, 2025. Initial setup
+- October 7, 2025: Added newsletter signup, mobile menu animations, SEO meta tags, lazy loading, loading states, and stock indicators
+- June 28, 2025: Initial setup
 
 ## User Preferences
 

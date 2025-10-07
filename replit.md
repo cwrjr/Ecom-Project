@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a full-stack e-commerce web application built with a modern tech stack featuring React frontend, Express.js backend, and PostgreSQL database. The application serves as both a professional developer portfolio and a functional e-commerce platform with advanced features like product management, shopping cart, user authentication, and ratings system.
+This is a full-stack e-commerce web application built with a modern tech stack featuring React frontend and Express.js backend with in-memory storage. The application serves as both a professional developer portfolio and a functional e-commerce platform with advanced features like product management, shopping cart, user authentication, and ratings system.
 
 ## System Architecture
 
@@ -10,9 +10,9 @@ The application follows a monorepo structure with clear separation between clien
 
 - **Frontend**: React with TypeScript, built using Vite
 - **Backend**: Express.js with TypeScript running on Node.js
-- **Database**: PostgreSQL with Drizzle ORM for type-safe database operations
+- **Storage**: In-memory storage with MemoryStore session management (ready for database integration)
 - **Styling**: Tailwind CSS with shadcn/ui component library
-- **Authentication**: Replit-based OAuth integration
+- **Authentication**: Replit-based OAuth integration with in-memory sessions
 - **Build System**: Vite for frontend, esbuild for backend production builds
 
 ## Key Components
@@ -26,12 +26,12 @@ The application follows a monorepo structure with clear separation between clien
 
 ### Backend Architecture
 - **REST API** built with Express.js
-- **Database Layer**: Drizzle ORM with type-safe schema definitions
-- **Authentication**: Session-based auth with PostgreSQL session store
+- **Storage Layer**: In-memory MemStorage implementation with full IStorage interface
+- **Authentication**: Session-based auth with MemoryStore session management
 - **File Serving**: Static asset serving for images and media
 
-### Database Schema
-The application uses a comprehensive schema with the following main entities:
+### Data Schema
+The application uses a comprehensive type-safe schema with the following main entities:
 - **Products**: Core product information with categories, pricing, and inventory
 - **Users**: User profiles and authentication data
 - **Cart Items**: Shopping cart functionality with session-based persistence
@@ -39,6 +39,8 @@ The application uses a comprehensive schema with the following main entities:
 - **Ratings**: Product review and rating system
 - **Favorites**: User wishlist functionality
 - **Categories**: Product categorization system
+
+*Note: Data is stored in-memory and will reset on server restart. Ready for database integration when needed.*
 
 ### UI/UX Features
 - **Responsive Design**: Mobile-first approach with tablet and desktop optimization
@@ -53,7 +55,7 @@ The application uses a comprehensive schema with the following main entities:
 1. **Client Requests**: React components make API calls using React Query
 2. **API Layer**: Express.js routes handle HTTP requests and validation
 3. **Business Logic**: Server-side processing with type-safe operations
-4. **Database Operations**: Drizzle ORM executes SQL queries against PostgreSQL
+4. **Storage Operations**: MemStorage executes in-memory CRUD operations
 5. **Response Handling**: JSON responses with proper error handling
 6. **State Updates**: React Query manages cache invalidation and UI updates
 
@@ -62,8 +64,7 @@ The application uses a comprehensive schema with the following main entities:
 ### Core Framework Dependencies
 - **React 18**: Modern React with concurrent features
 - **Express.js**: Web application framework for Node.js
-- **Drizzle ORM**: Type-safe database toolkit
-- **@neondatabase/serverless**: PostgreSQL connection for serverless environments
+- **Zod**: Schema validation for type-safe data operations
 
 ### UI and Styling
 - **Tailwind CSS**: Utility-first CSS framework
@@ -96,12 +97,18 @@ The application is configured for deployment on Replit with the following setup:
 - **Asset Optimization**: Static assets are properly served and cached
 - **Environment Configuration**: Supports both development and production modes
 
-### Database Management
-- **Schema Migrations**: Drizzle Kit handles database schema changes
-- **Connection Pooling**: Neon serverless PostgreSQL with connection pooling
-- **Session Storage**: PostgreSQL-based session management for authentication
+### Storage Management
+- **In-Memory Storage**: Fast MemStorage implementation with full CRUD operations
+- **Session Management**: MemoryStore for session persistence (ephemeral, resets on restart)
+- **Data Initialization**: Pre-loaded sample products, categories, and reviews
 
 ## Recent Improvements
+
+### Architecture Refactoring (October 2025)
+- **Database Removal**: Converted from PostgreSQL to in-memory storage for simplified deployment
+- **Type-Safe Schema**: Plain TypeScript interfaces with Zod validation (removed Drizzle ORM)
+- **Session Storage**: Switched from PostgreSQL sessions to MemoryStore
+- **Performance Focus**: Removed database overhead for faster response times
 
 ### Newsletter Signup (October 2025)
 - **Newsletter Modal**: Auto-triggered modal after 8 seconds on homepage
@@ -122,13 +129,15 @@ The application is configured for deployment on Replit with the following setup:
 - **Product-specific Meta**: Dynamic SEO for individual product pages
 
 ### Performance Optimizations (October 2025)
-- **Lazy Loading**: Native browser lazy loading for images
+- **Resource Preloading**: DNS prefetch, preconnect, and preload hints for Google Fonts
+- **React Query Caching**: Optimized staleTime (5min) and gcTime (10min) for better performance
+- **Lazy Loading**: Native browser lazy loading for all product images
 - **Loading States**: Skeleton screens for Shop and ProductDetail pages
 - **Stock Indicators**: Real-time inventory badges with "Out of Stock" handling
 - **Disabled States**: Non-functional buttons when products unavailable
 
 ## Changelog
-- October 7, 2025: Added newsletter signup, mobile menu animations, SEO meta tags, lazy loading, loading states, and stock indicators
+- October 7, 2025: Removed PostgreSQL database, added in-memory storage, performance optimizations (preloading, caching), newsletter signup, mobile menu animations, SEO meta tags, lazy loading, loading states, stock indicators
 - June 28, 2025: Initial setup
 
 ## User Preferences

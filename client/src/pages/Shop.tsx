@@ -16,8 +16,6 @@ import { apiRequest } from "@/lib/queryClient";
 import CartTest from "@/components/CartTest";
 import Footer from "@/components/Footer";
 import ProductRating from "@/components/ProductRating";
-import AdvancedSearch from "@/components/AdvancedSearch";
-import ProductComparison from "@/components/ProductComparison";
 import ProductQuickView from "@/components/ProductQuickView";
 import FavoritesButton from "@/components/FavoritesButton";
 import { SEO } from "@/components/SEO";

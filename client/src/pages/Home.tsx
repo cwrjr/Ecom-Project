@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import Footer from "@/components/Footer";
 import ProductRating from "@/components/ProductRating";
 import { SEO } from "@/components/SEO";
+import { NewsletterModal } from "@/components/NewsletterModal";
 
 // Image resolver to map product images to actual imported assets
 const getProductImage = (imagePath: string, productName: string) => {
@@ -42,6 +43,7 @@ export default function Home() {
 
   const [isWhyChooseVisible, setIsWhyChooseVisible] = useState(false);
   const [scrollLocked, setScrollLocked] = useState(false);
+  const [newsletterModalOpen, setNewsletterModalOpen] = useState(false);
   const whyChooseRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -91,6 +93,19 @@ export default function Home() {
       document.body.style.overflow = 'unset';
     };
   }, [isWhyChooseVisible]);
+
+  useEffect(() => {
+    const hasSeenNewsletter = localStorage.getItem('newsletterSeen');
+    
+    if (!hasSeenNewsletter) {
+      const timer = setTimeout(() => {
+        setNewsletterModalOpen(true);
+        localStorage.setItem('newsletterSeen', 'true');
+      }, 8000);
+
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   return (
     <div className="min-h-screen relative">
@@ -353,6 +368,11 @@ export default function Home() {
       </section>
 
       <Footer />
+      
+      <NewsletterModal 
+        open={newsletterModalOpen} 
+        onOpenChange={setNewsletterModalOpen} 
+      />
     </div>
   );
 }

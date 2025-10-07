@@ -10,6 +10,7 @@ import Cart from "@/pages/Cart";
 import NotFound from "@/pages/not-found";
 import Navigation from "@/components/Navigation";
 import { CartProvider } from "@/components/CartContext";
+import { ThemeProvider } from "@/components/ThemeProvider";
 import { useEffect, useState, useRef } from "react";
 
 function Router() {
@@ -96,12 +97,14 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <CartProvider>
-          <Toaster />
-          <Router />
-        </CartProvider>
-      </TooltipProvider>
+      <ThemeProvider>
+        <TooltipProvider>
+          <CartProvider>
+            <Toaster />
+            <Router />
+          </CartProvider>
+        </TooltipProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }

@@ -1,7 +1,8 @@
 import { Link, useLocation } from "wouter";
 import { useState } from "react";
-import { Menu, X, ShoppingBag, Phone, Home, ShoppingCart, Search } from "lucide-react";
+import { Menu, X, ShoppingBag, Phone, Home, ShoppingCart, Search, Moon, Sun } from "lucide-react";
 import { useCart } from "./CartContext";
+import { useTheme } from "./ThemeProvider";
 import logoPath from "@assets/images/logi.webp";
 
 export default function Navigation() {
@@ -9,6 +10,7 @@ export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const { cartCount } = useCart();
+  const { theme, toggleTheme } = useTheme();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,7 +27,7 @@ export default function Navigation() {
   ];
 
   return (
-    <nav className="bg-white shadow-lg border-b-4 border-blue-600 sticky top-0 z-50">
+    <nav className="bg-white dark:bg-gray-900 shadow-lg border-b-4 border-blue-600 dark:border-blue-500 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           <div className="flex items-center space-x-6">
@@ -71,6 +73,15 @@ export default function Navigation() {
               );
             })}
             
+            {/* Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="p-3 rounded-lg text-blue-600 hover:bg-blue-50 hover:shadow-md border-2 border-transparent hover:border-blue-600 transition-all duration-200"
+              aria-label="Toggle theme"
+            >
+              {theme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+            </button>
+            
             {/* Cart Icon */}
             <Link href="/cart" className="relative flex items-center space-x-2 px-4 py-3 rounded-lg text-lg font-bold text-blue-600 hover:bg-blue-50 hover:shadow-md border-2 border-transparent hover:border-blue-600 transition-all duration-200">
               <ShoppingCart className="h-5 w-5" />
@@ -85,8 +96,16 @@ export default function Navigation() {
 
           {/* Mobile menu button */}
           <div className="md:hidden flex items-center space-x-4">
+            <button
+              onClick={toggleTheme}
+              className="p-2 text-blue-600 dark:text-blue-400"
+              aria-label="Toggle theme"
+            >
+              {theme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+            </button>
+            
             <Link href="/cart" className="relative p-2">
-              <ShoppingCart className="h-6 w-6 text-blue-600" />
+              <ShoppingCart className="h-6 w-6 text-blue-600 dark:text-blue-400" />
               {cartCount > 0 && (
                 <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
                   {cartCount}
@@ -96,7 +115,7 @@ export default function Navigation() {
             
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-blue-600 hover:text-blue-700 focus:outline-none"
+              className="text-blue-600 dark:text-blue-400 hover:text-blue-700 focus:outline-none"
             >
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>

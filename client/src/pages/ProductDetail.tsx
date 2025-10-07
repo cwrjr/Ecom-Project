@@ -4,12 +4,14 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { ShoppingCart, Heart, ZoomIn, Star, ArrowLeft, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useCart } from "@/components/CartContext";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { apiRequest } from "@/lib/queryClient";
 import ProductRating from "@/components/ProductRating";
 import Footer from "@/components/Footer";
+import { SEO } from "@/components/SEO";
 import type { Product } from "@shared/schema";
 
 // Image imports
@@ -69,8 +71,25 @@ export default function ProductDetail() {
 
   if (isLoading || !product) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen bg-white dark:bg-gray-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <Skeleton className="h-10 w-32 mb-6" />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div className="space-y-4">
+              <Skeleton className="aspect-square w-full" />
+            </div>
+            <div className="space-y-6">
+              <Skeleton className="h-10 w-3/4" />
+              <Skeleton className="h-6 w-1/2" />
+              <Skeleton className="h-20 w-full" />
+              <Skeleton className="h-12 w-1/3" />
+              <div className="flex space-x-4">
+                <Skeleton className="h-12 w-32" />
+                <Skeleton className="h-12 w-48" />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -90,6 +109,13 @@ export default function ProductDetail() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
+      <SEO 
+        title={product.name}
+        description={product.description}
+        image={getProductImage(product.image, product.name)}
+        type="product"
+        keywords={`${product.name}, ${product.category}, buy online, premium ${product.category.toLowerCase()}`}
+      />
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">

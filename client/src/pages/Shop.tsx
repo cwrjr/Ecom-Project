@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useCart } from "@/components/CartContext";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
@@ -19,6 +20,7 @@ import AdvancedSearch from "@/components/AdvancedSearch";
 import ProductComparison from "@/components/ProductComparison";
 import ProductQuickView from "@/components/ProductQuickView";
 import FavoritesButton from "@/components/FavoritesButton";
+import { SEO } from "@/components/SEO";
 import type { Product } from "@shared/schema";
 import shopBannerImage from "@assets/images/pexels-n-voitkevich-6214476.jpg";
 import headphonesImage from "@assets/A sleek black pair of premium wireless headphones displayed on a clean white background with soft sh.jpeg";
@@ -192,6 +194,11 @@ export default function Shop() {
 
   return (
     <div className="min-h-screen relative">
+      <SEO 
+        title="Shop - Premium Products"
+        description="Browse our curated collection of premium electronics, accessories, and innovative tech solutions. Find quality products with detailed reviews and competitive prices."
+        keywords="shop, electronics, gadgets, premium products, tech accessories, online shopping"
+      />
       {/* Shop Header */}
       <section 
         className="relative py-20 bg-cover bg-center"
@@ -361,9 +368,28 @@ export default function Shop() {
           </Select>
         </div>
 
+        {/* Loading Skeletons */}
+        {isLoading && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[...Array(6)].map((_, index) => (
+              <div key={index} className="product-card">
+                <Skeleton className="w-full h-64" />
+                <div className="p-6 space-y-4">
+                  <Skeleton className="h-6 w-3/4" />
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-2/3" />
+                  <Skeleton className="h-8 w-1/2" />
+                  <Skeleton className="h-10 w-full" />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
         {/* Products Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredAndSortedProducts.map((product) => (
+        {!isLoading && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredAndSortedProducts.map((product) => (
             <div key={product.id} className="product-card">
               <Link href={`/product/${product.id}`}>
                 <div className="relative overflow-hidden cursor-pointer">
@@ -400,6 +426,13 @@ export default function Shop() {
                       NEW
                     </div>
                   )}
+                  {!product.inStock && (
+                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                      <span className="bg-gray-800 text-white px-4 py-2 rounded-lg font-bold text-lg">
+                        OUT OF STOCK
+                      </span>
+                    </div>
+                  )}
                 </div>
                 
                 <div className="p-6">
@@ -428,18 +461,21 @@ export default function Shop() {
                     e.stopPropagation();
                     handleAddToCart(product);
                   }}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3"
+                  disabled={!product.inStock}
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                  data-testid={`button-add-to-cart-${product.id}`}
                 >
                   <ShoppingCart className="h-5 w-5 mr-2" />
-                  Add to Cart
+                  {product.inStock ? "Add to Cart" : "Out of Stock"}
                 </Button>
               </div>
             </div>
           ))}
-        </div>
+          </div>
+        )}
 
         {/* No Results */}
-        {filteredAndSortedProducts.length === 0 && (
+        {!isLoading && filteredAndSortedProducts.length === 0 && (
           <div className="text-center py-16">
             <div className="text-6xl mb-4">🔍</div>
             <h3 className="text-2xl font-bold text-gray-900 mb-2">No products found</h3>

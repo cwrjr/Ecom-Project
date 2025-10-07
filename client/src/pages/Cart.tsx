@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useCart } from "@/components/CartContext";
 import { useToast } from "@/hooks/use-toast";
 import Footer from "@/components/Footer";
+import { SEO } from "@/components/SEO";
 import type { Product } from "@shared/schema";
 import smartHomeImage from "@assets/Firefly_realistic and clear glow smart speaker on a Highrise table with Seattle night skyline 787022.jpg";
 import monitorImage from "@assets/minimalist_expensive_desk_with_curved_monitor_that.jpg";
@@ -84,6 +85,10 @@ export default function Cart() {
   if (cartItems.length === 0) {
     return (
       <div className="min-h-screen bg-gray-50 py-16">
+        <SEO 
+          title="Shopping Cart - Your Cart is Empty"
+          description="Your shopping cart is currently empty. Browse our collection of premium products and add items to your cart."
+        />
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="bg-white rounded-2xl shadow-lg p-12">
             <div className="text-6xl mb-6">🛒</div>
@@ -109,6 +114,10 @@ export default function Cart() {
 
   return (
     <div className="min-h-screen relative">
+      <SEO 
+        title={`Shopping Cart (${cartItems.length} ${cartItems.length === 1 ? 'item' : 'items'})`}
+        description={`Review your ${cartItems.length} selected items and proceed to checkout. Total: $${cartTotal.toFixed(2)}`}
+      />
       {/* Cart Header */}
       <section className="bg-blue-600 py-16">
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

@@ -13,6 +13,7 @@ import monitorImage from "@assets/minimalist_expensive_desk_with_curved_monitor_
 import { Button } from "@/components/ui/button";
 import Footer from "@/components/Footer";
 import ProductRating from "@/components/ProductRating";
+import { SEO } from "@/components/SEO";
 
 // Image resolver to map product images to actual imported assets
 const getProductImage = (imagePath: string, productName: string) => {
@@ -93,6 +94,11 @@ export default function Home() {
 
   return (
     <div className="min-h-screen relative">
+      <SEO 
+        title="Trellis - Premium E-commerce Platform"
+        description="Discover premium products at Trellis. Shop our curated collection of electronics, accessories, and innovative tech solutions with fast shipping and excellent customer service."
+        type="website"
+      />
       {/* Hero Banner */}
       <section 
         className="relative h-[80vh] flex items-center justify-center bg-cover bg-center bg-fixed"

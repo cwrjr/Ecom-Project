@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import Footer from "@/components/Footer";
+import { SEO } from "@/components/SEO";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -64,6 +65,11 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen relative">
+      <SEO 
+        title="Contact Us - Get in Touch"
+        description="Have questions? Contact Trellis for customer support, product inquiries, or partnership opportunities. We're here to help you find the perfect solution."
+        keywords="contact, customer support, help, inquiries, Trellis support"
+      />
       {/* Contact Header */}
       <section className="bg-blue-600 py-16">
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

@@ -498,9 +498,11 @@ export default function Shop() {
             <p className="text-gray-600 dark:text-gray-300 mb-6">
               Contact us and we'll help you find the perfect product for your needs.
             </p>
-            <Button variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white">
-              Contact Support
-            </Button>
+            <Link href="/contact" onClick={() => window.scrollTo(0, 0)}>
+              <Button variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white" data-testid="button-contact-support">
+                Contact Support
+              </Button>
+            </Link>
           </div>
         )}
       </div>

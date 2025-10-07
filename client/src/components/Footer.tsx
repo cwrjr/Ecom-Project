@@ -4,7 +4,7 @@ import trellisLogo from "@assets/logi.webp";
 
 export default function Footer() {
   return (
-    <footer className="bg-slate-900 text-white">
+    <footer className="bg-slate-900/30 backdrop-blur-lg text-white border-t border-white/10 rounded-t-3xl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* About Section */}
@@ -82,7 +82,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Section */}
-        <div className="border-t border-gray-700 mt-12 pt-8 pb-0">
+        <div className="border-t border-white/10 mt-12 pt-8 pb-0">
           <div className="flex flex-col items-center text-center space-y-4">
             <div className="flex items-center space-x-2">
               <img 

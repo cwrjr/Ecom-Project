@@ -86,14 +86,17 @@ export default function Shop() {
     queryKey: ["/api/categories"],
   });
 
-  const { data: recentlyViewed = [] } = useQuery({
+  const { data: recentlyViewed = [] } = useQuery<any[]>({
     queryKey: ["/api/recently-viewed"],
   });
 
   // Track recently viewed products
   const addToRecentlyViewedMutation = useMutation({
     mutationFn: (productId: number) =>
-      apiRequest("POST", "/api/recently-viewed", { productId }),
+      apiRequest("/api/recently-viewed", { 
+        method: "POST", 
+        body: JSON.stringify({ productId }) 
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/recently-viewed"] });
     },
@@ -101,7 +104,10 @@ export default function Shop() {
 
   const addToComparisonMutation = useMutation({
     mutationFn: (productIds: number[]) =>
-      apiRequest("POST", "/api/comparison", { productIds }),
+      apiRequest("/api/comparison", { 
+        method: "POST", 
+        body: JSON.stringify({ productIds }) 
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/comparison"] });
     },
@@ -204,7 +210,7 @@ export default function Shop() {
             <div className="flex gap-4 overflow-x-auto pb-4">
               {recentlyViewed.slice(0, 5).map((item: any) => (
                 <div key={item.id} className="flex-shrink-0 w-48 bg-white/80 backdrop-blur-sm dark:bg-gray-800/80 rounded-lg shadow-md p-4">
-                  <img src={getImagePath(item.product?.image)} alt={item.product?.name} className="w-full h-32 object-cover rounded mb-2" />
+                  <img src={getProductImage(item.product?.image, item.product?.name)} alt={item.product?.name} className="w-full h-32 object-cover rounded mb-2" />
                   <h3 className="text-sm font-medium text-gray-900 dark:text-white truncate">{item.product?.name}</h3>
                   <p className="text-lg font-bold text-blue-600">${item.product?.price}</p>
                 </div>

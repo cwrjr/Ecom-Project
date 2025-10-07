@@ -151,7 +151,8 @@ export default function Home() {
             <div className="relative reveal-on-hover">
               <img 
                 src={aboutImage} 
-                alt="About Trellis" 
+                alt="About Trellis"
+                loading="lazy" 
                 className="rounded-3xl shadow-2xl w-full smooth-transition"
               />
               <div className="absolute -bottom-6 -right-6 glass-card text-white p-6 reveal-content">
@@ -191,6 +192,7 @@ export default function Home() {
                     <img 
                       src={getProductImage(product.image, product.name)} 
                       alt={product.name}
+                      loading="lazy"
                       className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   )}

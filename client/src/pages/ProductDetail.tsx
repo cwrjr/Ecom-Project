@@ -256,6 +256,7 @@ export default function ProductDetail() {
                       <img
                         src={getProductImage(relatedProduct.image, relatedProduct.name)}
                         alt={relatedProduct.name}
+                        loading="lazy"
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                     </div>

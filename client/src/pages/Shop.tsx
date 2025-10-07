@@ -408,6 +408,7 @@ export default function Shop() {
                     <img 
                       src={getProductImage(product.image, product.name)} 
                       alt={product.name}
+                      loading="lazy"
                       className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
                       onError={(e) => {
                         console.log('Image failed to load:', product.image);

@@ -161,6 +161,7 @@ export default function Cart() {
                         <img 
                           src={getCartProductImage(product)} 
                           alt={product.name}
+                          loading="lazy"
                           className="w-20 h-20 object-cover rounded-lg"
                         />
                         

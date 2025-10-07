@@ -1,13 +1,22 @@
 import { Link, useLocation } from "wouter";
 import { useState } from "react";
-import { Menu, X, ShoppingBag, Phone, Home, ShoppingCart } from "lucide-react";
+import { Menu, X, ShoppingBag, Phone, Home, ShoppingCart, Search } from "lucide-react";
 import { useCart } from "./CartContext";
 import logoPath from "@assets/images/logi.webp";
 
 export default function Navigation() {
-  const [location] = useLocation();
+  const [location, navigate] = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const { cartCount } = useCart();
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/shop?search=${encodeURIComponent(searchQuery)}`);
+      setSearchQuery("");
+    }
+  };
 
   const navigation = [
     { name: "Home", href: "/", icon: Home },
@@ -19,7 +28,7 @@ export default function Navigation() {
     <nav className="bg-white shadow-lg border-b-4 border-blue-600 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
-          <div className="flex items-center">
+          <div className="flex items-center space-x-6">
             <Link href="/">
               <img 
                 src={logoPath} 
@@ -27,10 +36,24 @@ export default function Navigation() {
                 className="h-12 w-auto hover:opacity-80 transition-opacity"
               />
             </Link>
+            
+            {/* Search Bar - Desktop */}
+            <form onSubmit={handleSearch} className="hidden lg:flex items-center">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search products..."
+                  className="pl-10 pr-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-600 w-64 transition-all"
+                />
+              </div>
+            </form>
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-4">
             {navigation.map((item) => {
               const Icon = item.icon;
               const isActive = location === item.href;
@@ -83,6 +106,20 @@ export default function Navigation() {
         {/* Mobile Navigation */}
         {isMenuOpen && (
           <div className="md:hidden py-4 border-t border-gray-200">
+            {/* Search Bar - Mobile */}
+            <form onSubmit={handleSearch} className="mb-4 px-4">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search products..."
+                  className="w-full pl-10 pr-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-600 transition-all"
+                />
+              </div>
+            </form>
+            
             <div className="flex flex-col space-y-2">
               {navigation.map((item) => {
                 const Icon = item.icon;

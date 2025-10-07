@@ -76,6 +76,14 @@ export default function Shop() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    
+    // Check for search query in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchQuery = urlParams.get('search');
+    if (searchQuery) {
+      setSearchTerm(searchQuery);
+      setFilters(prev => ({ ...prev, query: searchQuery }));
+    }
   }, []);
 
   const { data: products = [], isLoading } = useQuery<Product[]>({

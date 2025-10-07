@@ -212,7 +212,7 @@ export default function Home() {
           </div>
 
           <div className="text-center">
-            <Link href="/shop">
+            <Link href="/shop" onClick={() => window.scrollTo(0, 0)}>
               <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-4">
                 View All Products
                 <ArrowRight className="h-5 w-5 ml-2" />

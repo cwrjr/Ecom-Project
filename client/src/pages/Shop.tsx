@@ -74,6 +74,10 @@ export default function Shop() {
   const { user, isAuthenticated } = useAuth();
   const queryClient = useQueryClient();
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const { data: products = [], isLoading } = useQuery<Product[]>({
     queryKey: ["/api/products"],
   });

@@ -142,16 +142,16 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="glass-card p-8">
-              <h2 className="text-4xl font-bold text-blue-600 mb-6 text-center lg:text-left">
+              <h2 className="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-6 text-center lg:text-left">
                 About Trellis
               </h2>
-              <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+              <p className="text-lg text-gray-700 dark:text-gray-200 mb-6 leading-relaxed">
                 At Trellis, we believe in creating exceptional products that enhance your everyday life. 
                 Our carefully curated collection features premium items designed with precision and crafted 
                 with passion. From cutting-edge technology to timeless essentials, every product in our 
                 store represents our commitment to quality and innovation.
               </p>
-              <p className="text-lg text-gray-700 mb-8 leading-relaxed">
+              <p className="text-lg text-gray-700 dark:text-gray-200 mb-8 leading-relaxed">
                 We understand that our customers deserve the best, which is why we partner with trusted 
                 manufacturers and artisans who share our values of excellence, sustainability, and 
                 customer satisfaction.
@@ -183,8 +183,8 @@ export default function Home() {
       <section className="py-20 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-blue-600 mb-4">Featured Products</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto glass-card p-6">
+            <h2 className="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-4">Featured Products</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto glass-card p-6">
               Discover our handpicked selection of premium products that combine quality, 
               innovation, and style.
             </p>
@@ -218,14 +218,14 @@ export default function Home() {
                   )}
                 </div>
                 <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">{product.name}</h3>
-                  <p className="text-gray-600 mb-4 line-clamp-2">{product.description}</p>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{product.name}</h3>
+                  <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-2">{product.description}</p>
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center space-x-2">
                       {product.originalPrice && (
-                        <span className="text-gray-400 line-through">${product.originalPrice}</span>
+                        <span className="text-gray-400 dark:text-gray-500 line-through">${product.originalPrice}</span>
                       )}
-                      <span className="text-2xl font-bold text-blue-600">${product.price}</span>
+                      <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">${product.price}</span>
                     </div>
                   </div>
                   <ProductRating productId={product.id} productName={product.name} />
@@ -257,8 +257,8 @@ export default function Home() {
           <div className={`text-center mb-16 transform transition-all duration-1000 ${
             isWhyChooseVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
           }`}>
-            <h2 className="text-4xl font-bold text-blue-600 mb-4">Why Choose Trellis?</h2>
-            <p className="text-xl text-gray-700 max-w-2xl mx-auto bg-white/20 backdrop-blur-md rounded-2xl border border-white/30 shadow-xl p-6">
+            <h2 className="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-4">Why Choose Trellis?</h2>
+            <p className="text-xl text-gray-700 dark:text-gray-200 max-w-2xl mx-auto bg-white/20 backdrop-blur-md rounded-2xl border border-white/30 shadow-xl p-6">
               We're committed to providing an exceptional shopping experience with every purchase.
             </p>
           </div>
@@ -276,10 +276,10 @@ export default function Home() {
               }`}>
                 <Zap className="h-8 w-8 text-blue-600" />
               </div>
-              <h3 className={`text-xl font-bold text-gray-900 mb-4 transition-all duration-500 ${
+              <h3 className={`text-xl font-bold text-gray-900 dark:text-white mb-4 transition-all duration-500 ${
                 scrollLocked ? 'animate-pulse' : ''
               }`}>Fast Delivery</h3>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-gray-300">
                 Get your orders delivered quickly with our expedited shipping options and reliable logistics partners.
               </p>
             </div>
@@ -296,10 +296,10 @@ export default function Home() {
               }`}>
                 <Shield className="h-8 w-8 text-blue-600" />
               </div>
-              <h3 className={`text-xl font-bold text-gray-900 mb-4 transition-all duration-500 ${
+              <h3 className={`text-xl font-bold text-gray-900 dark:text-white mb-4 transition-all duration-500 ${
                 scrollLocked ? 'animate-pulse' : ''
               }`}>Quality Guarantee</h3>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-gray-300">
                 Every product is carefully inspected and comes with our satisfaction guarantee for your peace of mind.
               </p>
             </div>
@@ -316,10 +316,10 @@ export default function Home() {
               }`}>
                 <Star className="h-8 w-8 text-blue-600" />
               </div>
-              <h3 className={`text-xl font-bold text-gray-900 mb-4 transition-all duration-500 ${
+              <h3 className={`text-xl font-bold text-gray-900 dark:text-white mb-4 transition-all duration-500 ${
                 scrollLocked ? 'animate-pulse' : ''
               }`}>Premium Support</h3>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-gray-300">
                 Our dedicated customer service team is here to help you with any questions or concerns you may have.
               </p>
             </div>

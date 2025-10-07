@@ -89,8 +89,8 @@ export default function Contact() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           {/* Contact Information */}
           <div>
-            <h2 className="text-3xl font-bold text-blue-600 mb-8">Get in Touch</h2>
-            <p className="text-lg text-gray-600 mb-8">
+            <h2 className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-8">Get in Touch</h2>
+            <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
               We're here to help and answer any question you might have. We look forward to hearing from you.
             </p>
 
@@ -100,9 +100,9 @@ export default function Contact() {
                   <Mail className="h-6 w-6 text-blue-600" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Email</h3>
-                  <p className="text-gray-600">Thoma260@wwu.edu</p>
-                  <p className="text-sm text-gray-500 mt-1">We'll respond within 24 hours</p>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Email</h3>
+                  <p className="text-gray-600 dark:text-gray-300">Thoma260@wwu.edu</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">We'll respond within 24 hours</p>
                 </div>
               </div>
 
@@ -111,9 +111,9 @@ export default function Contact() {
                   <Phone className="h-6 w-6 text-blue-600" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Phone</h3>
-                  <p className="text-gray-600">+1 (555) 123-4567</p>
-                  <p className="text-sm text-gray-500 mt-1">Monday to Friday, 9am to 6pm PST</p>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Phone</h3>
+                  <p className="text-gray-600 dark:text-gray-300">+1 (555) 123-4567</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Monday to Friday, 9am to 6pm PST</p>
                 </div>
               </div>
 
@@ -122,12 +122,12 @@ export default function Contact() {
                   <MapPin className="h-6 w-6 text-blue-600" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Office</h3>
-                  <p className="text-gray-600">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Office</h3>
+                  <p className="text-gray-600 dark:text-gray-300">
                     Western Washington University<br />
                     Bellingham, WA 98225
                   </p>
-                  <p className="text-sm text-gray-500 mt-1">Visit us during business hours</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Visit us during business hours</p>
                 </div>
               </div>
             </div>

@@ -186,7 +186,7 @@ export default function Shop() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading amazing products...</p>
+          <p className="text-gray-600 dark:text-gray-300">Loading amazing products...</p>
         </div>
       </div>
     );
@@ -437,16 +437,16 @@ export default function Shop() {
                 </div>
                 
                 <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">{product.name}</h3>
-                  <p className="text-gray-600 mb-4 line-clamp-2">{product.description}</p>
-                  <p className="text-sm text-blue-600 font-medium mb-4">{product.category}</p>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{product.name}</h3>
+                  <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-2">{product.description}</p>
+                  <p className="text-sm text-blue-600 dark:text-blue-400 font-medium mb-4">{product.category}</p>
                   
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center space-x-2">
                       {product.originalPrice && (
-                        <span className="text-gray-400 line-through text-lg">${product.originalPrice}</span>
+                        <span className="text-gray-400 dark:text-gray-500 line-through text-lg">${product.originalPrice}</span>
                       )}
-                      <span className="text-2xl font-bold text-blue-600">${product.price}</span>
+                      <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">${product.price}</span>
                     </div>
                   </div>
                   
@@ -479,8 +479,8 @@ export default function Shop() {
         {!isLoading && filteredAndSortedProducts.length === 0 && (
           <div className="text-center py-16">
             <div className="text-6xl mb-4">🔍</div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">No products found</h3>
-            <p className="text-gray-600 mb-6">Try adjusting your search or filter criteria</p>
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">No products found</h3>
+            <p className="text-gray-600 dark:text-gray-300 mb-6">Try adjusting your search or filter criteria</p>
             <Button onClick={() => { setSearchTerm(""); setSelectedCategory("All Products"); setSortBy("name"); }}>
               Clear Filters
             </Button>
@@ -493,9 +493,9 @@ export default function Shop() {
 
         {/* Call to Action */}
         {filteredAndSortedProducts.length > 0 && (
-          <div className="mt-16 text-center bg-blue-50 rounded-2xl p-8">
-            <h3 className="text-2xl font-bold text-blue-600 mb-4">Can't find what you're looking for?</h3>
-            <p className="text-gray-600 mb-6">
+          <div className="mt-16 text-center bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-8">
+            <h3 className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-4">Can't find what you're looking for?</h3>
+            <p className="text-gray-600 dark:text-gray-300 mb-6">
               Contact us and we'll help you find the perfect product for your needs.
             </p>
             <Button variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white">

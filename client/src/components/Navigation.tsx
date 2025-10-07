@@ -4,6 +4,7 @@ import { Menu, X, ShoppingBag, Phone, Home, ShoppingCart, Search, Moon, Sun } fr
 import { useCart } from "./CartContext";
 import { useTheme } from "./ThemeProvider";
 import logoPath from "@assets/images/logi.webp";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Navigation() {
   const [location, navigate] = useLocation();
@@ -17,6 +18,7 @@ export default function Navigation() {
     if (searchQuery.trim()) {
       navigate(`/shop?search=${encodeURIComponent(searchQuery)}`);
       setSearchQuery("");
+      setIsMenuOpen(false);
     }
   };
 
@@ -123,45 +125,69 @@ export default function Navigation() {
         </div>
 
         {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <div className="md:hidden py-4 border-t border-gray-200">
-            {/* Search Bar - Mobile */}
-            <form onSubmit={handleSearch} className="mb-4 px-4">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search products..."
-                  className="w-full pl-10 pr-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-600 transition-all"
-                />
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="md:hidden overflow-hidden border-t border-gray-200 dark:border-gray-700"
+            >
+              <div className="py-4">
+                {/* Search Bar - Mobile */}
+                <motion.form
+                  initial={{ y: -20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.1, duration: 0.3 }}
+                  onSubmit={handleSearch}
+                  className="mb-4 px-4"
+                >
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder="Search products..."
+                      className="w-full pl-10 pr-4 py-2 border-2 border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:border-blue-600 dark:bg-gray-800 dark:text-white transition-all"
+                      data-testid="input-search-mobile"
+                    />
+                  </div>
+                </motion.form>
+                
+                <div className="flex flex-col space-y-2">
+                  {navigation.map((item, index) => {
+                    const Icon = item.icon;
+                    const isActive = location === item.href;
+                    return (
+                      <motion.div
+                        key={item.name}
+                        initial={{ x: -20, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ delay: 0.1 + index * 0.1, duration: 0.3 }}
+                      >
+                        <Link 
+                          href={item.href}
+                          className={`flex items-center space-x-3 px-4 py-3 rounded-lg text-lg font-bold transition-all ${
+                            isActive
+                              ? "bg-blue-600 text-white"
+                              : "text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-800"
+                          }`}
+                          onClick={() => setIsMenuOpen(false)}
+                          data-testid={`link-mobile-${item.name.toLowerCase()}`}
+                        >
+                          <Icon className="h-5 w-5" />
+                          <span>{item.name}</span>
+                        </Link>
+                      </motion.div>
+                    );
+                  })}
+                </div>
               </div>
-            </form>
-            
-            <div className="flex flex-col space-y-2">
-              {navigation.map((item) => {
-                const Icon = item.icon;
-                const isActive = location === item.href;
-                return (
-                  <Link key={item.name} href={item.href}>
-                    <a
-                      className={`flex items-center space-x-3 px-4 py-3 rounded-lg text-lg font-bold transition-all ${
-                        isActive
-                          ? "bg-blue-600 text-white"
-                          : "text-blue-600 hover:bg-blue-50"
-                      }`}
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      <Icon className="h-5 w-5" />
-                      <span>{item.name}</span>
-                    </a>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        )}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </nav>
   );

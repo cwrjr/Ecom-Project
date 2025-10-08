@@ -253,3 +253,53 @@ export const insertProductSpecSchema = z.object({
 });
 
 export type InsertProductSpec = z.infer<typeof insertProductSpecSchema>;
+
+// Product Embedding types (for AI recommendations)
+export interface ProductEmbedding {
+  productId: number;
+  embedding: number[];
+  createdAt: Date | null;
+}
+
+export const insertProductEmbeddingSchema = z.object({
+  productId: z.number(),
+  embedding: z.array(z.number()),
+});
+
+export type InsertProductEmbedding = z.infer<typeof insertProductEmbeddingSchema>;
+
+// SEO Meta types (for AI-generated SEO)
+export interface SEOMeta {
+  id: number;
+  productId: number;
+  metaTitle: string;
+  metaDescription: string;
+  generatedBy: string | null;
+  createdAt: Date | null;
+}
+
+export const insertSEOMetaSchema = z.object({
+  productId: z.number(),
+  metaTitle: z.string(),
+  metaDescription: z.string(),
+  generatedBy: z.string().optional(),
+});
+
+export type InsertSEOMeta = z.infer<typeof insertSEOMetaSchema>;
+
+// Chat Message types (for AI chatbot)
+export interface ChatMessage {
+  id: number;
+  sessionId: string;
+  role: 'user' | 'assistant' | 'system';
+  content: string;
+  createdAt: Date | null;
+}
+
+export const insertChatMessageSchema = z.object({
+  sessionId: z.string(),
+  role: z.enum(['user', 'assistant', 'system']),
+  content: z.string(),
+});
+
+export type InsertChatMessage = z.infer<typeof insertChatMessageSchema>;

@@ -24,7 +24,13 @@ import {
   type OrderItem,
   type InsertOrderItem,
   type ProductSpec,
-  type InsertProductSpec
+  type InsertProductSpec,
+  type ProductEmbedding,
+  type InsertProductEmbedding,
+  type SEOMeta,
+  type InsertSEOMeta,
+  type ChatMessage,
+  type InsertChatMessage
 } from "@shared/schema";
 
 export interface IStorage {
@@ -89,6 +95,17 @@ export interface IStorage {
   // Order items operations
   addOrderItem(item: InsertOrderItem): Promise<OrderItem>;
   getOrderItems(orderId: number): Promise<OrderItem[]>;
+  
+  // AI-related operations
+  getProductEmbedding(productId: number): Promise<ProductEmbedding | undefined>;
+  saveProductEmbedding(embedding: InsertProductEmbedding): Promise<ProductEmbedding>;
+  getAllProductEmbeddings(): Promise<ProductEmbedding[]>;
+  
+  getSEOMeta(productId: number): Promise<SEOMeta | undefined>;
+  saveSEOMeta(meta: InsertSEOMeta): Promise<SEOMeta>;
+  
+  getChatMessages(sessionId: string): Promise<ChatMessage[]>;
+  saveChatMessage(message: InsertChatMessage): Promise<ChatMessage>;
 }
 
 export class MemStorage implements IStorage {
@@ -105,6 +122,9 @@ export class MemStorage implements IStorage {
   private enhancedOrders: Map<number, EnhancedOrder>;
   private orderItems: Map<number, OrderItem>;
   private productSpecs: Map<number, ProductSpec>;
+  private productEmbeddings: Map<number, ProductEmbedding>;
+  private seoMetas: Map<number, SEOMeta>;
+  private chatMessages: Map<number, ChatMessage>;
   
   private currentProductId: number;
   private currentCategoryId: number;
@@ -118,6 +138,8 @@ export class MemStorage implements IStorage {
   private currentEnhancedOrderId: number;
   private currentOrderItemId: number;
   private currentProductSpecId: number;
+  private currentSEOMetaId: number;
+  private currentChatMessageId: number;
 
   constructor() {
     this.products = new Map();
@@ -133,6 +155,9 @@ export class MemStorage implements IStorage {
     this.enhancedOrders = new Map();
     this.orderItems = new Map();
     this.productSpecs = new Map();
+    this.productEmbeddings = new Map();
+    this.seoMetas = new Map();
+    this.chatMessages = new Map();
     
     this.currentProductId = 1;
     this.currentCategoryId = 1;
@@ -146,6 +171,8 @@ export class MemStorage implements IStorage {
     this.currentEnhancedOrderId = 1;
     this.currentOrderItemId = 1;
     this.currentProductSpecId = 1;
+    this.currentSEOMetaId = 1;
+    this.currentChatMessageId = 1;
     
     this.initializeData();
   }
@@ -720,6 +747,68 @@ export class MemStorage implements IStorage {
   async getOrderItems(orderId: number): Promise<OrderItem[]> {
     return Array.from(this.orderItems.values())
       .filter(item => item.orderId === orderId);
+  }
+
+  // AI-related operations
+  async getProductEmbedding(productId: number): Promise<ProductEmbedding | undefined> {
+    return Array.from(this.productEmbeddings.values())
+      .find(embedding => embedding.productId === productId);
+  }
+
+  async saveProductEmbedding(embedding: InsertProductEmbedding): Promise<ProductEmbedding> {
+    const existing = Array.from(this.productEmbeddings.values())
+      .find(e => e.productId === embedding.productId);
+    
+    const newEmbedding: ProductEmbedding = {
+      productId: embedding.productId,
+      embedding: embedding.embedding,
+      createdAt: new Date(),
+    };
+    
+    this.productEmbeddings.set(embedding.productId, newEmbedding);
+    return newEmbedding;
+  }
+
+  async getAllProductEmbeddings(): Promise<ProductEmbedding[]> {
+    return Array.from(this.productEmbeddings.values());
+  }
+
+  async getSEOMeta(productId: number): Promise<SEOMeta | undefined> {
+    return Array.from(this.seoMetas.values())
+      .find(meta => meta.productId === productId);
+  }
+
+  async saveSEOMeta(meta: InsertSEOMeta): Promise<SEOMeta> {
+    const id = this.currentSEOMetaId++;
+    const newMeta: SEOMeta = {
+      id,
+      productId: meta.productId,
+      metaTitle: meta.metaTitle,
+      metaDescription: meta.metaDescription,
+      generatedBy: meta.generatedBy ?? null,
+      createdAt: new Date(),
+    };
+    this.seoMetas.set(id, newMeta);
+    return newMeta;
+  }
+
+  async getChatMessages(sessionId: string): Promise<ChatMessage[]> {
+    return Array.from(this.chatMessages.values())
+      .filter(msg => msg.sessionId === sessionId)
+      .sort((a, b) => new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime());
+  }
+
+  async saveChatMessage(message: InsertChatMessage): Promise<ChatMessage> {
+    const id = this.currentChatMessageId++;
+    const newMessage: ChatMessage = {
+      id,
+      sessionId: message.sessionId,
+      role: message.role,
+      content: message.content,
+      createdAt: new Date(),
+    };
+    this.chatMessages.set(id, newMessage);
+    return newMessage;
   }
 }
 

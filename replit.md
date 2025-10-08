@@ -136,7 +136,16 @@ The application is configured for deployment on Replit with the following setup:
 - **Stock Indicators**: Real-time inventory badges with "Out of Stock" handling
 - **Disabled States**: Non-functional buttons when products unavailable
 
+### AI Features (October 2025)
+- **AI Product Recommendations**: Semantic similarity-based product suggestions using OpenAI embeddings (text-embedding-3-small)
+- **Semantic AI Search**: Natural language search with vector embeddings and cosine similarity
+- **Smart Support Chatbot**: GPT-4o powered customer support with knowledge base about shipping, returns, and policies
+- **AI-Powered Product Comparison**: Intelligent product comparison with pros/cons analysis using GPT-4o
+- **Automated SEO Meta Generator**: AI-generated meta titles and descriptions for products
+- **Floating Chat Widget**: Always-accessible AI assistant with Framer Motion animations
+
 ## Changelog
+- October 8, 2025: Added comprehensive AI features (product recommendations, semantic search, chatbot, product comparison, SEO generation)
 - October 7, 2025: Removed PostgreSQL database, added in-memory storage, performance optimizations (preloading, caching), newsletter signup, mobile menu animations, SEO meta tags, lazy loading, loading states, stock indicators
 - June 28, 2025: Initial setup
 

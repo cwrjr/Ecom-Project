@@ -1,6 +1,6 @@
 import OpenAI from "openai";
 
-// the newest OpenAI model is "gpt-5" which was released August 7, 2025. do not change this unless explicitly requested by the user
+// Using gpt-4o as the primary model for chat completions
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 // Generate embeddings for product text
@@ -32,7 +32,7 @@ export async function generateSEOMeta(productName: string, productDescription: s
 }> {
   try {
     const response = await openai.chat.completions.create({
-      model: "gpt-5",
+      model: "gpt-4o",
       messages: [
         {
           role: "system",
@@ -74,12 +74,12 @@ ${knowledgeBase}
 Be friendly, professional, and helpful. If you don't know something, suggest contacting support directly.`;
 
     const response = await openai.chat.completions.create({
-      model: "gpt-5",
+      model: "gpt-4o",
       messages: [
         { role: "system", content: systemPrompt },
         ...messages,
       ],
-      max_completion_tokens: 500,
+      max_tokens: 500,
     });
 
     return response.choices[0].message.content || "I'm sorry, I couldn't process that request.";
@@ -102,7 +102,7 @@ export async function compareProducts(products: Array<{
     ).join("\n\n");
 
     const response = await openai.chat.completions.create({
-      model: "gpt-5",
+      model: "gpt-4o",
       messages: [
         {
           role: "system",
@@ -113,7 +113,7 @@ export async function compareProducts(products: Array<{
           content: `Compare these products and help me understand which one might be best for different use cases:\n\n${productsText}`,
         },
       ],
-      max_completion_tokens: 800,
+      max_tokens: 800,
     });
 
     return response.choices[0].message.content || "Unable to compare products at this time.";

@@ -12,6 +12,7 @@ import { apiRequest } from "@/lib/queryClient";
 import ProductRating from "@/components/ProductRating";
 import Footer from "@/components/Footer";
 import { SEO } from "@/components/SEO";
+import AIRecommendations from "@/components/AIRecommendations";
 import type { Product } from "@shared/schema";
 
 // Image imports
@@ -243,6 +244,9 @@ export default function ProductDetail() {
             </div>
           </div>
         </div>
+
+        {/* AI Recommendations */}
+        <AIRecommendations productId={product.id} />
 
         {/* Related Products */}
         {relatedProducts.length > 0 && (

@@ -13,6 +13,7 @@ import NotFound from "@/pages/not-found";
 import Navigation from "@/components/Navigation";
 import { CartProvider } from "@/components/CartContext";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import AIChatWidget from "@/components/AIChatWidget";
 import { useEffect, useState, useRef } from "react";
 
 function Router() {
@@ -93,6 +94,7 @@ function Router() {
           <Route component={NotFound} />
         </Switch>
       </div>
+      <AIChatWidget />
     </div>
   );
 }

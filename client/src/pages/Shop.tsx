@@ -87,8 +87,10 @@ export default function Shop() {
     }
   }, []);
 
+  const [useSemanticSearch, setUseSemanticSearch] = useState(false);
+
   const { data: products = [], isLoading } = useQuery<Product[]>({
-    queryKey: ["/api/products"],
+    queryKey: searchTerm && useSemanticSearch ? [`/api/search?query=${searchTerm}`] : ["/api/products"],
   });
 
   const { data: categories = [] } = useQuery({
@@ -236,15 +238,34 @@ export default function Shop() {
         {/* Search and Filter */}
         <div className="mb-8">
           <div className="flex flex-col md:flex-row gap-4 mb-6">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-              <Input
-                type="text"
-                placeholder="Search products..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 h-12 text-lg"
-              />
+            <div className="flex-1 space-y-2">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <Input
+                  type="text"
+                  placeholder="Search products..."
+                  value={searchTerm}
+                  onChange={(e) => {
+                    setSearchTerm(e.target.value);
+                    setFilters(prev => ({ ...prev, query: e.target.value }));
+                  }}
+                  className="pl-10 h-12 text-lg"
+                  data-testid="search-input"
+                />
+              </div>
+              {searchTerm && (
+                <div className="flex items-center gap-2">
+                  <Checkbox
+                    id="semantic-search"
+                    checked={useSemanticSearch}
+                    onCheckedChange={(checked) => setUseSemanticSearch(!!checked)}
+                    data-testid="semantic-search-toggle"
+                  />
+                  <label htmlFor="semantic-search" className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-1">
+                    <span className="text-blue-600 dark:text-blue-400">✨</span> Use AI Semantic Search
+                  </label>
+                </div>
+              )}
             </div>
             <Popover open={showFilters} onOpenChange={setShowFilters}>
               <PopoverTrigger asChild>

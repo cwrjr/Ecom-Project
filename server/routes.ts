@@ -418,6 +418,242 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // AI Routes
+  const { generateEmbedding, cosineSimilarity, generateSEOMeta, chatWithAI, compareProducts, semanticSearch } = await import("./openai");
+
+  // AI Product Recommendations
+  app.get("/api/recommendations/:productId", async (req, res) => {
+    try {
+      const productId = parseInt(req.params.productId);
+      if (isNaN(productId)) {
+        return res.status(400).json({ error: "Invalid product ID" });
+      }
+
+      const product = await storage.getProduct(productId);
+      if (!product) {
+        return res.status(404).json({ error: "Product not found" });
+      }
+
+      let targetEmbedding = await storage.getProductEmbedding(productId);
+      if (!targetEmbedding) {
+        const embeddingVector = await generateEmbedding(`${product.name} ${product.description}`);
+        targetEmbedding = await storage.saveProductEmbedding({
+          productId,
+          embedding: embeddingVector,
+        });
+      }
+
+      const allEmbeddings = await storage.getAllProductEmbeddings();
+      const similarities = allEmbeddings
+        .filter(e => e.productId !== productId)
+        .map(e => ({
+          productId: e.productId,
+          similarity: cosineSimilarity(targetEmbedding!.embedding, e.embedding),
+        }))
+        .sort((a, b) => b.similarity - a.similarity)
+        .slice(0, 5);
+
+      const recommendedProducts = await Promise.all(
+        similarities.map(async s => {
+          const p = await storage.getProduct(s.productId);
+          return p;
+        })
+      );
+
+      res.json(recommendedProducts.filter(p => p !== undefined));
+    } catch (error) {
+      console.error("Error getting recommendations:", error);
+      res.status(500).json({ error: "Failed to get recommendations" });
+    }
+  });
+
+  // Semantic AI Search
+  app.get("/api/search", async (req, res) => {
+    try {
+      const { query } = req.query;
+      if (!query || typeof query !== 'string') {
+        return res.status(400).json({ error: "Search query required" });
+      }
+
+      const allEmbeddings = await storage.getAllProductEmbeddings();
+      
+      if (allEmbeddings.length === 0) {
+        const products = await storage.getProducts();
+        for (const product of products) {
+          const embeddingVector = await generateEmbedding(`${product.name} ${product.description}`);
+          await storage.saveProductEmbedding({
+            productId: product.id,
+            embedding: embeddingVector,
+          });
+        }
+        const newEmbeddings = await storage.getAllProductEmbeddings();
+        const results = await semanticSearch(query, newEmbeddings, 0.3);
+        const rankedProducts = await Promise.all(
+          results.map(async r => await storage.getProduct(r.productId))
+        );
+        return res.json(rankedProducts.filter(p => p !== undefined));
+      }
+
+      const results = await semanticSearch(query, allEmbeddings, 0.3);
+      const rankedProducts = await Promise.all(
+        results.map(async r => await storage.getProduct(r.productId))
+      );
+      res.json(rankedProducts.filter(p => p !== undefined));
+    } catch (error) {
+      console.error("Error in semantic search:", error);
+      res.status(500).json({ error: "Failed to perform search" });
+    }
+  });
+
+  // Generate SEO Meta for Product
+  app.post("/api/seo/generate/:productId", async (req, res) => {
+    try {
+      const productId = parseInt(req.params.productId);
+      if (isNaN(productId)) {
+        return res.status(400).json({ error: "Invalid product ID" });
+      }
+
+      const product = await storage.getProduct(productId);
+      if (!product) {
+        return res.status(404).json({ error: "Product not found" });
+      }
+
+      const existing = await storage.getSEOMeta(productId);
+      if (existing) {
+        return res.json(existing);
+      }
+
+      const meta = await generateSEOMeta(product.name, product.description);
+      const saved = await storage.saveSEOMeta({
+        productId,
+        metaTitle: meta.metaTitle,
+        metaDescription: meta.metaDescription,
+        generatedBy: "gpt-5",
+      });
+
+      res.json(saved);
+    } catch (error) {
+      console.error("Error generating SEO meta:", error);
+      res.status(500).json({ error: "Failed to generate SEO meta" });
+    }
+  });
+
+  // Get SEO Meta for Product
+  app.get("/api/seo/:productId", async (req, res) => {
+    try {
+      const productId = parseInt(req.params.productId);
+      if (isNaN(productId)) {
+        return res.status(400).json({ error: "Invalid product ID" });
+      }
+
+      const meta = await storage.getSEOMeta(productId);
+      res.json(meta || null);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch SEO meta" });
+    }
+  });
+
+  // AI Support Chatbot
+  app.post("/api/support", async (req: any, res) => {
+    try {
+      const sessionId = req.session?.id || 'anonymous';
+      const { message } = req.body;
+
+      if (!message || typeof message !== 'string') {
+        return res.status(400).json({ error: "Message required" });
+      }
+
+      await storage.saveChatMessage({
+        sessionId,
+        role: 'user',
+        content: message,
+      });
+
+      const history = await storage.getChatMessages(sessionId);
+      const messages = history.slice(-10).map(m => ({
+        role: m.role as 'user' | 'assistant' | 'system',
+        content: m.content,
+      }));
+
+      const knowledgeBase = `
+**Trellis E-commerce Store**
+
+Shipping & Returns:
+- Free shipping on orders over $50
+- Standard shipping takes 3-5 business days
+- 30-day return policy on most items
+- Return items in original packaging
+
+Payment:
+- We accept all major credit cards
+- Secure checkout with SSL encryption
+- Order confirmation sent via email
+
+Customer Support:
+- Email: support@trellis.com
+- Live chat available Mon-Fri 9am-6pm EST
+- FAQ section available on our website
+`;
+
+      const response = await chatWithAI(messages, knowledgeBase);
+
+      await storage.saveChatMessage({
+        sessionId,
+        role: 'assistant',
+        content: response,
+      });
+
+      res.json({ response });
+    } catch (error) {
+      console.error("Error in support chat:", error);
+      res.status(500).json({ error: "Failed to process chat" });
+    }
+  });
+
+  // Get Chat History
+  app.get("/api/support/history", async (req: any, res) => {
+    try {
+      const sessionId = req.session?.id || 'anonymous';
+      const messages = await storage.getChatMessages(sessionId);
+      res.json(messages);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch chat history" });
+    }
+  });
+
+  // AI Product Comparison
+  app.post("/api/compare", async (req, res) => {
+    try {
+      const { productIds } = req.body;
+
+      if (!Array.isArray(productIds) || productIds.length < 2 || productIds.length > 3) {
+        return res.status(400).json({ error: "Please provide 2-3 product IDs to compare" });
+      }
+
+      const products = await Promise.all(
+        productIds.map(async (id: number) => await storage.getProduct(id))
+      );
+
+      if (products.some(p => !p)) {
+        return res.status(404).json({ error: "One or more products not found" });
+      }
+
+      const comparison = await compareProducts(
+        products.filter(p => p !== undefined).map(p => ({
+          name: p!.name,
+          description: p!.description,
+          price: p!.price,
+          category: p!.category,
+        }))
+      );
+
+      res.json({ comparison });
+    } catch (error) {
+      console.error("Error comparing products:", error);
+      res.status(500).json({ error: "Failed to compare products" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

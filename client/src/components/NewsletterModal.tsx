@@ -67,7 +67,7 @@ export function NewsletterModal({ open, onOpenChange }: NewsletterModalProps) {
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300"
               data-testid="button-subscribe"
             >
               {isSubmitting ? "Subscribing..." : "Subscribe"}
@@ -76,7 +76,7 @@ export function NewsletterModal({ open, onOpenChange }: NewsletterModalProps) {
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
-              className="flex-1"
+              className="flex-1 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300"
               data-testid="button-cancel"
             >
               Maybe Later

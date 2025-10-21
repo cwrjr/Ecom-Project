@@ -29,7 +29,7 @@ export default function Navigation() {
   ];
 
   return (
-    <nav className="bg-white dark:bg-gray-900 shadow-lg border-b-4 border-blue-600 dark:border-blue-500 sticky top-0 z-50">
+    <nav className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl shadow-lg border-b-4 border-blue-600 dark:border-blue-500 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           <div className="flex items-center space-x-6">
@@ -63,10 +63,10 @@ export default function Navigation() {
               const isActive = location === item.href;
               return (
                 <Link key={item.name} href={item.href}
-                  className={`flex items-center space-x-2 px-4 py-3 rounded-lg text-lg font-bold transition-all duration-200 ${
+                  className={`flex items-center space-x-2 px-4 py-3 rounded-lg text-lg font-bold transition-all duration-300 ${
                     isActive
-                      ? "bg-blue-600 text-white shadow-lg"
-                      : "text-blue-600 hover:bg-blue-50 hover:shadow-md border-2 border-transparent hover:border-blue-600"
+                      ? "bg-blue-600 text-white shadow-lg hover:shadow-blue-500/50"
+                      : "text-blue-600 hover:bg-blue-50 hover:shadow-md hover:shadow-blue-500/20 border-2 border-transparent hover:border-blue-600"
                   }`}
                 >
                   <Icon className="h-5 w-5" />
@@ -78,14 +78,14 @@ export default function Navigation() {
             {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
-              className="p-3 rounded-lg text-blue-600 hover:bg-blue-50 hover:shadow-md border-2 border-transparent hover:border-blue-600 transition-all duration-200"
+              className="p-3 rounded-lg text-blue-600 hover:bg-blue-50 hover:shadow-md hover:shadow-blue-500/20 border-2 border-transparent hover:border-blue-600 transition-all duration-300"
               aria-label="Toggle theme"
             >
               {theme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
             </button>
             
             {/* Cart Icon */}
-            <Link href="/cart" className="relative flex items-center space-x-2 px-4 py-3 rounded-lg text-lg font-bold text-blue-600 hover:bg-blue-50 hover:shadow-md border-2 border-transparent hover:border-blue-600 transition-all duration-200">
+            <Link href="/cart" className="relative flex items-center space-x-2 px-4 py-3 rounded-lg text-lg font-bold text-blue-600 hover:bg-blue-50 hover:shadow-md hover:shadow-blue-500/20 border-2 border-transparent hover:border-blue-600 transition-all duration-300">
               <ShoppingCart className="h-5 w-5" />
               <span>Cart</span>
               {cartCount > 0 && (
@@ -132,7 +132,7 @@ export default function Navigation() {
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="md:hidden overflow-hidden border-t border-gray-200 dark:border-gray-700"
+              className="md:hidden overflow-hidden border-t border-gray-200 dark:border-gray-700 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md"
             >
               <div className="py-4">
                 {/* Search Bar - Mobile */}

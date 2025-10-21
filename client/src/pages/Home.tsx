@@ -157,7 +157,7 @@ export default function Home() {
                 customer satisfaction.
               </p>
               <Link href="/contact">
-                <Button variant="outline" size="lg" className="text-blue-600 border-blue-600 hover:bg-blue-600 hover:text-white font-bold">
+                <Button variant="outline" size="lg" className="text-blue-600 border-blue-600 hover:bg-blue-600 hover:text-white font-bold hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300">
                   Get in Touch
                   <ArrowRight className="h-4 w-4 ml-2" />
                 </Button>
@@ -236,7 +236,7 @@ export default function Home() {
 
           <div className="text-center">
             <Link href="/shop" onClick={() => window.scrollTo(0, 0)}>
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-4">
+              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-4 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300">
                 View All Products
                 <ArrowRight className="h-5 w-5 ml-2" />
               </Button>

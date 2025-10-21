@@ -98,7 +98,7 @@ export default function Cart() {
               Start shopping to fill it up!
             </p>
             <Link href="/shop">
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-4">
+              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-4 hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300">
                 <ShoppingBag className="h-5 w-5 mr-2" />
                 Start Shopping
                 <ArrowRight className="h-5 w-5 ml-2" />
@@ -208,7 +208,7 @@ export default function Cart() {
             {/* Continue Shopping */}
             <div className="mt-6">
               <Link href="/shop">
-                <Button variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white">
+                <Button variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300">
                   <ArrowRight className="h-5 w-5 mr-2 rotate-180" />
                   Continue Shopping
                 </Button>

@@ -409,7 +409,7 @@ export default function Shop() {
         {!isLoading && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredAndSortedProducts.map((product) => (
-            <div key={product.id} className="product-card">
+            <div key={product.id} className="product-card group hover:shadow-2xl hover:shadow-blue-500/20 hover:-translate-y-2 transition-all duration-300">
               <Link href={`/product/${product.id}`}>
                 <div className="relative overflow-hidden cursor-pointer">
                   {product.name === "Smart Home Assistant" ? (
@@ -482,7 +482,7 @@ export default function Shop() {
                     handleAddToCart(product);
                   }}
                   disabled={!product.inStock}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300"
                   data-testid={`button-add-to-cart-${product.id}`}
                 >
                   <ShoppingCart className="h-5 w-5 mr-2" />

@@ -13,6 +13,7 @@ import ProductRating from "@/components/ProductRating";
 import Footer from "@/components/Footer";
 import { SEO } from "@/components/SEO";
 import AIRecommendations from "@/components/AIRecommendations";
+import RatingDistributionChart from "@/components/RatingDistributionChart";
 import type { Product } from "@shared/schema";
 
 // Image imports
@@ -247,6 +248,11 @@ export default function ProductDetail() {
 
         {/* AI Recommendations */}
         <AIRecommendations productId={product.id} />
+
+        {/* Rating Distribution Chart */}
+        <div className="mt-12">
+          <RatingDistributionChart productId={product.id} />
+        </div>
 
         {/* Related Products */}
         {relatedProducts.length > 0 && (

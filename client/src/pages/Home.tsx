@@ -16,6 +16,7 @@ import Footer from "@/components/Footer";
 import ProductRating from "@/components/ProductRating";
 import { SEO } from "@/components/SEO";
 import { NewsletterModal } from "@/components/NewsletterModal";
+import ParticleBackground from "@/components/ParticleBackground";
 
 // Image resolver to map product images to actual imported assets
 const getProductImage = (imagePath: string, productName: string) => {
@@ -120,8 +121,9 @@ export default function Home() {
         className="relative h-[80vh] flex items-center justify-center bg-cover bg-center bg-fixed"
         style={{ backgroundImage: `url(${bannerImage})` }}
       >
-        <div className="absolute inset-0 bg-black/30"></div>
-        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
+        <ParticleBackground />
+        <div className="absolute inset-0 bg-black/30 z-10"></div>
+        <div className="relative z-20 text-center px-4 max-w-4xl mx-auto">
           <h1 className="text-6xl md:text-8xl font-bold mb-6 bg-gradient-to-r from-slate-100 via-blue-100 to-slate-100 bg-clip-text text-transparent animate-gradient-text">
             Welcome!
           </h1>

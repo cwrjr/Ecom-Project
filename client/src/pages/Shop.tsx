@@ -18,6 +18,7 @@ import Footer from "@/components/Footer";
 import ProductRating from "@/components/ProductRating";
 import ProductQuickView from "@/components/ProductQuickView";
 import FavoritesButton from "@/components/FavoritesButton";
+import ProductHoverCard from "@/components/ProductHoverCard";
 import { SEO } from "@/components/SEO";
 import type { Product } from "@shared/schema";
 import shopBannerImage from "@assets/images/pexels-n-voitkevich-6214476.jpg";
@@ -456,7 +457,9 @@ export default function Shop() {
                 </div>
                 
                 <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{product.name}</h3>
+                  <ProductHoverCard product={product}>
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 cursor-help">{product.name}</h3>
+                  </ProductHoverCard>
                   <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-2">{product.description}</p>
                   <p className="text-sm text-blue-600 dark:text-blue-400 font-medium mb-4">{product.category}</p>
                   

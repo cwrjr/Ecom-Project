@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { ShoppingBag, ArrowRight, Star, Zap, Shield, Phone } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import type { Product } from "@shared/schema";
 import bannerImage from "@assets/images/pexels-n-voitkevich-6214476.jpg";
 import aboutImage from "@assets/images/pexels-karolina-grabowska-5632382.jpg";
@@ -271,10 +272,22 @@ export default function Home() {
                   ? 'translate-y-0 opacity-100 scale-100 delay-300' 
                   : 'translate-y-16 opacity-0 scale-95'
             }`}>
-              <div className={`w-16 h-16 bg-blue-600/30 rounded-full flex items-center justify-center mx-auto mb-6 backdrop-blur-sm transition-all duration-500 ${
+              <div className={`w-16 h-16 bg-blue-600/30 rounded-full flex items-center justify-center mx-auto mb-6 backdrop-blur-sm transition-all duration-500 relative ${
                 scrollLocked ? 'animate-pulse scale-110' : ''
               }`}>
                 <Zap className="h-8 w-8 text-blue-600" />
+                <AnimatePresence>
+                  {isWhyChooseVisible && (
+                    <motion.div
+                      initial={{ scale: 0, rotate: -180 }}
+                      animate={{ scale: 1, rotate: 0 }}
+                      transition={{ duration: 0.5, type: "spring", stiffness: 200 }}
+                      className="absolute inset-0 flex items-center justify-center"
+                    >
+                      <Zap className="h-6 w-6 text-yellow-400 animate-pulse drop-shadow-[0_0_8px_rgba(250,204,21,0.8)]" />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
               <h3 className={`text-xl font-bold text-gray-900 dark:text-white mb-4 transition-all duration-500 ${
                 scrollLocked ? 'animate-pulse' : ''
@@ -291,10 +304,24 @@ export default function Home() {
                   ? 'translate-y-0 opacity-100 scale-100 delay-500' 
                   : 'translate-y-16 opacity-0 scale-95'
             }`}>
-              <div className={`w-16 h-16 bg-blue-600/30 rounded-full flex items-center justify-center mx-auto mb-6 backdrop-blur-sm transition-all duration-500 ${
+              <div className={`w-16 h-16 bg-blue-600/30 rounded-full flex items-center justify-center mx-auto mb-6 backdrop-blur-sm transition-all duration-500 relative ${
                 scrollLocked ? 'animate-pulse scale-110' : ''
               }`}>
                 <Shield className="h-8 w-8 text-blue-600" />
+                <AnimatePresence>
+                  {isWhyChooseVisible && (
+                    <motion.div
+                      initial={{ scale: 0, opacity: 0, y: -10 }}
+                      animate={{ scale: 1, opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, type: "spring", stiffness: 200, delay: 0.2 }}
+                      className="absolute inset-0 flex items-center justify-center"
+                    >
+                      <span className="text-3xl font-black text-blue-600 dark:text-blue-400 drop-shadow-[0_0_6px_rgba(37,99,235,0.8)] animate-pulse">
+                        T
+                      </span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
               <h3 className={`text-xl font-bold text-gray-900 dark:text-white mb-4 transition-all duration-500 ${
                 scrollLocked ? 'animate-pulse' : ''
@@ -311,10 +338,22 @@ export default function Home() {
                   ? 'translate-y-0 opacity-100 scale-100 delay-700' 
                   : 'translate-y-16 opacity-0 scale-95'
             }`}>
-              <div className={`w-16 h-16 bg-blue-600/30 rounded-full flex items-center justify-center mx-auto mb-6 backdrop-blur-sm transition-all duration-500 ${
+              <div className={`w-16 h-16 bg-blue-600/30 rounded-full flex items-center justify-center mx-auto mb-6 backdrop-blur-sm transition-all duration-500 relative ${
                 scrollLocked ? 'animate-pulse scale-110' : ''
               }`}>
                 <Star className="h-8 w-8 text-blue-600" />
+                <AnimatePresence>
+                  {isWhyChooseVisible && (
+                    <motion.div
+                      initial={{ scale: 0, rotate: -180 }}
+                      animate={{ scale: 1, rotate: 0 }}
+                      transition={{ duration: 0.5, type: "spring", stiffness: 200, delay: 0.4 }}
+                      className="absolute inset-0 flex items-center justify-center"
+                    >
+                      <Zap className="h-6 w-6 text-yellow-400 animate-pulse drop-shadow-[0_0_8px_rgba(250,204,21,0.8)]" />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
               <h3 className={`text-xl font-bold text-gray-900 dark:text-white mb-4 transition-all duration-500 ${
                 scrollLocked ? 'animate-pulse' : ''

@@ -43,15 +43,18 @@ export default function Navigation() {
             
             {/* Search Bar - Desktop */}
             <form onSubmit={handleSearch} className="hidden lg:flex items-center">
-              <div className="relative">
+              <div className="relative group">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search products..."
-                  className="pl-10 pr-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-600 w-64 transition-all"
+                  className="pl-10 pr-20 py-2 border-2 border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:border-blue-600 w-64 transition-all dark:bg-gray-800 dark:text-white"
                 />
+                <kbd className="absolute right-3 top-1/2 transform -translate-y-1/2 px-2 py-0.5 text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded">
+                  ⌘K
+                </kbd>
               </div>
             </form>
           </div>

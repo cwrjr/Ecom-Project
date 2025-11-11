@@ -14,6 +14,7 @@ import Navigation from "@/components/Navigation";
 import { CartProvider } from "@/components/CartContext";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import AIChatWidget from "@/components/AIChatWidget";
+import CommandMenu from "@/components/CommandMenu";
 import { useEffect, useState, useRef } from "react";
 
 function Router() {
@@ -84,6 +85,7 @@ function Router() {
       <div ref={cursorGlowRef} className="cursor-glow"></div>
       
       <Navigation />
+      <CommandMenu />
       <div className="w-full relative">
         <Switch>
           <Route path="/" component={Home} />

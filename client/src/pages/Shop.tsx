@@ -125,7 +125,7 @@ export default function Shop() {
     },
   });
 
-  const categoryTabs = ["All Products", "Featured", "New Arrivals", "Best Sellers", ...(categories as any[]).map((cat: any) => cat.name)];
+  const categoryTabs = Array.from(new Set(["All Products", "Featured", "New Arrivals", "Best Sellers", ...(categories as any[]).map((cat: any) => cat.name)]));
 
   const handleFiltersChange = (newFilters: any) => {
     setFilters(newFilters);

@@ -121,12 +121,12 @@ export default function ProductDetail() {
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
-          <Link href="/">
-            <a className="hover:text-blue-600">Home</a>
+          <Link href="/" className="hover:text-blue-600">
+            Home
           </Link>
           <span>/</span>
-          <Link href="/shop">
-            <a className="hover:text-blue-600">Shop</a>
+          <Link href="/shop" className="hover:text-blue-600">
+            Shop
           </Link>
           <span>/</span>
           <span className="text-blue-600">{product.name}</span>

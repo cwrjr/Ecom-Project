@@ -63,7 +63,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/products", async (req, res) => {
+  // Admin only - creating products requires authentication
+  app.post("/api/products", isAuthenticated, async (req, res) => {
     try {
       const result = insertProductSchema.safeParse(req.body);
       if (!result.success) {
@@ -160,8 +161,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Orders routes
-  app.post("/api/orders", async (req, res) => {
+  // Orders routes - protected (user must be logged in)
+  app.post("/api/orders", isAuthenticated, async (req, res) => {
     try {
       const result = insertOrderSchema.safeParse(req.body);
       if (!result.success) {
@@ -175,7 +176,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/orders", async (req, res) => {
+  app.get("/api/orders", isAuthenticated, async (req, res) => {
     try {
       const orders = await storage.getOrders();
       res.json(orders);
@@ -199,7 +200,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/products/:id/ratings", async (req, res) => {
+  // Ratings - protected (user must be logged in to rate)
+  app.post("/api/products/:id/ratings", isAuthenticated, async (req, res) => {
     try {
       const productId = parseInt(req.params.id);
       if (isNaN(productId)) {

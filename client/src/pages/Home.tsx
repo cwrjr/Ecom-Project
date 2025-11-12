@@ -16,7 +16,7 @@ import deskLampImage from "@assets/minimalist_expensive_desk_lamp_main_attractio
 import monitorImage from "@assets/minimalist_expensive_desk_with_curved_monitor_that.jpg";
 import officeChairImage from "@assets/stock_images/ergonomic_office_cha_b30f2022.jpg";
 import smartwatchImage from "@assets/pexels-alesiakozik-6772024.jpg";
-import luxuryWatchImage from "@assets/pexels-n-voitkevich-6214476.jpg";
+import luxuryWatchImage from "@assets/images/pexels-n-voitkevich-6214476.jpg";
 import { Button } from "@/components/ui/button";
 import Footer from "@/components/Footer";
 import ProductRating from "@/components/ProductRating";
@@ -24,6 +24,7 @@ import { SEO } from "@/components/SEO";
 import { NewsletterModal } from "@/components/NewsletterModal";
 import ParticleBackground from "@/components/ParticleBackground";
 import ThreeJsCart from "@/components/ThreeJsCart";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 // Image resolver to map product images to actual imported assets
 const getProductImage = (imagePath: string, productName: string) => {
@@ -49,6 +50,9 @@ export default function Home() {
   const [scrollLocked, setScrollLocked] = useState(false);
   const [newsletterModalOpen, setNewsletterModalOpen] = useState(false);
   const whyChooseRef = useRef<HTMLElement>(null);
+  
+  // Only load video on desktop (≥768px)
+  const isDesktop = useMediaQuery('(min-width: 768px)');
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -202,14 +206,25 @@ export default function Home() {
                 <div className="product-card cursor-pointer" data-testid={`product-card-${product.id}`}>
                   <div className="relative overflow-hidden">
                     {product.name === "Smart Home Assistant" ? (
-                      <video
-                        src={smartHomeVideo}
-                        className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                      />
+                      isDesktop ? (
+                        /* Desktop: Video (12 MB) - only rendered/downloaded on large screens */
+                        <video
+                          src={smartHomeVideo}
+                          className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                          autoPlay
+                          loop
+                          muted
+                          playsInline
+                        />
+                      ) : (
+                        /* Mobile: Static image (1.2 MB) - video never downloads */
+                        <img
+                          src={smartHomeImage}
+                          alt={product.name}
+                          loading="lazy"
+                          className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      )
                     ) : (
                       <img 
                         src={getProductImage(product.image, product.name)} 

@@ -21,6 +21,7 @@ import FavoritesButton from "@/components/FavoritesButton";
 import ProductHoverCard from "@/components/ProductHoverCard";
 import { SEO } from "@/components/SEO";
 import type { Product } from "@shared/schema";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import shopBannerImage from "@assets/images/pexels-n-voitkevich-6214476.jpg";
 import headphonesImage from "@assets/A sleek black pair of premium wireless headphones displayed on a clean white background with soft sh.jpeg";
 import chargerImage from "@assets/stock_images/wireless_phone_charg_71473ae2.jpg";
@@ -32,7 +33,7 @@ import deskLampImage from "@assets/minimalist_expensive_desk_lamp_main_attractio
 import monitorImage from "@assets/minimalist_expensive_desk_with_curved_monitor_that.jpg";
 import officeChairImage from "@assets/stock_images/ergonomic_office_cha_b30f2022.jpg";
 import smartwatchImage from "@assets/pexels-alesiakozik-6772024.jpg";
-import luxuryWatchImage from "@assets/pexels-n-voitkevich-6214476.jpg";
+import luxuryWatchImage from "@assets/images/pexels-n-voitkevich-6214476.jpg";
 
 // Image resolver to map product images to actual imported assets
 const getProductImage = (imagePath: string, productName: string) => {
@@ -63,6 +64,9 @@ export default function Shop() {
     inStockOnly: false,
     sortBy: "relevance",
   });
+  
+  // Only load video on desktop (≥768px)
+  const isDesktop = useMediaQuery('(min-width: 768px)');
   
   const { addToCart } = useCart();
   const { toast } = useToast();
@@ -220,7 +224,7 @@ export default function Shop() {
             <div className="flex gap-4 overflow-x-auto pb-4">
               {recentlyViewed.slice(0, 5).map((item: any) => (
                 <div key={item.id} className="flex-shrink-0 w-48 bg-white/80 backdrop-blur-sm dark:bg-gray-800/80 rounded-lg shadow-md p-4">
-                  <img src={getProductImage(item.product?.image, item.product?.name)} alt={item.product?.name} className="w-full h-32 object-cover rounded mb-2" />
+                  <img src={getProductImage(item.product?.image, item.product?.name)} alt={item.product?.name} loading="lazy" className="w-full h-32 object-cover rounded mb-2" />
                   <h3 className="text-sm font-medium text-gray-900 dark:text-white truncate">{item.product?.name}</h3>
                   <p className="text-lg font-bold text-blue-600">${item.product?.price}</p>
                 </div>
@@ -407,14 +411,25 @@ export default function Shop() {
               <Link href={`/product/${product.id}`}>
                 <div className="relative overflow-hidden cursor-pointer">
                   {product.name === "Smart Home Assistant" ? (
-                    <video
-                      src={smartHomeVideo}
-                      className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                    />
+                    isDesktop ? (
+                      /* Desktop: Video (12 MB) - only rendered/downloaded on large screens */
+                      <video
+                        src={smartHomeVideo}
+                        className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                      />
+                    ) : (
+                      /* Mobile: Static image (1.2 MB) - video never downloads */
+                      <img
+                        src={smartHomeImage}
+                        alt={product.name}
+                        loading="lazy"
+                        className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    )
                   ) : (
                     <img 
                       src={getProductImage(product.image, product.name)} 

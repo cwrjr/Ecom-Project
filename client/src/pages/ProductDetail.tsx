@@ -18,12 +18,15 @@ import type { Product } from "@shared/schema";
 
 // Image imports
 import headphonesImage from "@assets/A sleek black pair of premium wireless headphones displayed on a clean white background with soft sh.jpeg";
-import chargerImage from "@assets/magicstudio-art (1).jpg";
-import investmentImage from "@assets/pexels-alesiakozik-6772024.jpg";
-import smartHomeImage from "@assets/f62dd8e7-7056-4c64-9252-8cb45c3210ef (1).mp4";
+import chargerImage from "@assets/stock_images/wireless_phone_charg_71473ae2.jpg";
+import investmentImage from "@assets/stock_images/investment_portfolio_6509782d.jpg";
+import smartHomeImage from "@assets/Firefly_realistic and clear glow smart speaker on a Highrise table with Seattle night skyline 787022.jpg";
 import cameraKitImage from "@assets/Firefly_Professional Camera Kit 664369.jpg";
 import deskLampImage from "@assets/minimalist_expensive_desk_lamp_main_attraction_on.jpg";
 import monitorImage from "@assets/minimalist_expensive_desk_with_curved_monitor_that.jpg";
+import officeChairImage from "@assets/stock_images/ergonomic_office_cha_b30f2022.jpg";
+import smartwatchImage from "@assets/pexels-alesiakozik-6772024.jpg";
+import luxuryWatchImage from "@assets/pexels-n-voitkevich-6214476.jpg";
 
 const getProductImage = (imagePath: string, productName: string) => {
   if (productName === "Premium Wireless Headphones") return headphonesImage;
@@ -33,6 +36,9 @@ const getProductImage = (imagePath: string, productName: string) => {
   if (productName === "Professional Camera Kit") return cameraKitImage;
   if (productName === "Minimalist Desk Lamp") return deskLampImage;
   if (productName === "Monitors") return monitorImage;
+  if (productName === "Ergonomic Office Chair") return officeChairImage;
+  if (productName === "Smartwatch Pro") return smartwatchImage;
+  if (productName === "Luxury Watch Collection") return luxuryWatchImage;
   return imagePath;
 };
 

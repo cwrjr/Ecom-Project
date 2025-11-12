@@ -23,37 +23,30 @@ import { SEO } from "@/components/SEO";
 import type { Product } from "@shared/schema";
 import shopBannerImage from "@assets/images/pexels-n-voitkevich-6214476.jpg";
 import headphonesImage from "@assets/A sleek black pair of premium wireless headphones displayed on a clean white background with soft sh.jpeg";
-import chargerImage from "@assets/magicstudio-art (1).jpg";
-import investmentImage from "@assets/pexels-alesiakozik-6772024.jpg";
-import smartHomeImage from "@assets/f62dd8e7-7056-4c64-9252-8cb45c3210ef (1).mp4";
+import chargerImage from "@assets/stock_images/wireless_phone_charg_71473ae2.jpg";
+import investmentImage from "@assets/stock_images/investment_portfolio_6509782d.jpg";
+import smartHomeImage from "@assets/Firefly_realistic and clear glow smart speaker on a Highrise table with Seattle night skyline 787022.jpg";
+import smartHomeVideo from "@assets/f62dd8e7-7056-4c64-9252-8cb45c3210ef (1).mp4";
 import cameraKitImage from "@assets/Firefly_Professional Camera Kit 664369.jpg";
 import deskLampImage from "@assets/minimalist_expensive_desk_lamp_main_attraction_on.jpg";
 import monitorImage from "@assets/minimalist_expensive_desk_with_curved_monitor_that.jpg";
+import officeChairImage from "@assets/stock_images/ergonomic_office_cha_b30f2022.jpg";
+import smartwatchImage from "@assets/pexels-alesiakozik-6772024.jpg";
+import luxuryWatchImage from "@assets/pexels-n-voitkevich-6214476.jpg";
 
 // Image resolver to map product images to actual imported assets
 const getProductImage = (imagePath: string, productName: string) => {
-  if (productName === "Premium Wireless Headphones") {
-    return headphonesImage;
-  }
-  if (productName === "Wireless Phone Charger") {
-    return chargerImage;
-  }
-  if (productName === "Investment Trends") {
-    return investmentImage;
-  }
-  if (productName === "Smart Home Assistant") {
-    return smartHomeImage;
-  }
-  if (productName === "Professional Camera Kit") {
-    return cameraKitImage;
-  }
-  if (productName === "Minimalist Desk Lamp") {
-    return deskLampImage;
-  }
-  if (productName === "Monitors") {
-    return monitorImage;
-  }
-  return imagePath; // fallback to original path
+  if (productName === "Premium Wireless Headphones") return headphonesImage;
+  if (productName === "Wireless Phone Charger") return chargerImage;
+  if (productName === "Investment Trends") return investmentImage;
+  if (productName === "Smart Home Assistant") return smartHomeImage;
+  if (productName === "Professional Camera Kit") return cameraKitImage;
+  if (productName === "Minimalist Desk Lamp") return deskLampImage;
+  if (productName === "Monitors") return monitorImage;
+  if (productName === "Ergonomic Office Chair") return officeChairImage;
+  if (productName === "Smartwatch Pro") return smartwatchImage;
+  if (productName === "Luxury Watch Collection") return luxuryWatchImage;
+  return imagePath;
 };
 
 export default function Shop() {
@@ -415,14 +408,12 @@ export default function Shop() {
                 <div className="relative overflow-hidden cursor-pointer">
                   {product.name === "Smart Home Assistant" ? (
                     <video
-                      src={getProductImage(product.image, product.name)}
+                      src={smartHomeVideo}
                       className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
                       autoPlay
                       loop
                       muted
                       playsInline
-                      onError={() => console.log('Video failed to load:', product.image)}
-                      onLoadedData={() => console.log('Video loaded:', product.image)}
                     />
                   ) : (
                     <img 

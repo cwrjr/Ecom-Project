@@ -4,49 +4,49 @@ import trellisLogo from "@assets/logi.webp";
 
 export default function Footer() {
   return (
-    <footer className="bg-slate-900/30 backdrop-blur-lg text-black border-t border-white/10 rounded-t-3xl">
+    <footer className="bg-slate-900/30 backdrop-blur-lg text-gray-900 dark:text-gray-100 border-t border-gray-200 dark:border-white/10 rounded-t-3xl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* About Section */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold mb-4">About Trellis</h3>
-            <ul className="space-y-3 text-gray-700">
-              <li><a href="/#about" className="hover:text-black transition-colors">Our Story</a></li>
-              <li><a href="#" className="hover:text-black transition-colors">Careers</a></li>
-              <li><a href="#" className="hover:text-black transition-colors">Press</a></li>
-              <li><a href="#" className="hover:text-black transition-colors">Investor Relations</a></li>
+            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">About Trellis</h3>
+            <ul className="space-y-3 text-gray-700 dark:text-gray-300">
+              <li><a href="/#about" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Our Story</a></li>
+              <li><a href="#" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Careers</a></li>
+              <li><a href="#" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Press</a></li>
+              <li><a href="#" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Investor Relations</a></li>
             </ul>
           </div>
 
           {/* Customer Service */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold mb-4">Customer Service</h3>
-            <ul className="space-y-3 text-gray-700">
-              <li><Link href="/contact" onClick={() => window.scrollTo(0, 0)} className="hover:text-black transition-colors">Contact Us</Link></li>
-              <li><a href="/contact#shipping" className="hover:text-black transition-colors">Shipping Information</a></li>
-              <li><a href="/contact#shipping" className="hover:text-black transition-colors">Returns & Exchanges</a></li>
-              <li><a href="/contact#shipping" className="hover:text-black transition-colors">Track Your Order</a></li>
+            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Customer Service</h3>
+            <ul className="space-y-3 text-gray-700 dark:text-gray-300">
+              <li><Link href="/contact" onClick={() => window.scrollTo(0, 0)} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Contact Us</Link></li>
+              <li><a href="/contact#shipping" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Shipping Information</a></li>
+              <li><a href="/contact#shipping" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Returns & Exchanges</a></li>
+              <li><a href="/contact#shipping" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Track Your Order</a></li>
             </ul>
           </div>
 
           {/* Quick Links */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
-            <ul className="space-y-3 text-gray-700">
-              <li><Link href="/" className="hover:text-black transition-colors">Home</Link></li>
-              <li><Link href="/shop" className="hover:text-black transition-colors">Shop</Link></li>
-              <li><Link href="/contact" onClick={() => window.scrollTo(0, 0)} className="hover:text-black transition-colors">Contact</Link></li>
-              <li><a href="/#about" className="hover:text-black transition-colors">About Us</a></li>
+            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Quick Links</h3>
+            <ul className="space-y-3 text-gray-700 dark:text-gray-300">
+              <li><Link href="/" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Home</Link></li>
+              <li><Link href="/shop" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Shop</Link></li>
+              <li><Link href="/contact" onClick={() => window.scrollTo(0, 0)} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Contact</Link></li>
+              <li><a href="/#about" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">About Us</a></li>
             </ul>
           </div>
 
           {/* Contact & Social */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold mb-4">Connect</h3>
-            <div className="space-y-3 text-gray-700 text-sm">
+            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Connect</h3>
+            <div className="space-y-3 text-gray-700 dark:text-gray-300 text-sm">
               <div className="flex items-center space-x-2">
                 <Mail className="h-4 w-4" />
-                <a href="mailto:Thoma260@wwu.edu" className="hover:text-black transition-colors">
+                <a href="mailto:Thoma260@wwu.edu" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                   Thoma260@wwu.edu
                 </a>
               </div>
@@ -60,7 +60,7 @@ export default function Footer() {
                   href="https://www.google.com/maps/dir//Seattle,+WA" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="hover:text-black transition-colors cursor-pointer"
+                  className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
                 >
                   Seattle, WA
                 </a>
@@ -68,7 +68,7 @@ export default function Footer() {
             </div>
             
             <div className="pt-4">
-              <p className="text-gray-700 text-sm mb-3">Follow us</p>
+              <p className="text-gray-700 dark:text-gray-300 text-sm mb-3">Follow us</p>
               <div className="flex space-x-4">
                 <a href="https://instagram.com/cwtjr" target="_blank" rel="noopener noreferrer" className="text-[#E4405F] hover:opacity-80 transition-opacity">
                   <Instagram className="h-5 w-5" />
@@ -82,7 +82,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Section */}
-        <div className="border-t border-white/10 mt-12 pt-8 pb-0">
+        <div className="border-t border-gray-200 dark:border-white/10 mt-12 pt-8 pb-0">
           <div className="flex flex-col items-center text-center space-y-4">
             <div className="flex items-center space-x-2">
               <img 
@@ -90,15 +90,15 @@ export default function Footer() {
                 alt="Trellis Logo" 
                 className="w-8 h-8 object-contain"
               />
-              <span className="text-xl font-bold text-black">Trellis</span>
+              <span className="text-xl font-bold text-gray-900 dark:text-white">Trellis</span>
             </div>
             
-            <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6 text-sm text-gray-600">
+            <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6 text-sm text-gray-600 dark:text-gray-400">
               <p>&copy; 2025 Trellis Inc. All rights reserved.</p>
               <div className="flex space-x-4">
-                <a href="#" className="hover:text-black transition-colors">Privacy Policy</a>
-                <a href="#" className="hover:text-black transition-colors">Terms of Service</a>
-                <a href="#" className="hover:text-black transition-colors">Cookie Policy</a>
+                <a href="#" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Privacy Policy</a>
+                <a href="#" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Terms of Service</a>
+                <a href="#" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Cookie Policy</a>
               </div>
             </div>
           </div>

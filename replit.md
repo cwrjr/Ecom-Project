@@ -166,6 +166,8 @@ The application is platform-agnostic and ready for local development and product
   - Window-level mousemove with bounds checking (click-through support)
 
 ## Changelog
+- November 12, 2025: **Security Hardening** - Fixed critical privacy breach (orders endpoint), added authentication to protected routes (products, orders, ratings), created production security checklist with rate limiting, CSRF protection, and session management guidelines
+- November 12, 2025: **Asset Optimization Documentation** - Created ASSET_OPTIMIZATION.md guide (identified 25MB bloat, documented image/video compression strategies), added .env.example template for all auth providers
 - November 12, 2025: **Migration Preparation** - Removed Replit-specific dependencies, created migration-ready auth module (server/auth.ts) with Firebase/Auth0/Supabase support, updated codebase to be platform-agnostic for local development in Cursor IDE
 - November 12, 2025: Added interactive UI enhancements (command menu, hover cards, particle backgrounds, rating charts, Three.js 3D cart animations)
 - October 8, 2025: Added comprehensive AI features (product recommendations, semantic search, chatbot, product comparison, SEO generation)

@@ -162,23 +162,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Orders routes - protected (user must be logged in)
-  app.post("/api/orders", isAuthenticated, async (req, res) => {
+  app.post("/api/orders", isAuthenticated, async (req: any, res) => {
     try {
       const result = insertOrderSchema.safeParse(req.body);
       if (!result.success) {
         return res.status(400).json({ error: "Invalid order data", issues: result.error.issues });
       }
       
-      const order = await storage.createOrder(result.data);
+      // Security: Override userId with authenticated user to prevent forged ownership
+      const userId = req.user.claims.sub;
+      const orderData = { ...result.data, userId };
+      
+      const order = await storage.createOrder(orderData);
       res.status(201).json(order);
     } catch (error) {
       res.status(500).json({ error: "Failed to create order" });
     }
   });
 
-  app.get("/api/orders", isAuthenticated, async (req, res) => {
+  app.get("/api/orders", isAuthenticated, async (req: any, res) => {
     try {
-      const orders = await storage.getOrders();
+      const userId = req.user.claims.sub;
+      const orders = await storage.getUserOrders(userId);
       res.json(orders);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch orders" });

@@ -18,7 +18,7 @@ export default function ProductComparison({ children }: ProductComparisonProps) 
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: comparison } = useQuery({
+  const { data: comparison } = useQuery<{ productIds: number[] }>({
     queryKey: ["/api/comparison"],
     enabled: isOpen,
   });
@@ -29,7 +29,10 @@ export default function ProductComparison({ children }: ProductComparisonProps) 
 
   const updateComparisonMutation = useMutation({
     mutationFn: (productIds: number[]) =>
-      apiRequest("POST", "/api/comparison", { productIds }),
+      apiRequest("/api/comparison", {
+        method: "POST",
+        body: JSON.stringify({ productIds })
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/comparison"] });
     },
@@ -62,7 +65,7 @@ export default function ProductComparison({ children }: ProductComparisonProps) 
 
   const removeFromComparison = (productId: number) => {
     const currentIds = comparison?.productIds || [];
-    updateComparisonMutation.mutate(currentIds.filter(id => id !== productId));
+    updateComparisonMutation.mutate(currentIds.filter((id: number) => id !== productId));
   };
 
   const ProductSpecs = ({ productId }: { productId: number }) => {
@@ -189,5 +192,3 @@ export default function ProductComparison({ children }: ProductComparisonProps) 
     </Dialog>
   );
 }
-
-export { addToComparison } from "./ProductComparison";

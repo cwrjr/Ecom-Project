@@ -21,15 +21,18 @@ export default function FavoritesButton({
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: favorites = [] } = useQuery({
+  const { data: favorites = [] } = useQuery<Array<{ id: number; productId: number }>>({
     queryKey: ["/api/favorites"],
     enabled: isAuthenticated,
   });
 
-  const isFavorited = favorites.some((fav: any) => fav.productId === productId);
+  const isFavorited = favorites.some((fav) => fav.productId === productId);
 
   const addToFavoritesMutation = useMutation({
-    mutationFn: () => apiRequest("POST", "/api/favorites", { productId }),
+    mutationFn: () => apiRequest("/api/favorites", {
+      method: "POST",
+      body: JSON.stringify({ productId })
+    }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/favorites"] });
       toast({
@@ -47,7 +50,9 @@ export default function FavoritesButton({
   });
 
   const removeFromFavoritesMutation = useMutation({
-    mutationFn: () => apiRequest("DELETE", `/api/favorites/${productId}`),
+    mutationFn: () => apiRequest(`/api/favorites/${productId}`, {
+      method: "DELETE"
+    }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/favorites"] });
       toast({

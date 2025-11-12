@@ -12,7 +12,7 @@ The application follows a monorepo structure with clear separation between clien
 - **Backend**: Express.js with TypeScript running on Node.js
 - **Storage**: In-memory storage with MemoryStore session management (ready for database integration)
 - **Styling**: Tailwind CSS with shadcn/ui component library
-- **Authentication**: Replit-based OAuth integration with in-memory sessions
+- **Authentication**: Migration-ready auth module (supports Firebase, Auth0, or Supabase)
 - **Build System**: Vite for frontend, esbuild for backend production builds
 
 ## Key Components
@@ -90,12 +90,13 @@ The application uses a comprehensive type-safe schema with the following main en
 
 ## Deployment Strategy
 
-The application is configured for deployment on Replit with the following setup:
+The application is platform-agnostic and ready for local development and production deployment:
 
 ### Development Environment
 - **Dev Server**: `npm run dev` starts both frontend and backend in development mode
 - **Hot Reload**: Vite provides instant updates during development
 - **TypeScript Checking**: Continuous type checking with `tsc`
+- **Local Development**: Works seamlessly in any IDE (VS Code, Cursor, WebStorm, etc.)
 
 ### Production Build
 - **Frontend Build**: Vite builds optimized React application
@@ -104,8 +105,10 @@ The application is configured for deployment on Replit with the following setup:
 - **Environment Configuration**: Supports both development and production modes
 
 ### Storage Management
-- **In-Memory Storage**: Fast MemStorage implementation with full CRUD operations
-- **Session Management**: MemoryStore for session persistence (ephemeral, resets on restart)
+- **Migration-Ready**: Storage interface abstraction allows easy database integration
+- **Current State**: In-memory MemStorage implementation (development)
+- **Production Options**: Supabase, PostgreSQL, MySQL, or any SQL database
+- **Session Management**: MemoryStore (development) - ready for PostgreSQL sessions in production
 - **Data Initialization**: Pre-loaded sample products, categories, and reviews
 
 ## Recent Improvements
@@ -163,6 +166,7 @@ The application is configured for deployment on Replit with the following setup:
   - Window-level mousemove with bounds checking (click-through support)
 
 ## Changelog
+- November 12, 2025: **Migration Preparation** - Removed Replit-specific dependencies, created migration-ready auth module (server/auth.ts) with Firebase/Auth0/Supabase support, updated codebase to be platform-agnostic for local development in Cursor IDE
 - November 12, 2025: Added interactive UI enhancements (command menu, hover cards, particle backgrounds, rating charts, Three.js 3D cart animations)
 - October 8, 2025: Added comprehensive AI features (product recommendations, semantic search, chatbot, product comparison, SEO generation)
 - October 7, 2025: Removed PostgreSQL database, added in-memory storage, performance optimizations (preloading, caching), newsletter signup, mobile menu animations, SEO meta tags, lazy loading, loading states, stock indicators

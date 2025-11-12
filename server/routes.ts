@@ -13,7 +13,7 @@ import {
   insertRecentlyViewedSchema,
   insertComparisonSchema
 } from "@shared/schema";
-import { setupAuth, isAuthenticated } from "./replitAuth";
+import { setupAuth, isAuthenticated } from "./auth";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware

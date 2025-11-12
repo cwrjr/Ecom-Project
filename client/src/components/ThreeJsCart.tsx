@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
 export default function ThreeJsCart() {
@@ -9,8 +9,10 @@ export default function ThreeJsCart() {
   const cartGroupRef = useRef<THREE.Group | null>(null);
   const glowLightRef = useRef<THREE.PointLight | null>(null);
   const animationFrameRef = useRef<number | null>(null);
-  const [isHovered, setIsHovered] = useState(false);
+  const isHoveredRef = useRef(false);
   const scrollYRef = useRef(0);
+  const raycasterRef = useRef<THREE.Raycaster>(new THREE.Raycaster());
+  const mouseRef = useRef<THREE.Vector2>(new THREE.Vector2());
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -120,6 +122,35 @@ export default function ThreeJsCart() {
     };
     window.addEventListener("scroll", handleScroll);
 
+    // Handle mouse move for raycasting (using window to work with pointer-events: none)
+    const handleMouseMove = (event: MouseEvent) => {
+      if (!containerRef.current) return;
+      
+      const rect = containerRef.current.getBoundingClientRect();
+      
+      // Check if mouse is within the container bounds
+      const isInBounds = 
+        event.clientX >= rect.left &&
+        event.clientX <= rect.right &&
+        event.clientY >= rect.top &&
+        event.clientY <= rect.bottom;
+      
+      if (!isInBounds) {
+        isHoveredRef.current = false;
+        return;
+      }
+      
+      mouseRef.current.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      mouseRef.current.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+      
+      // Raycast to detect hover
+      raycasterRef.current.setFromCamera(mouseRef.current, camera);
+      const intersects = raycasterRef.current.intersectObjects(cartGroup.children, true);
+      
+      isHoveredRef.current = intersects.length > 0;
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+
     // Animation loop
     const animate = () => {
       const elapsed = Date.now() - startTime;
@@ -140,7 +171,7 @@ export default function ThreeJsCart() {
       }
 
       // Hover effect - wiggle and glow
-      if (isHovered && rollInProgress >= 1) {
+      if (isHoveredRef.current && rollInProgress >= 1) {
         const wiggle = Math.sin(Date.now() * 0.005) * 0.1;
         cartGroup.rotation.z = wiggle * 0.2;
         cartGroup.position.y = Math.sin(Date.now() * 0.003) * 0.1;
@@ -163,14 +194,14 @@ export default function ThreeJsCart() {
         const pathX = -1 + Math.sin(scrollProgress * Math.PI) * 2;
         const pathY = -scrollProgress * 2;
         
-        if (!isHovered) {
+        if (!isHoveredRef.current) {
           cartGroup.position.x = pathX;
           cartGroup.position.y = pathY;
         }
       }
 
       // Gentle rotation
-      if (rollInProgress >= 1 && !isHovered) {
+      if (rollInProgress >= 1 && !isHoveredRef.current) {
         cartGroup.rotation.y = -Math.PI / 4 + Math.sin(Date.now() * 0.0005) * 0.2;
       }
 
@@ -192,15 +223,18 @@ export default function ThreeJsCart() {
 
     // Cleanup
     return () => {
+      const currentContainer = containerRef.current;
+      
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("mousemove", handleMouseMove);
       
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
       
-      if (containerRef.current && renderer.domElement) {
-        containerRef.current.removeChild(renderer.domElement);
+      if (currentContainer && renderer.domElement) {
+        currentContainer.removeChild(renderer.domElement);
       }
       
       renderer.dispose();
@@ -211,15 +245,13 @@ export default function ThreeJsCart() {
       wheelGeometry.dispose();
       wheelMaterial.dispose();
     };
-  }, [isHovered]);
+  }, []);
 
   return (
     <div
       ref={containerRef}
       className="absolute inset-0 pointer-events-none"
       style={{ zIndex: 15 }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
     />
   );
 }

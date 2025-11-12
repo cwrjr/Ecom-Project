@@ -17,6 +17,22 @@ export default function ThreeJsCart() {
   useEffect(() => {
     if (!containerRef.current) return;
 
+    // Check for WebGL support
+    const canvas = document.createElement('canvas');
+    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    if (!gl) {
+      console.warn('ThreeJsCart: WebGL not supported, skipping 3D cart animation');
+      return;
+    }
+
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    } catch (error) {
+      console.warn('ThreeJsCart: Failed to create WebGL renderer', error);
+      return;
+    }
+
     const scene = new THREE.Scene();
     sceneRef.current = scene;
 
@@ -29,7 +45,6 @@ export default function ThreeJsCart() {
     camera.position.z = 5;
     cameraRef.current = camera;
 
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight);
     renderer.setClearColor(0x000000, 0);
     containerRef.current.appendChild(renderer.domElement);

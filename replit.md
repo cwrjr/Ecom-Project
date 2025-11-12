@@ -49,6 +49,9 @@ The application uses a comprehensive type-safe schema with the following main en
 - **Product Comparison**: Side-by-side product comparison tool
 - **Quick View**: Modal-based product previews
 - **Shopping Cart**: Real-time cart updates with quantity management
+- **3D Animations**: Three.js powered 3D shopping cart with roll-in, hover, and scroll effects
+- **Canvas Animations**: Particle background effects using Canvas API
+- **Command Palette**: Global search with ⌘K/Ctrl+K keyboard shortcut
 
 ## Data Flow
 
@@ -81,6 +84,9 @@ The application uses a comprehensive type-safe schema with the following main en
 - **Stripe**: Payment processing integration (configured but not fully implemented)
 - **SendGrid**: Email service integration
 - **React Hook Form**: Form handling with validation
+- **Three.js**: WebGL-powered 3D graphics and animations
+- **Recharts**: Data visualization for rating distributions
+- **Framer Motion**: Advanced animations and transitions
 
 ## Deployment Strategy
 
@@ -144,7 +150,20 @@ The application is configured for deployment on Replit with the following setup:
 - **Automated SEO Meta Generator**: AI-generated meta titles and descriptions for products
 - **Floating Chat Widget**: Always-accessible AI assistant with Framer Motion animations
 
+### Interactive UI Enhancements (November 2025)
+- **Command Menu (⌘K)**: Global command palette with product search and keyboard navigation
+- **Interactive Hover Cards**: Lazy-loaded product previews with performance optimization
+- **Canvas Particle Background**: Animated particle effects in hero section with IntersectionObserver
+- **Rating Distribution Charts**: Visual rating analytics with recharts and dark mode support
+- **Three.js 3D Shopping Cart**: WebGL-powered animated cart with:
+  - Roll-in animation on page load (2s easing with wheel rotation)
+  - Hover wiggle + glow effects (raycasting-based detection)
+  - Scroll-based parallax motion (sinusoidal path)
+  - Graceful WebGL fallback for unsupported environments
+  - Window-level mousemove with bounds checking (click-through support)
+
 ## Changelog
+- November 12, 2025: Added interactive UI enhancements (command menu, hover cards, particle backgrounds, rating charts, Three.js 3D cart animations)
 - October 8, 2025: Added comprehensive AI features (product recommendations, semantic search, chatbot, product comparison, SEO generation)
 - October 7, 2025: Removed PostgreSQL database, added in-memory storage, performance optimizations (preloading, caching), newsletter signup, mobile menu animations, SEO meta tags, lazy loading, loading states, stock indicators
 - June 28, 2025: Initial setup

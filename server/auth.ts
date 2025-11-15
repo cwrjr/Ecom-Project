@@ -2,6 +2,7 @@ import passport from "passport";
 import session from "express-session";
 import type { Express, RequestHandler } from "express";
 import { storage } from "./storage";
+import MemoryStore from "memorystore";
 
 /**
  * MIGRATION-READY AUTH MODULE
@@ -56,8 +57,8 @@ export function getSession() {
   // });
   
   // For now, using in-memory store (development only)
-  const MemoryStore = require("memorystore")(session);
-  const sessionStore = new MemoryStore({
+  const MemoryStoreSession = MemoryStore(session);
+  const sessionStore = new MemoryStoreSession({
     checkPeriod: sessionTtl,
   });
   

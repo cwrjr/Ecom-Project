@@ -26,7 +26,7 @@ import deskLampImage from "@assets/minimalist_expensive_desk_lamp_main_attractio
 import monitorImage from "@assets/minimalist_expensive_desk_with_curved_monitor_that.jpg";
 import officeChairImage from "@assets/stock_images/ergonomic_office_cha_b30f2022.jpg";
 import smartwatchImage from "@assets/pexels-alesiakozik-6772024.jpg";
-import luxuryWatchImage from "@assets/pexels-n-voitkevich-6214476.jpg";
+import luxuryWatchImage from "@assets/images/pexels-n-voitkevich-6214476.jpg";
 
 const getProductImage = (imagePath: string, productName: string) => {
   if (productName === "Premium Wireless Headphones") return headphonesImage;

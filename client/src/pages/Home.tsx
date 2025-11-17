@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { ShoppingBag, ArrowRight, Star, Zap, Shield, Phone } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Product } from "@shared/schema";
-import bannerImage from "@assets/magicstudio-art (1).jpg";
+import bannerImage from "@assets/images/pexels-n-voitkevich-6214476.jpg";
 import aboutImage from "@assets/images/pexels-karolina-grabowska-5632382.jpg";
 import headphonesImage from "@assets/A sleek black pair of premium wireless headphones displayed on a clean white background with soft sh.jpeg";
 import chargerImage from "@assets/stock_images/wireless_phone_charg_71473ae2.jpg";

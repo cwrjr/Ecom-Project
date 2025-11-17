@@ -22,7 +22,7 @@ import ProductHoverCard from "@/components/ProductHoverCard";
 import { SEO } from "@/components/SEO";
 import type { Product } from "@shared/schema";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import shopBannerImage from "@assets/magicstudio-art (1).jpg";
+import shopBannerImage from "@assets/images/pexels-n-voitkevich-6214476.jpg";
 import headphonesImage from "@assets/A sleek black pair of premium wireless headphones displayed on a clean white background with soft sh.jpeg";
 import chargerImage from "@assets/stock_images/wireless_phone_charg_71473ae2.jpg";
 import investmentImage from "@assets/stock_images/investment_portfolio_6509782d.jpg";

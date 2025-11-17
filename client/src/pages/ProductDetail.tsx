@@ -31,14 +31,14 @@ import luxuryWatchImage from "@assets/images/pexels-n-voitkevich-6214476.jpg";
 const getProductImage = (imagePath: string, productName: string) => {
   if (productName === "Premium Wireless Headphones") return headphonesImage;
   if (productName === "Wireless Phone Charger") return chargerImage;
-  if (productName === "Investment Trends") return investmentImage;
+  if (productName === "Investment Portfolio Kit") return investmentImage;
   if (productName === "Smart Home Assistant") return smartHomeImage;
   if (productName === "Professional Camera Kit") return cameraKitImage;
   if (productName === "Minimalist Desk Lamp") return deskLampImage;
-  if (productName === "Monitors") return monitorImage;
+  if (productName === "4K Curved Monitor") return monitorImage;
   if (productName === "Ergonomic Office Chair") return officeChairImage;
-  if (productName === "Smartwatch Pro") return smartwatchImage;
-  if (productName === "Luxury Watch Collection") return luxuryWatchImage;
+  if (productName === "Fitness Tracker") return smartwatchImage;
+  if (productName === "Luxury Watch") return luxuryWatchImage;
   return imagePath;
 };
 

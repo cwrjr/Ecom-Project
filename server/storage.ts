@@ -305,7 +305,7 @@ export class MemStorage implements IStorage {
         price: 459.99,
         originalPrice: null,
         category: "Fashion",
-        image: "attached_assets/pexels-n-voitkevich-6214476.jpg",
+        image: "attached_assets/images/pexels-n-voitkevich-6214476.jpg",
         tags: ["luxury", "watch", "premium"],
         featured: false,
         inStock: true,

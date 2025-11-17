@@ -55,8 +55,10 @@ export default function ProductDetail() {
     window.scrollTo(0, 0);
   }, []);
 
-  const { data: product, isLoading } = useQuery<Product>({
+  const { data: product, isLoading, isError, error } = useQuery<Product>({
     queryKey: [`/api/products/${id}`],
+    refetchOnMount: true,
+    staleTime: 0,
   });
 
   const { data: allProducts = [] } = useQuery<Product[]>({
@@ -77,7 +79,7 @@ export default function ProductDetail() {
     },
   });
 
-  if (isLoading || !product) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -96,6 +98,30 @@ export default function ProductDetail() {
                 <Skeleton className="h-12 w-48" />
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (isError || !product || product.id !== Number(id)) {
+    return (
+      <div className="min-h-screen bg-white dark:bg-gray-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="text-center py-16">
+            <div className="text-6xl mb-4" data-testid="error-icon">😞</div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4" data-testid="error-title">
+              Product Not Found
+            </h1>
+            <p className="text-gray-600 dark:text-gray-300 mb-8" data-testid="error-message">
+              Sorry, we couldn't find the product you're looking for.
+            </p>
+            <Link href="/shop">
+              <Button data-testid="button-back-to-shop">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back to Shop
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

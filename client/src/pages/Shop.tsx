@@ -22,7 +22,7 @@ import ProductHoverCard from "@/components/ProductHoverCard";
 import { SEO } from "@/components/SEO";
 import type { Product } from "@shared/schema";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import shopBannerImage from "@assets/images/pexels-n-voitkevich-6214476.jpg";
+import shopBannerImage from "@assets/magicstudio-art (1).jpg";
 import headphonesImage from "@assets/A sleek black pair of premium wireless headphones displayed on a clean white background with soft sh.jpeg";
 import chargerImage from "@assets/stock_images/wireless_phone_charg_71473ae2.jpg";
 import investmentImage from "@assets/stock_images/investment_portfolio_6509782d.jpg";
@@ -53,7 +53,6 @@ const getProductImage = (imagePath: string, productName: string) => {
 export default function Shop() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All Products");
-  const [sortBy, setSortBy] = useState("name");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState({
@@ -62,7 +61,7 @@ export default function Shop() {
     categories: [] as string[],
     minRating: 0,
     inStockOnly: false,
-    sortBy: "relevance",
+    sortBy: "name",
   });
   
   // Only load video on desktop (≥768px)
@@ -331,7 +330,7 @@ export default function Shop() {
                         categories: [],
                         minRating: 0,
                         inStockOnly: false,
-                        sortBy: "relevance",
+                        sortBy: "name",
                       })}
                       className="flex-1"
                     >
@@ -373,7 +372,7 @@ export default function Shop() {
           <p className="text-gray-600">
             Showing {filteredAndSortedProducts.length} product{filteredAndSortedProducts.length !== 1 ? 's' : ''}
           </p>
-          <Select value={sortBy} onValueChange={setSortBy}>
+          <Select value={filters.sortBy} onValueChange={(value) => setFilters(prev => ({ ...prev, sortBy: value }))}>
             <SelectTrigger className="w-48">
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
@@ -472,9 +471,9 @@ export default function Shop() {
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center space-x-2">
                       {product.originalPrice && (
-                        <span className="text-gray-400 dark:text-gray-500 line-through text-lg">${product.originalPrice}</span>
+                        <span className="text-gray-400 dark:text-gray-500 line-through text-lg" data-testid={`original-price-${product.id}`}>${product.originalPrice}</span>
                       )}
-                      <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">${product.price}</span>
+                      <span className="text-2xl font-bold text-blue-600 dark:text-blue-400" data-testid={`price-${product.id}`}>${product.price}</span>
                     </div>
                   </div>
                   
@@ -509,7 +508,19 @@ export default function Shop() {
             <div className="text-6xl mb-4">🔍</div>
             <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">No products found</h3>
             <p className="text-gray-600 dark:text-gray-300 mb-6">Try adjusting your search or filter criteria</p>
-            <Button onClick={() => { setSearchTerm(""); setSelectedCategory("All Products"); setSortBy("name"); }}>
+            <Button onClick={() => { 
+              setSearchTerm(""); 
+              setSelectedCategory("All Products");
+              setUseSemanticSearch(false);
+              setFilters({
+                query: "",
+                priceRange: [0, 1000],
+                categories: [],
+                minRating: 0,
+                inStockOnly: false,
+                sortBy: "name",
+              });
+            }} data-testid="button-clear-filters">
               Clear Filters
             </Button>
           </div>

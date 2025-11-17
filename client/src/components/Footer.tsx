@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { Instagram, Linkedin, Mail, Phone, MapPin } from "lucide-react";
-import trellisLogo from "@assets/logi.webp";
+import trellisLogo from "@assets/images/logi.webp";
 
 export default function Footer() {
   return (

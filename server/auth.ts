@@ -6,6 +6,10 @@ import { scrypt, randomBytes, timingSafeEqual } from "crypto";
 import { promisify } from "util";
 import { storage } from "./storage";
 import { User } from "@shared/schema";
+import memoryStore from "memorystore";
+
+const MemoryStore = memoryStore(session);
+
 
 const scryptAsync = promisify(scrypt);
 
@@ -30,7 +34,7 @@ export function setupAuth(app: Express) {
     cookie: {
       maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
     },
-    store: new (require("memorystore")(session))({
+    store: new MemoryStore({
       checkPeriod: 86400000,
     }),
   };

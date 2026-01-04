@@ -6,9 +6,6 @@ import MemoryStore from "memorystore";
 
 /**
  * MIGRATION-READY AUTH MODULE
- * 
- * This module replaces server/replitAuth.ts for local development.
- * 
  * TODO: Choose your authentication provider:
  * - Firebase Authentication (recommended for quick setup)
  * - Auth0 (recommended for enterprise features)

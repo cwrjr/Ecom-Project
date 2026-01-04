@@ -1,5 +1,5 @@
-import { 
-  type Product, 
+import {
+  type Product,
   type InsertProduct,
   type Category,
   type InsertCategory,
@@ -30,8 +30,26 @@ import {
   type SEOMeta,
   type InsertSEOMeta,
   type ChatMessage,
-  type InsertChatMessage
+  type InsertChatMessage,
+  products,
+  categories,
+  cartItems,
+  orders,
+  contactSubmissions,
+  ratings,
+  users,
+  favorites,
+  recentlyViewed,
+  comparisons,
+  enhancedOrders,
+  orderItems,
+  productSpecs,
+  productEmbeddings,
+  seoMetas,
+  chatMessages
 } from "@shared/schema";
+import { db } from "./db";
+import { eq, desc, and, or } from "drizzle-orm"; // Import 'or' here directly to avoid dynamic import issues if not needed
 
 export interface IStorage {
   // Product operations
@@ -40,776 +58,385 @@ export interface IStorage {
   getFeaturedProducts(): Promise<Product[]>;
   getProduct(id: number): Promise<Product | undefined>;
   createProduct(product: InsertProduct): Promise<Product>;
-  
+
   // Category operations
   getCategories(): Promise<Category[]>;
   createCategory(category: InsertCategory): Promise<Category>;
-  
+
   // Cart operations
   getCartItems(sessionId: string): Promise<CartItem[]>;
   addToCart(item: InsertCartItem): Promise<CartItem>;
   updateCartItem(id: number, quantity: number): Promise<CartItem | undefined>;
   removeFromCart(id: number): Promise<boolean>;
   clearCart(sessionId: string): Promise<boolean>;
-  
+
   // Order operations
   createOrder(order: InsertOrder): Promise<Order>;
   getOrders(): Promise<Order[]>;
-  
+
   // Contact operations
   createContactSubmission(submission: InsertContactSubmission): Promise<ContactSubmission>;
-  
+
   // Rating operations
   getRatings(productId: number): Promise<Rating[]>;
   addRating(rating: InsertRating): Promise<Rating>;
   getAverageRating(productId: number): Promise<number>;
-  
+
   // User operations
   getUser(id: string): Promise<User | undefined>;
   upsertUser(user: UpsertUser): Promise<User>;
-  
+
   // Favorites operations
   getUserFavorites(userId: string): Promise<Favorite[]>;
   addToFavorites(userId: string, productId: number): Promise<Favorite>;
   removeFromFavorites(userId: string, productId: number): Promise<boolean>;
-  
+
   // Recently viewed operations
   getRecentlyViewed(userId?: string, sessionId?: string): Promise<RecentlyViewed[]>;
   addToRecentlyViewed(data: InsertRecentlyViewed): Promise<RecentlyViewed>;
-  
+
   // Product comparison operations
   getComparison(userId?: string, sessionId?: string): Promise<Comparison | undefined>;
   saveComparison(data: InsertComparison): Promise<Comparison>;
-  
+
   // Product specs operations
   getProductSpecs(productId: number): Promise<ProductSpec[]>;
   addProductSpec(spec: InsertProductSpec): Promise<ProductSpec>;
-  
+
   // Enhanced order operations
   createEnhancedOrder(order: InsertEnhancedOrder): Promise<EnhancedOrder>;
   getEnhancedOrder(id: number): Promise<EnhancedOrder | undefined>;
   getEnhancedOrderByNumber(orderNumber: string): Promise<EnhancedOrder | undefined>;
   getUserOrders(userId: string): Promise<EnhancedOrder[]>;
   updateOrderStatus(id: number, status: string, trackingNumber?: string): Promise<EnhancedOrder | undefined>;
-  
+
   // Order items operations
   addOrderItem(item: InsertOrderItem): Promise<OrderItem>;
   getOrderItems(orderId: number): Promise<OrderItem[]>;
-  
+
   // AI-related operations
   getProductEmbedding(productId: number): Promise<ProductEmbedding | undefined>;
   saveProductEmbedding(embedding: InsertProductEmbedding): Promise<ProductEmbedding>;
   getAllProductEmbeddings(): Promise<ProductEmbedding[]>;
-  
+
   getSEOMeta(productId: number): Promise<SEOMeta | undefined>;
   saveSEOMeta(meta: InsertSEOMeta): Promise<SEOMeta>;
-  
+
   getChatMessages(sessionId: string): Promise<ChatMessage[]>;
   saveChatMessage(message: InsertChatMessage): Promise<ChatMessage>;
 }
 
-export class MemStorage implements IStorage {
-  private products: Map<number, Product>;
-  private categories: Map<number, Category>;
-  private cartItems: Map<number, CartItem>;
-  private orders: Map<number, Order>;
-  private contactSubmissions: Map<number, ContactSubmission>;
-  private ratings: Map<number, Rating>;
-  private users: Map<string, User>;
-  private favorites: Map<number, Favorite>;
-  private recentlyViewed: Map<number, RecentlyViewed>;
-  private comparisons: Map<number, Comparison>;
-  private enhancedOrders: Map<number, EnhancedOrder>;
-  private orderItems: Map<number, OrderItem>;
-  private productSpecs: Map<number, ProductSpec>;
-  private productEmbeddings: Map<number, ProductEmbedding>;
-  private seoMetas: Map<number, SEOMeta>;
-  private chatMessages: Map<number, ChatMessage>;
-  
-  private currentProductId: number;
-  private currentCategoryId: number;
-  private currentCartId: number;
-  private currentOrderId: number;
-  private currentContactId: number;
-  private currentRatingId: number;
-  private currentFavoriteId: number;
-  private currentRecentlyViewedId: number;
-  private currentComparisonId: number;
-  private currentEnhancedOrderId: number;
-  private currentOrderItemId: number;
-  private currentProductSpecId: number;
-  private currentSEOMetaId: number;
-  private currentChatMessageId: number;
-
-  constructor() {
-    this.products = new Map();
-    this.categories = new Map();
-    this.cartItems = new Map();
-    this.orders = new Map();
-    this.contactSubmissions = new Map();
-    this.ratings = new Map();
-    this.users = new Map();
-    this.favorites = new Map();
-    this.recentlyViewed = new Map();
-    this.comparisons = new Map();
-    this.enhancedOrders = new Map();
-    this.orderItems = new Map();
-    this.productSpecs = new Map();
-    this.productEmbeddings = new Map();
-    this.seoMetas = new Map();
-    this.chatMessages = new Map();
-    
-    this.currentProductId = 1;
-    this.currentCategoryId = 1;
-    this.currentCartId = 1;
-    this.currentOrderId = 1;
-    this.currentContactId = 1;
-    this.currentRatingId = 1;
-    this.currentFavoriteId = 1;
-    this.currentRecentlyViewedId = 1;
-    this.currentComparisonId = 1;
-    this.currentEnhancedOrderId = 1;
-    this.currentOrderItemId = 1;
-    this.currentProductSpecId = 1;
-    this.currentSEOMetaId = 1;
-    this.currentChatMessageId = 1;
-    
-    this.initializeData();
-  }
-
-  private initializeData() {
-    // Initialize categories
-    const sampleCategories: Category[] = [
-      { id: this.currentCategoryId++, name: "Featured", description: "Our featured products" },
-      { id: this.currentCategoryId++, name: "New Arrivals", description: "Latest products" },
-      { id: this.currentCategoryId++, name: "Best Sellers", description: "Most popular items" },
-      { id: this.currentCategoryId++, name: "Electronics", description: "Electronic devices and accessories" },
-      { id: this.currentCategoryId++, name: "Home & Garden", description: "Home and garden essentials" },
-      { id: this.currentCategoryId++, name: "Fashion", description: "Clothing and accessories" },
-    ];
-
-    sampleCategories.forEach(category => {
-      this.categories.set(category.id, category);
-    });
-
-    // Initialize products
-    const sampleProducts: Product[] = [
-      {
-        id: this.currentProductId++,
-        name: "Premium Wireless Headphones",
-        description: "High-quality wireless headphones with noise cancellation and premium sound quality. Perfect for music lovers and professionals.",
-        price: 149.99,
-        originalPrice: 199.99,
-        category: "Electronics",
-        image: "attached_assets/A sleek black pair of premium wireless headphones displayed on a clean white background with soft sh.jpeg",
-        tags: ["sale", "wireless", "audio"],
-        featured: true,
-        inStock: true,
-        createdAt: new Date(),
-      },
-      {
-        id: this.currentProductId++,
-        name: "Smart Home Assistant",
-        description: "Voice-controlled smart home assistant with AI capabilities. Control your home devices with simple voice commands.",
-        price: 89.99,
-        originalPrice: null,
-        category: "Electronics",
-        image: "attached_assets/Firefly_realistic and clear glow smart speaker on a Highrise table with Seattle night skyline 787022.jpg",
-        tags: ["smart", "home", "ai"],
-        featured: true,
-        inStock: true,
-        createdAt: new Date(),
-      },
-      {
-        id: this.currentProductId++,
-        name: "Professional Camera Kit",
-        description: "Complete photography kit for professionals and enthusiasts. Includes camera body, lenses, and accessories.",
-        price: 899.99,
-        originalPrice: null,
-        category: "Electronics",
-        image: "attached_assets/Firefly_Professional Camera Kit 664369.jpg",
-        tags: ["photography", "professional", "kit"],
-        featured: false,
-        inStock: true,
-        createdAt: new Date(),
-      },
-      {
-        id: this.currentProductId++,
-        name: "Wireless Phone Charger",
-        description: "Fast wireless charging pad compatible with all Qi-enabled devices. Sleek design with LED indicator.",
-        price: 39.99,
-        originalPrice: 49.99,
-        category: "Electronics",
-        image: "attached_assets/stock_images/wireless_phone_charg_71473ae2.jpg",
-        tags: ["sale", "wireless", "charger"],
-        featured: false,
-        inStock: true,
-        createdAt: new Date(),
-      },
-      {
-        id: this.currentProductId++,
-        name: "Ergonomic Office Chair",
-        description: "Comfortable ergonomic office chair designed for long working hours. Adjustable height and lumbar support.",
-        price: 299.99,
-        originalPrice: null,
-        category: "Home & Garden",
-        image: "attached_assets/stock_images/ergonomic_office_cha_b30f2022.jpg",
-        tags: ["new", "office", "ergonomic"],
-        featured: false,
-        inStock: true,
-        createdAt: new Date(),
-      },
-      {
-        id: this.currentProductId++,
-        name: "Minimalist Desk Lamp",
-        description: "Sleek and modern desk lamp with adjustable brightness. Perfect for any workspace or bedside table.",
-        price: 79.99,
-        originalPrice: null,
-        category: "Home & Garden",
-        image: "attached_assets/minimalist_expensive_desk_lamp_main_attraction_on.jpg",
-        tags: ["lighting", "minimalist", "desk"],
-        featured: false,
-        inStock: true,
-        createdAt: new Date(),
-      },
-      {
-        id: this.currentProductId++,
-        name: "4K Curved Monitor",
-        description: "High-resolution curved monitor with professional display quality. Perfect for productivity and creative work.",
-        price: 449.99,
-        originalPrice: null,
-        category: "Electronics",
-        image: "attached_assets/minimalist_expensive_desk_with_curved_monitor_that.jpg",
-        tags: ["monitor", "display", "productivity"],
-        featured: false,
-        inStock: true,
-        createdAt: new Date(),
-      },
-      {
-        id: this.currentProductId++,
-        name: "Fitness Tracker",
-        description: "Advanced fitness tracker with heart rate monitoring, GPS, and waterproof design. Track your health goals.",
-        price: 79.99,
-        originalPrice: 99.99,
-        category: "Electronics",
-        image: "attached_assets/pexels-alesiakozik-6772024.jpg",
-        tags: ["sale", "fitness", "health"],
-        featured: true,
-        inStock: true,
-        createdAt: new Date(),
-      },
-      {
-        id: this.currentProductId++,
-        name: "Luxury Watch",
-        description: "Elegant timepiece with premium materials and precision craftsmanship. A perfect accessory for any occasion.",
-        price: 459.99,
-        originalPrice: null,
-        category: "Fashion",
-        image: "attached_assets/images/pexels-n-voitkevich-6214476.jpg",
-        tags: ["luxury", "watch", "premium"],
-        featured: false,
-        inStock: true,
-        createdAt: new Date(),
-      },
-      {
-        id: this.currentProductId++,
-        name: "Investment Portfolio Kit",
-        description: "Comprehensive guide and tools for building and managing your investment portfolio. Professional strategies for wealth building.",
-        price: 199.99,
-        originalPrice: null,
-        category: "Books & Education",
-        image: "attached_assets/stock_images/investment_portfolio_6509782d.jpg",
-        tags: ["investment", "finance", "education"],
-        featured: false,
-        inStock: true,
-        createdAt: new Date(),
-      },
-    ];
-
-    sampleProducts.forEach(product => {
-      this.products.set(product.id, product);
-    });
-
-    // Initialize sample ratings
-    this.initializeSampleRatings();
-  }
-
-  private initializeSampleRatings() {
-    const sampleReviews = [
-      // Premium Wireless Headphones (Product ID: 1)
-      { productId: 1, userName: "Sarah M.", rating: 5, review: "Absolutely amazing headphones! The noise cancellation is incredible and the battery life exceeds expectations. Worth every penny." },
-      { productId: 1, userName: "Mike T.", rating: 4, review: "Great sound quality and comfortable for long listening sessions. Only minor complaint is the case could be more compact." },
-      { productId: 1, userName: "Jessica L.", rating: 5, review: "Perfect for working from home. The noise cancellation blocks out all distractions and the sound is crystal clear." },
-      { productId: 1, userName: "David K.", rating: 4, review: "Excellent build quality and the wireless connection is very stable. Highly recommended for music enthusiasts." },
-      { productId: 1, userName: "Amanda R.", rating: 5, review: "Best headphones I've ever owned! The bass is deep but not overwhelming, and the highs are crisp." },
-      
-      // Smart Home Assistant (Product ID: 2)
-      { productId: 2, userName: "Jennifer A.", rating: 5, review: "This smart assistant has transformed our home! Voice recognition is spot-on and it controls all our devices seamlessly." },
-      { productId: 2, userName: "Robert C.", rating: 4, review: "Very responsive and easy to set up. The sound quality for music is surprisingly good for the size." },
-      { productId: 2, userName: "Maria G.", rating: 5, review: "Love how it integrates with all our smart home devices. The kids enjoy asking it questions and playing games." },
-      
-      // Professional Camera Kit (Product ID: 3)
-      { productId: 3, userName: "Photography Pro", rating: 5, review: "Professional-grade equipment at an amazing price! The image quality is outstanding and the lens variety covers all my needs." },
-      { productId: 3, userName: "Lisa Camera", rating: 4, review: "Excellent starter kit for serious photographers. The camera body feels solid and the included lenses are sharp." },
-      
-      // Other products with varied ratings
-      { productId: 4, userName: "Emily J.", rating: 4, review: "Convenient wireless charging pad. Works great with my phone case on." },
-      { productId: 5, userName: "Office Worker", rating: 5, review: "Best chair I've ever owned for working from home. My back pain has completely disappeared!" },
-      { productId: 6, userName: "Design Lover", rating: 5, review: "Beautiful minimalist design that complements any workspace. The adjustable brightness levels are perfect." },
-      { productId: 7, userName: "Tech Enthusiast", rating: 5, review: "Stunning display quality! The color accuracy is exceptional for both work and gaming." },
-      { productId: 8, userName: "Fitness Fan", rating: 4, review: "Great fitness tracker. Accurate heart rate monitoring and the battery lasts for days." },
-      { productId: 9, userName: "Watch Collector", rating: 5, review: "Absolutely stunning timepiece. The craftsmanship is impeccable and it looks even better in person." },
-      { productId: 10, userName: "Investor", rating: 5, review: "Comprehensive investment guide with practical strategies. Has helped me grow my portfolio significantly." },
-    ];
-
-    sampleReviews.forEach(reviewData => {
-      const rating: Rating = {
-        id: this.currentRatingId++,
-        productId: reviewData.productId,
-        userName: reviewData.userName,
-        rating: reviewData.rating,
-        review: reviewData.review,
-        createdAt: new Date(Date.now() - Math.random() * 90 * 24 * 60 * 60 * 1000),
-      };
-      this.ratings.set(rating.id, rating);
-    });
-  }
-
+export class DatabaseStorage implements IStorage {
+  // Product operations
   async getProducts(): Promise<Product[]> {
-    return Array.from(this.products.values()).sort((a, b) => 
-      new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
-    );
+    return await db.select().from(products).orderBy(desc(products.createdAt));
   }
 
   async getProductsByCategory(category: string): Promise<Product[]> {
-    return Array.from(this.products.values())
-      .filter(product => product.category === category)
-      .sort((a, b) => 
-        new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
-      );
+    return await db.select().from(products).where(eq(products.category, category)).orderBy(desc(products.createdAt));
   }
 
   async getFeaturedProducts(): Promise<Product[]> {
-    return Array.from(this.products.values())
-      .filter(product => product.featured)
-      .sort((a, b) => 
-        new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
-      );
+    return await db.select().from(products).where(eq(products.featured, true)).orderBy(desc(products.createdAt));
   }
 
   async getProduct(id: number): Promise<Product | undefined> {
-    return this.products.get(id);
-  }
-
-  async createProduct(insertProduct: InsertProduct): Promise<Product> {
-    const id = this.currentProductId++;
-    const product: Product = { 
-      ...insertProduct, 
-      originalPrice: insertProduct.originalPrice ?? null,
-      tags: insertProduct.tags ?? null,
-      featured: insertProduct.featured ?? null,
-      inStock: insertProduct.inStock ?? null,
-      id,
-      createdAt: new Date(),
-    };
-    this.products.set(id, product);
+    const [product] = await db.select().from(products).where(eq(products.id, id));
     return product;
   }
 
+  async createProduct(insertProduct: InsertProduct): Promise<Product> {
+    const [product] = await db.insert(products).values(insertProduct).returning();
+    return product;
+  }
+
+  // Category operations
   async getCategories(): Promise<Category[]> {
-    return Array.from(this.categories.values());
+    return await db.select().from(categories);
   }
 
   async createCategory(insertCategory: InsertCategory): Promise<Category> {
-    const id = this.currentCategoryId++;
-    const category: Category = { 
-      ...insertCategory, 
-      description: insertCategory.description ?? null,
-      id 
-    };
-    this.categories.set(id, category);
+    const [category] = await db.insert(categories).values(insertCategory).returning();
     return category;
   }
 
+  // Cart operations
   async getCartItems(sessionId: string): Promise<CartItem[]> {
-    return Array.from(this.cartItems.values())
-      .filter(item => item.sessionId === sessionId)
-      .sort((a, b) => 
-        new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
-      );
+    return await db.select().from(cartItems).where(eq(cartItems.sessionId, sessionId)).orderBy(desc(cartItems.createdAt));
   }
 
   async addToCart(insertItem: InsertCartItem): Promise<CartItem> {
-    const existingItem = Array.from(this.cartItems.values())
-      .find(item => item.productId === insertItem.productId && item.sessionId === insertItem.sessionId);
-    
-    if (existingItem) {
-      existingItem.quantity += insertItem.quantity ?? 1;
-      this.cartItems.set(existingItem.id, existingItem);
-      return existingItem;
-    } else {
-      const id = this.currentCartId++;
-      const cartItem: CartItem = { 
-        ...insertItem, 
-        quantity: insertItem.quantity ?? 1,
-        id,
-        createdAt: new Date(),
-      };
-      this.cartItems.set(id, cartItem);
-      return cartItem;
+    const [existing] = await db.select().from(cartItems).where(
+      and(
+        eq(cartItems.productId, insertItem.productId),
+        eq(cartItems.sessionId, insertItem.sessionId)
+      )
+    );
+
+    if (existing) {
+      const quantityRaw = insertItem.quantity ?? 1;
+      const newQuantity = existing.quantity + quantityRaw;
+      const [updated] = await db.update(cartItems)
+        .set({ quantity: newQuantity })
+        .where(eq(cartItems.id, existing.id))
+        .returning();
+      return updated;
     }
+
+    const [newItem] = await db.insert(cartItems).values(insertItem).returning();
+    return newItem;
   }
 
   async updateCartItem(id: number, quantity: number): Promise<CartItem | undefined> {
-    const item = this.cartItems.get(id);
-    if (item) {
-      item.quantity = quantity;
-      this.cartItems.set(id, item);
-      return item;
-    }
-    return undefined;
+    const [item] = await db.update(cartItems)
+      .set({ quantity })
+      .where(eq(cartItems.id, id))
+      .returning();
+    return item;
   }
 
   async removeFromCart(id: number): Promise<boolean> {
-    return this.cartItems.delete(id);
+    const [deleted] = await db.delete(cartItems).where(eq(cartItems.id, id)).returning();
+    return !!deleted;
   }
 
   async clearCart(sessionId: string): Promise<boolean> {
-    const cartItems = Array.from(this.cartItems.entries())
-      .filter(([_, item]) => item.sessionId === sessionId);
-    
-    cartItems.forEach(([id, _]) => {
-      this.cartItems.delete(id);
-    });
-    
+    await db.delete(cartItems).where(eq(cartItems.sessionId, sessionId));
     return true;
   }
 
+  // Order operations
   async createOrder(insertOrder: InsertOrder): Promise<Order> {
-    const id = this.currentOrderId++;
-    const order: Order = {
-      ...insertOrder,
-      status: insertOrder.status ?? null,
-      id,
-      createdAt: new Date(),
-    };
-    this.orders.set(id, order);
+    const [order] = await db.insert(orders).values(insertOrder).returning();
     return order;
   }
 
   async getOrders(): Promise<Order[]> {
-    return Array.from(this.orders.values()).sort((a, b) => 
-      new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
-    );
+    return await db.select().from(orders).orderBy(desc(orders.createdAt));
   }
 
+  // Contact operations
   async createContactSubmission(insertSubmission: InsertContactSubmission): Promise<ContactSubmission> {
-    const id = this.currentContactId++;
-    const submission: ContactSubmission = {
-      ...insertSubmission,
-      id,
-      createdAt: new Date(),
-    };
-    this.contactSubmissions.set(id, submission);
+    const [submission] = await db.insert(contactSubmissions).values(insertSubmission).returning();
     return submission;
   }
 
+  // Rating operations
   async getRatings(productId: number): Promise<Rating[]> {
-    return Array.from(this.ratings.values())
-      .filter(rating => rating.productId === productId)
-      .sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
+    return await db.select().from(ratings).where(eq(ratings.productId, productId)).orderBy(desc(ratings.createdAt));
   }
 
   async addRating(insertRating: InsertRating): Promise<Rating> {
-    const id = this.currentRatingId++;
-    const rating: Rating = {
-      ...insertRating,
-      review: insertRating.review ?? null,
-      id,
-      createdAt: new Date(),
-    };
-    this.ratings.set(id, rating);
+    const [rating] = await db.insert(ratings).values(insertRating).returning();
     return rating;
   }
 
   async getAverageRating(productId: number): Promise<number> {
-    const productRatings = await this.getRatings(productId);
-    if (productRatings.length === 0) return 0;
-    
-    const sum = productRatings.reduce((acc, rating) => acc + rating.rating, 0);
-    return Math.round((sum / productRatings.length) * 10) / 10;
+    const allRatings = await this.getRatings(productId);
+    if (allRatings.length === 0) return 0;
+    const sum = allRatings.reduce((acc, r) => acc + r.rating, 0);
+    return Math.round((sum / allRatings.length) * 10) / 10;
   }
 
-  // User operations (stub implementations - no auth in memory storage)
+  // User operations
   async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user;
   }
 
   async upsertUser(userData: UpsertUser): Promise<User> {
-    const existing = this.users.get(userData.id);
-    const user: User = {
-      ...userData,
-      email: userData.email ?? null,
-      firstName: userData.firstName ?? null,
-      lastName: userData.lastName ?? null,
-      profileImageUrl: userData.profileImageUrl ?? null,
-      createdAt: existing?.createdAt ?? new Date(),
-      updatedAt: new Date(),
-    };
-    this.users.set(userData.id, user);
+    const [user] = await db.insert(users).values(userData).onConflictDoUpdate({
+      target: users.id,
+      set: {
+        email: userData.email,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        profileImageUrl: userData.profileImageUrl,
+        updatedAt: new Date()
+      }
+    }).returning();
     return user;
   }
 
   // Favorites operations
   async getUserFavorites(userId: string): Promise<Favorite[]> {
-    return Array.from(this.favorites.values())
-      .filter(fav => fav.userId === userId);
+    return await db.select().from(favorites).where(eq(favorites.userId, userId));
   }
 
   async addToFavorites(userId: string, productId: number): Promise<Favorite> {
-    const id = this.currentFavoriteId++;
-    const favorite: Favorite = {
-      id,
-      userId,
-      productId,
-      createdAt: new Date(),
-    };
-    this.favorites.set(id, favorite);
+    const [favorite] = await db.insert(favorites).values({ userId, productId }).returning();
     return favorite;
   }
 
   async removeFromFavorites(userId: string, productId: number): Promise<boolean> {
-    const favorite = Array.from(this.favorites.entries())
-      .find(([_, fav]) => fav.userId === userId && fav.productId === productId);
-    
-    if (favorite) {
-      return this.favorites.delete(favorite[0]);
-    }
-    return false;
+    const [deleted] = await db.delete(favorites).where(
+      and(
+        eq(favorites.userId, userId),
+        eq(favorites.productId, productId)
+      )
+    ).returning();
+    return !!deleted;
   }
 
   // Recently viewed operations
   async getRecentlyViewed(userId?: string, sessionId?: string): Promise<RecentlyViewed[]> {
-    return Array.from(this.recentlyViewed.values())
-      .filter(item => {
-        if (userId && item.userId === userId) return true;
-        if (sessionId && item.sessionId === sessionId) return true;
-        return false;
-      })
-      .sort((a, b) => new Date(b.viewedAt || 0).getTime() - new Date(a.viewedAt || 0).getTime())
-      .slice(0, 10);
+    const query = db.select().from(recentlyViewed);
+
+    if (userId && sessionId) {
+      return await query.where(or(eq(recentlyViewed.userId, userId), eq(recentlyViewed.sessionId, sessionId)))
+        .orderBy(desc(recentlyViewed.viewedAt)).limit(10);
+    } else if (userId) {
+      return await query.where(eq(recentlyViewed.userId, userId))
+        .orderBy(desc(recentlyViewed.viewedAt)).limit(10);
+    } else if (sessionId) {
+      return await query.where(eq(recentlyViewed.sessionId, sessionId))
+        .orderBy(desc(recentlyViewed.viewedAt)).limit(10);
+    }
+
+    return [];
   }
 
   async addToRecentlyViewed(data: InsertRecentlyViewed): Promise<RecentlyViewed> {
-    // Remove existing entry for same product
-    const existing = Array.from(this.recentlyViewed.entries())
-      .find(([_, item]) => 
-        (data.userId && item.userId === data.userId && item.productId === data.productId) ||
-        (data.sessionId && item.sessionId === data.sessionId && item.productId === data.productId)
+    if (data.userId) {
+      await db.delete(recentlyViewed).where(
+        and(
+          eq(recentlyViewed.userId, data.userId),
+          eq(recentlyViewed.productId, data.productId)
+        )
       );
-    
-    if (existing) {
-      this.recentlyViewed.delete(existing[0]);
+    } else if (data.sessionId) {
+      await db.delete(recentlyViewed).where(
+        and(
+          eq(recentlyViewed.sessionId, data.sessionId),
+          eq(recentlyViewed.productId, data.productId)
+        )
+      );
     }
 
-    const id = this.currentRecentlyViewedId++;
-    const viewed: RecentlyViewed = {
-      id,
-      userId: data.userId ?? null,
-      sessionId: data.sessionId ?? null,
-      productId: data.productId,
-      viewedAt: new Date(),
-    };
-    this.recentlyViewed.set(id, viewed);
+    const [viewed] = await db.insert(recentlyViewed).values(data).returning();
     return viewed;
   }
 
   // Product comparison operations
   async getComparison(userId?: string, sessionId?: string): Promise<Comparison | undefined> {
-    const comparisons = Array.from(this.comparisons.values())
-      .filter(comp => {
-        if (userId && comp.userId === userId) return true;
-        if (sessionId && comp.sessionId === sessionId) return true;
-        return false;
-      })
-      .sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
-    
-    return comparisons[0];
+    const query = db.select().from(comparisons);
+
+    let result: Comparison[] = [];
+
+    if (userId && sessionId) {
+      result = await query.where(or(eq(comparisons.userId, userId), eq(comparisons.sessionId, sessionId)))
+        .orderBy(desc(comparisons.createdAt));
+    } else if (userId) {
+      result = await query.where(eq(comparisons.userId, userId))
+        .orderBy(desc(comparisons.createdAt));
+    } else if (sessionId) {
+      result = await query.where(eq(comparisons.sessionId, sessionId))
+        .orderBy(desc(comparisons.createdAt));
+    }
+
+    return result[0];
   }
 
   async saveComparison(data: InsertComparison): Promise<Comparison> {
-    // Remove existing comparison
-    const existing = Array.from(this.comparisons.entries())
-      .find(([_, comp]) => 
-        (data.userId && comp.userId === data.userId) ||
-        (data.sessionId && comp.sessionId === data.sessionId)
-      );
-    
-    if (existing) {
-      this.comparisons.delete(existing[0]);
+    if (data.userId) {
+      await db.delete(comparisons).where(eq(comparisons.userId, data.userId));
+    } else if (data.sessionId) {
+      await db.delete(comparisons).where(eq(comparisons.sessionId, data.sessionId));
     }
 
-    const id = this.currentComparisonId++;
-    const comparison: Comparison = {
-      id,
-      userId: data.userId ?? null,
-      sessionId: data.sessionId ?? null,
-      productIds: data.productIds,
-      createdAt: new Date(),
-    };
-    this.comparisons.set(id, comparison);
-    return comparison;
+    const [comp] = await db.insert(comparisons).values(data).returning();
+    return comp;
   }
 
   // Product specs operations
   async getProductSpecs(productId: number): Promise<ProductSpec[]> {
-    return Array.from(this.productSpecs.values())
-      .filter(spec => spec.productId === productId);
+    return await db.select().from(productSpecs).where(eq(productSpecs.productId, productId));
   }
 
   async addProductSpec(spec: InsertProductSpec): Promise<ProductSpec> {
-    const id = this.currentProductSpecId++;
-    const newSpec: ProductSpec = {
-      id,
-      productId: spec.productId,
-      specName: spec.specName,
-      specValue: spec.specValue,
-      createdAt: new Date(),
-    };
-    this.productSpecs.set(id, newSpec);
+    const [newSpec] = await db.insert(productSpecs).values(spec).returning();
     return newSpec;
   }
 
   // Enhanced order operations
   async createEnhancedOrder(order: InsertEnhancedOrder): Promise<EnhancedOrder> {
-    const id = this.currentEnhancedOrderId++;
-    const newOrder: EnhancedOrder = {
-      id,
-      userId: order.userId ?? null,
-      orderNumber: order.orderNumber,
-      customerName: order.customerName,
-      customerEmail: order.customerEmail,
-      shippingAddress: order.shippingAddress,
-      billingAddress: order.billingAddress ?? null,
-      total: order.total,
-      status: order.status ?? null,
-      trackingNumber: order.trackingNumber ?? null,
-      stripePaymentIntentId: order.stripePaymentIntentId ?? null,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-    this.enhancedOrders.set(id, newOrder);
+    const [newOrder] = await db.insert(enhancedOrders).values(order).returning();
     return newOrder;
   }
 
   async getEnhancedOrder(id: number): Promise<EnhancedOrder | undefined> {
-    return this.enhancedOrders.get(id);
+    const [order] = await db.select().from(enhancedOrders).where(eq(enhancedOrders.id, id));
+    return order;
   }
 
   async getEnhancedOrderByNumber(orderNumber: string): Promise<EnhancedOrder | undefined> {
-    return Array.from(this.enhancedOrders.values())
-      .find(order => order.orderNumber === orderNumber);
+    const [order] = await db.select().from(enhancedOrders).where(eq(enhancedOrders.orderNumber, orderNumber));
+    return order;
   }
 
   async getUserOrders(userId: string): Promise<EnhancedOrder[]> {
-    return Array.from(this.enhancedOrders.values())
-      .filter(order => order.userId === userId)
-      .sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
+    return await db.select().from(enhancedOrders).where(eq(enhancedOrders.userId, userId)).orderBy(desc(enhancedOrders.createdAt));
   }
 
   async updateOrderStatus(id: number, status: string, trackingNumber?: string): Promise<EnhancedOrder | undefined> {
-    const order = this.enhancedOrders.get(id);
-    if (order) {
-      order.status = status;
-      order.updatedAt = new Date();
-      if (trackingNumber) order.trackingNumber = trackingNumber;
-      this.enhancedOrders.set(id, order);
-      return order;
-    }
-    return undefined;
+    const [order] = await db.update(enhancedOrders)
+      .set({
+        status,
+        updatedAt: new Date(),
+        ...(trackingNumber ? { trackingNumber } : {})
+      })
+      .where(eq(enhancedOrders.id, id))
+      .returning();
+    return order;
   }
 
   // Order items operations
   async addOrderItem(item: InsertOrderItem): Promise<OrderItem> {
-    const id = this.currentOrderItemId++;
-    const newItem: OrderItem = {
-      id,
-      orderId: item.orderId,
-      productId: item.productId,
-      quantity: item.quantity,
-      price: item.price,
-      createdAt: new Date(),
-    };
-    this.orderItems.set(id, newItem);
+    const [newItem] = await db.insert(orderItems).values(item).returning();
     return newItem;
   }
 
   async getOrderItems(orderId: number): Promise<OrderItem[]> {
-    return Array.from(this.orderItems.values())
-      .filter(item => item.orderId === orderId);
+    return await db.select().from(orderItems).where(eq(orderItems.orderId, orderId));
   }
 
   // AI-related operations
   async getProductEmbedding(productId: number): Promise<ProductEmbedding | undefined> {
-    return Array.from(this.productEmbeddings.values())
-      .find(embedding => embedding.productId === productId);
+    const [embedding] = await db.select().from(productEmbeddings).where(eq(productEmbeddings.productId, productId));
+    return embedding;
   }
 
   async saveProductEmbedding(embedding: InsertProductEmbedding): Promise<ProductEmbedding> {
-    const existing = Array.from(this.productEmbeddings.values())
-      .find(e => e.productId === embedding.productId);
-    
-    const newEmbedding: ProductEmbedding = {
-      productId: embedding.productId,
-      embedding: embedding.embedding,
-      createdAt: new Date(),
-    };
-    
-    this.productEmbeddings.set(embedding.productId, newEmbedding);
+    const [newEmbedding] = await db.insert(productEmbeddings).values(embedding)
+      .onConflictDoUpdate({
+        target: productEmbeddings.productId,
+        set: { embedding: embedding.embedding }
+      }).returning();
     return newEmbedding;
   }
 
   async getAllProductEmbeddings(): Promise<ProductEmbedding[]> {
-    return Array.from(this.productEmbeddings.values());
+    return await db.select().from(productEmbeddings);
   }
 
   async getSEOMeta(productId: number): Promise<SEOMeta | undefined> {
-    return Array.from(this.seoMetas.values())
-      .find(meta => meta.productId === productId);
+    const [meta] = await db.select().from(seoMetas).where(eq(seoMetas.productId, productId));
+    return meta;
   }
 
   async saveSEOMeta(meta: InsertSEOMeta): Promise<SEOMeta> {
-    const id = this.currentSEOMetaId++;
-    const newMeta: SEOMeta = {
-      id,
-      productId: meta.productId,
-      metaTitle: meta.metaTitle,
-      metaDescription: meta.metaDescription,
-      generatedBy: meta.generatedBy ?? null,
-      createdAt: new Date(),
-    };
-    this.seoMetas.set(id, newMeta);
+    const [newMeta] = await db.insert(seoMetas).values(meta).returning();
     return newMeta;
   }
 
   async getChatMessages(sessionId: string): Promise<ChatMessage[]> {
-    return Array.from(this.chatMessages.values())
-      .filter(msg => msg.sessionId === sessionId)
-      .sort((a, b) => new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime());
+    return await db.select().from(chatMessages).where(eq(chatMessages.sessionId, sessionId)).orderBy(chatMessages.createdAt);
   }
 
   async saveChatMessage(message: InsertChatMessage): Promise<ChatMessage> {
-    const id = this.currentChatMessageId++;
-    const newMessage: ChatMessage = {
-      id,
-      sessionId: message.sessionId,
-      role: message.role,
-      content: message.content,
-      createdAt: new Date(),
-    };
-    this.chatMessages.set(id, newMessage);
+    const [newMessage] = await db.insert(chatMessages).values(message).returning();
     return newMessage;
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();

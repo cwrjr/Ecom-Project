@@ -1,305 +1,199 @@
+import { pgTable, text, serial, integer, boolean, timestamp, jsonb, real } from "drizzle-orm/pg-core";
+import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
-// Product types
-export interface Product {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  originalPrice: number | null;
-  category: string;
-  image: string;
-  tags: string[] | null;
-  featured: boolean | null;
-  inStock: boolean | null;
-  createdAt: Date | null;
-}
-
-export const insertProductSchema = z.object({
-  name: z.string(),
-  description: z.string(),
-  price: z.number(),
-  originalPrice: z.number().nullable().optional(),
-  category: z.string(),
-  image: z.string(),
-  tags: z.array(z.string()).optional(),
-  featured: z.boolean().optional(),
-  inStock: z.boolean().optional(),
+export const products = pgTable("products", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  price: real("price").notNull(), // using real for float approximation, or numeric for precision
+  originalPrice: real("original_price"),
+  category: text("category").notNull(),
+  image: text("image").notNull(),
+  tags: text("tags").array(),
+  featured: boolean("featured").default(false),
+  inStock: boolean("in_stock").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
-export type InsertProduct = z.infer<typeof insertProductSchema>;
-
-// Category types
-export interface Category {
-  id: number;
-  name: string;
-  description: string | null;
-}
-
-export const insertCategorySchema = z.object({
-  name: z.string(),
-  description: z.string().nullable().optional(),
+export const categories = pgTable("categories", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  description: text("description"),
 });
 
-export type InsertCategory = z.infer<typeof insertCategorySchema>;
-
-// Cart types
-export interface CartItem {
-  id: number;
-  productId: number;
-  quantity: number;
-  sessionId: string;
-  createdAt: Date | null;
-}
-
-export const insertCartItemSchema = z.object({
-  productId: z.number(),
-  quantity: z.number().optional(),
-  sessionId: z.string(),
+export const cartItems = pgTable("cart_items", {
+  id: serial("id").primaryKey(),
+  productId: integer("product_id").notNull(),
+  quantity: integer("quantity").notNull().default(1),
+  sessionId: text("session_id").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
-export type InsertCartItem = z.infer<typeof insertCartItemSchema>;
-
-// Order types
-export interface Order {
-  id: number;
-  customerName: string;
-  customerEmail: string;
-  total: number;
-  status: string | null;
-  createdAt: Date | null;
-}
-
-export const insertOrderSchema = z.object({
-  customerName: z.string(),
-  customerEmail: z.string(),
-  total: z.number(),
-  status: z.string().optional(),
+export const orders = pgTable("orders", {
+  id: serial("id").primaryKey(),
+  customerName: text("customer_name").notNull(),
+  customerEmail: text("customer_email").notNull(),
+  total: real("total").notNull(),
+  status: text("status").default("pending"),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
-export type InsertOrder = z.infer<typeof insertOrderSchema>;
-
-// Contact types
-export interface ContactSubmission {
-  id: number;
-  name: string;
-  email: string;
-  message: string;
-  createdAt: Date | null;
-}
-
-export const insertContactSubmissionSchema = z.object({
-  name: z.string(),
-  email: z.string(),
-  message: z.string(),
+export const contactSubmissions = pgTable("contact_submissions", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  message: text("message").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
-export type InsertContactSubmission = z.infer<typeof insertContactSubmissionSchema>;
-
-// Rating types
-export interface Rating {
-  id: number;
-  productId: number;
-  userName: string;
-  rating: number;
-  review: string | null;
-  createdAt: Date | null;
-}
-
-export const insertRatingSchema = z.object({
-  productId: z.number(),
-  userName: z.string(),
-  rating: z.number(),
-  review: z.string().nullable().optional(),
+export const ratings = pgTable("ratings", {
+  id: serial("id").primaryKey(),
+  productId: integer("product_id").notNull(),
+  userName: text("user_name").notNull(),
+  rating: integer("rating").notNull(),
+  review: text("review"),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
-export type InsertRating = z.infer<typeof insertRatingSchema>;
-
-// User types  
-export interface User {
-  id: string;
-  email: string | null;
-  firstName: string | null;
-  lastName: string | null;
-  profileImageUrl: string | null;
-  createdAt: Date | null;
-  updatedAt: Date | null;
-}
-
-export const insertUserSchema = z.object({
-  id: z.string(),
-  email: z.string().nullable().optional(),
-  firstName: z.string().nullable().optional(),
-  lastName: z.string().nullable().optional(),
-  profileImageUrl: z.string().nullable().optional(),
+export const users = pgTable("users", {
+  id: text("id").primaryKey(), // Using text ID for external auth provider IDs
+  email: text("email"),
+  firstName: text("first_name"),
+  lastName: text("last_name"),
+  profileImageUrl: text("profile_image_url"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+export const favorites = pgTable("favorites", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id"),
+  productId: integer("product_id").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const recentlyViewed = pgTable("recently_viewed", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id"),
+  sessionId: text("session_id"),
+  productId: integer("product_id").notNull(),
+  viewedAt: timestamp("viewed_at").defaultNow(),
+});
+
+export const comparisons = pgTable("comparisons", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id"),
+  sessionId: text("session_id"),
+  productIds: integer("product_ids").array(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const enhancedOrders = pgTable("enhanced_orders", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id"),
+  orderNumber: text("order_number").notNull(),
+  customerName: text("customer_name").notNull(),
+  customerEmail: text("customer_email").notNull(),
+  shippingAddress: jsonb("shipping_address").notNull(),
+  billingAddress: jsonb("billing_address"),
+  total: text("total").notNull(), // Keeping as text to match original string type if needed, or change to numeric
+  status: text("status").default("pending"),
+  trackingNumber: text("tracking_number"),
+  stripePaymentIntentId: text("stripe_payment_intent_id"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const orderItems = pgTable("order_items", {
+  id: serial("id").primaryKey(),
+  orderId: integer("order_id"),
+  productId: integer("product_id").notNull(),
+  quantity: integer("quantity").notNull(),
+  price: text("price").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const productSpecs = pgTable("product_specs", {
+  id: serial("id").primaryKey(),
+  productId: integer("product_id").notNull(),
+  specName: text("spec_name").notNull(),
+  specValue: text("spec_value").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const productEmbeddings = pgTable("product_embeddings", {
+  productId: integer("product_id").primaryKey(),
+  embedding: real("embedding").array().notNull(), // vector extension usually needed for true embeddings, but using array for now or pg-vector if available
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const seoMetas = pgTable("seo_metas", {
+  id: serial("id").primaryKey(),
+  productId: integer("product_id").notNull(),
+  metaTitle: text("meta_title").notNull(),
+  metaDescription: text("meta_description").notNull(),
+  generatedBy: text("generated_by"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const chatMessages = pgTable("chat_messages", {
+  id: serial("id").primaryKey(),
+  sessionId: text("session_id").notNull(),
+  role: text("role", { enum: ['user', 'assistant', 'system'] }).notNull(),
+  content: text("content").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Zod Schemas
+export const insertProductSchema = createInsertSchema(products);
+export const insertCategorySchema = createInsertSchema(categories);
+export const insertCartItemSchema = createInsertSchema(cartItems);
+export const insertOrderSchema = createInsertSchema(orders);
+export const insertContactSubmissionSchema = createInsertSchema(contactSubmissions);
+export const insertRatingSchema = createInsertSchema(ratings);
+export const insertUserSchema = createInsertSchema(users);
+export const insertFavoriteSchema = createInsertSchema(favorites);
+export const insertRecentlyViewedSchema = createInsertSchema(recentlyViewed);
+export const insertComparisonSchema = createInsertSchema(comparisons);
+export const insertEnhancedOrderSchema = createInsertSchema(enhancedOrders);
+export const insertOrderItemSchema = createInsertSchema(orderItems);
+export const insertProductSpecSchema = createInsertSchema(productSpecs);
+export const insertProductEmbeddingSchema = createInsertSchema(productEmbeddings);
+export const insertSEOMetaSchema = createInsertSchema(seoMetas);
+export const insertChatMessageSchema = createInsertSchema(chatMessages);
 export const upsertUserSchema = insertUserSchema;
-export type UpsertUser = z.infer<typeof upsertUserSchema>;
 
-// Favorites types
-export interface Favorite {
-  id: number;
-  userId: string | null;
-  productId: number | null;
-  createdAt: Date | null;
-}
-
-export const insertFavoriteSchema = z.object({
-  userId: z.string(),
-  productId: z.number(),
-});
-
-export type InsertFavorite = z.infer<typeof insertFavoriteSchema>;
-
-// Recently viewed types
-export interface RecentlyViewed {
-  id: number;
-  userId: string | null;
-  sessionId: string | null;
-  productId: number | null;
-  viewedAt: Date | null;
-}
-
-export const insertRecentlyViewedSchema = z.object({
-  userId: z.string().nullable().optional(),
-  sessionId: z.string().nullable().optional(),
-  productId: z.number(),
-});
-
-export type InsertRecentlyViewed = z.infer<typeof insertRecentlyViewedSchema>;
-
-// Comparison types
-export interface Comparison {
-  id: number;
-  userId: string | null;
-  sessionId: string | null;
-  productIds: number[] | null;
-  createdAt: Date | null;
-}
-
-export const insertComparisonSchema = z.object({
-  userId: z.string().nullable().optional(),
-  sessionId: z.string().nullable().optional(),
-  productIds: z.array(z.number()),
-});
-
-export type InsertComparison = z.infer<typeof insertComparisonSchema>;
-
-// Enhanced order types
-export interface EnhancedOrder {
-  id: number;
-  userId: string | null;
-  orderNumber: string;
-  customerName: string;
-  customerEmail: string;
-  shippingAddress: any;
-  billingAddress: any;
-  total: string;
-  status: string | null;
-  trackingNumber: string | null;
-  stripePaymentIntentId: string | null;
-  createdAt: Date | null;
-  updatedAt: Date | null;
-}
-
-export const insertEnhancedOrderSchema = z.object({
-  userId: z.string().nullable().optional(),
-  orderNumber: z.string(),
-  customerName: z.string(),
-  customerEmail: z.string(),
-  shippingAddress: z.any(),
-  billingAddress: z.any().optional(),
-  total: z.string(),
-  status: z.string().optional(),
-  trackingNumber: z.string().nullable().optional(),
-  stripePaymentIntentId: z.string().nullable().optional(),
-});
-
-export type InsertEnhancedOrder = z.infer<typeof insertEnhancedOrderSchema>;
-
-// Order item types
-export interface OrderItem {
-  id: number;
-  orderId: number | null;
-  productId: number | null;
-  quantity: number;
-  price: string;
-  createdAt: Date | null;
-}
-
-export const insertOrderItemSchema = z.object({
-  orderId: z.number(),
-  productId: z.number(),
-  quantity: z.number(),
-  price: z.string(),
-});
-
-export type InsertOrderItem = z.infer<typeof insertOrderItemSchema>;
-
-// Product spec types
-export interface ProductSpec {
-  id: number;
-  productId: number | null;
-  specName: string;
-  specValue: string;
-  createdAt: Date | null;
-}
-
-export const insertProductSpecSchema = z.object({
-  productId: z.number(),
-  specName: z.string(),
-  specValue: z.string(),
-});
-
-export type InsertProductSpec = z.infer<typeof insertProductSpecSchema>;
-
-// Product Embedding types (for AI recommendations)
-export interface ProductEmbedding {
-  productId: number;
-  embedding: number[];
-  createdAt: Date | null;
-}
-
-export const insertProductEmbeddingSchema = z.object({
-  productId: z.number(),
-  embedding: z.array(z.number()),
-});
-
-export type InsertProductEmbedding = z.infer<typeof insertProductEmbeddingSchema>;
-
-// SEO Meta types (for AI-generated SEO)
-export interface SEOMeta {
-  id: number;
-  productId: number;
-  metaTitle: string;
-  metaDescription: string;
-  generatedBy: string | null;
-  createdAt: Date | null;
-}
-
-export const insertSEOMetaSchema = z.object({
-  productId: z.number(),
-  metaTitle: z.string(),
-  metaDescription: z.string(),
-  generatedBy: z.string().optional(),
-});
-
-export type InsertSEOMeta = z.infer<typeof insertSEOMetaSchema>;
-
-// Chat Message types (for AI chatbot)
-export interface ChatMessage {
-  id: number;
-  sessionId: string;
-  role: 'user' | 'assistant' | 'system';
-  content: string;
-  createdAt: Date | null;
-}
-
-export const insertChatMessageSchema = z.object({
-  sessionId: z.string(),
-  role: z.enum(['user', 'assistant', 'system']),
-  content: z.string(),
-});
-
-export type InsertChatMessage = z.infer<typeof insertChatMessageSchema>;
+// Types
+export type Product = typeof products.$inferSelect;
+export type InsertProduct = typeof products.$inferInsert;
+export type Category = typeof categories.$inferSelect;
+export type InsertCategory = typeof categories.$inferInsert;
+export type CartItem = typeof cartItems.$inferSelect;
+export type InsertCartItem = typeof cartItems.$inferInsert;
+export type Order = typeof orders.$inferSelect;
+export type InsertOrder = typeof orders.$inferInsert;
+export type ContactSubmission = typeof contactSubmissions.$inferSelect;
+export type InsertContactSubmission = typeof contactSubmissions.$inferInsert;
+export type Rating = typeof ratings.$inferSelect;
+export type InsertRating = typeof ratings.$inferInsert;
+export type User = typeof users.$inferSelect;
+export type UpsertUser = typeof users.$inferInsert;
+export type Favorite = typeof favorites.$inferSelect;
+export type InsertFavorite = typeof favorites.$inferInsert;
+export type RecentlyViewed = typeof recentlyViewed.$inferSelect;
+export type InsertRecentlyViewed = typeof recentlyViewed.$inferInsert;
+export type Comparison = typeof comparisons.$inferSelect;
+export type InsertComparison = typeof comparisons.$inferInsert;
+export type EnhancedOrder = typeof enhancedOrders.$inferSelect;
+export type InsertEnhancedOrder = typeof enhancedOrders.$inferInsert;
+export type OrderItem = typeof orderItems.$inferSelect;
+export type InsertOrderItem = typeof orderItems.$inferInsert;
+export type ProductSpec = typeof productSpecs.$inferSelect;
+export type InsertProductSpec = typeof productSpecs.$inferInsert;
+export type ProductEmbedding = typeof productEmbeddings.$inferSelect;
+export type InsertProductEmbedding = typeof productEmbeddings.$inferInsert;
+export type SEOMeta = typeof seoMetas.$inferSelect;
+export type InsertSEOMeta = typeof seoMetas.$inferInsert;
+export type ChatMessage = typeof chatMessages.$inferSelect;
+export type InsertChatMessage = typeof chatMessages.$inferInsert;

@@ -155,8 +155,6 @@ See `.env.example` for complete list with descriptions.
 - ✅ Asset optimization implemented (14.6 MB mobile savings)
 - ✅ Migration preparation finalized
 
-See [`replit.md`](./replit.md) for complete changelog.
-
 ## 🧪 Testing
 
 The application includes:

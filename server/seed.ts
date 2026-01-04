@@ -1,15 +1,36 @@
+import 'dotenv/config';
 import { db } from "./db";
-import { categories, products, ratings, type InsertCategory, type InsertProduct, type InsertRating } from "@shared/schema";
+import { categories, products, ratings, users, type InsertCategory, type InsertProduct, type InsertRating } from "@shared/schema";
+import { scrypt, randomBytes } from "crypto";
+import { promisify } from "util";
+import { eq } from "drizzle-orm";
+
+const scryptAsync = promisify(scrypt);
+
+async function hashPassword(password: string) {
+    const salt = randomBytes(16).toString("hex");
+    const buf = (await scryptAsync(password, salt, 64)) as Buffer;
+    return `${buf.toString("hex")}.${salt}`;
+}
 
 async function seed() {
     console.log("Seeding database...");
 
     try {
-        // Check if categories exist
-        const existingCategories = await db.select().from(categories).limit(1);
-        if (existingCategories.length > 0) {
-            console.log("Database already seeded. Skipping.");
-            process.exit(0);
+        // Create Admin User
+        const adminUser = await db.select().from(users).where(eq(users.username, "admin")).limit(1);
+        if (adminUser.length === 0) {
+            const hashedPassword = await hashPassword("admin123");
+            await db.insert(users).values({
+                id: randomBytes(8).toString("hex"),
+                username: "admin",
+                password: hashedPassword,
+                isAdmin: true,
+                firstName: "Admin",
+                lastName: "User",
+                email: "admin@example.com"
+            });
+            console.log("Seeded admin user (username: admin, password: admin123)");
         }
 
         // Insert Categories
@@ -20,10 +41,16 @@ async function seed() {
             { name: "Electronics", description: "Electronic devices and accessories" },
             { name: "Home & Garden", description: "Home and garden essentials" },
             { name: "Fashion", description: "Clothing and accessories" },
+            { name: "Beauty & Health", description: "Beauty and health products" },
         ];
 
-        const insertedCategories = await db.insert(categories).values(sampleCategories).returning();
-        console.log(`Seeded ${insertedCategories.length} categories`);
+        for (const category of sampleCategories) {
+            const existing = await db.select().from(categories).where(eq(categories.name, category.name));
+            if (existing.length === 0) {
+                await db.insert(categories).values(category);
+            }
+        }
+        console.log(`Seeded categories`);
 
         // Insert Products
         const sampleProducts: InsertProduct[] = [
@@ -136,11 +163,31 @@ async function seed() {
                 tags: ["investment", "finance", "education"],
                 featured: false,
                 inStock: true,
+            },
+            {
+                name: "Premium Skincare Set",
+                description: "Complete daily skincare routine set featuring natural ingredients for glowing, healthy skin. Includes cleanser, toner, and moisturizer.",
+                price: 89.99,
+                originalPrice: 119.99,
+                category: "Beauty & Health",
+                image: "attached_assets/images/pexels-karolina-grabowska-5632382.jpg",
+                tags: ["beauty", "skincare", "organic"],
+                featured: true,
+                inStock: true,
             }
         ];
 
-        const insertedProducts = await db.insert(products).values(sampleProducts).returning();
-        console.log(`Seeded ${insertedProducts.length} products`);
+        const insertedProducts: any[] = [];
+        for (const product of sampleProducts) {
+            const existing = await db.select().from(products).where(eq(products.name, product.name));
+            if (existing.length === 0) {
+                const [inserted] = await db.insert(products).values(product).returning();
+                insertedProducts.push(inserted);
+            } else {
+                insertedProducts.push(existing[0]);
+            }
+        }
+        console.log(`Seeded ${insertedProducts.length - (insertedProducts.length - sampleProducts.length)} products`);
 
         // Insert Ratings
         const sampleReviews = [

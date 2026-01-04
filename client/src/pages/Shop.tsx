@@ -34,6 +34,7 @@ import monitorImage from "@assets/minimalist_expensive_desk_with_curved_monitor_
 import officeChairImage from "@assets/stock_images/ergonomic_office_cha_b30f2022.jpg";
 import smartwatchImage from "@assets/pexels-alesiakozik-6772024.jpg";
 import luxuryWatchImage from "@assets/images/pexels-n-voitkevich-6214476.jpg";
+import skincareImage from "@assets/images/pexels-karolina-grabowska-5632382.jpg";
 
 // Image resolver to map product images to actual imported assets
 const getProductImage = (imagePath: string, productName: string) => {
@@ -47,6 +48,7 @@ const getProductImage = (imagePath: string, productName: string) => {
   if (productName === "Ergonomic Office Chair") return officeChairImage;
   if (productName === "Fitness Tracker") return smartwatchImage;
   if (productName === "Luxury Watch") return luxuryWatchImage;
+  if (productName === "Premium Skincare Set") return skincareImage;
   return imagePath;
 };
 
@@ -63,10 +65,10 @@ export default function Shop() {
     inStockOnly: false,
     sortBy: "name",
   });
-  
+
   // Only load video on desktop (≥768px)
   const isDesktop = useMediaQuery('(min-width: 768px)');
-  
+
   const { addToCart } = useCart();
   const { toast } = useToast();
   const { user, isAuthenticated } = useAuth();
@@ -74,7 +76,7 @@ export default function Shop() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    
+
     // Check for search query in URL
     const urlParams = new URLSearchParams(window.location.search);
     const searchQuery = urlParams.get('search');
@@ -101,9 +103,9 @@ export default function Shop() {
   // Track recently viewed products
   const addToRecentlyViewedMutation = useMutation({
     mutationFn: (productId: number) =>
-      apiRequest("/api/recently-viewed", { 
-        method: "POST", 
-        body: JSON.stringify({ productId }) 
+      apiRequest("/api/recently-viewed", {
+        method: "POST",
+        body: JSON.stringify({ productId })
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/recently-viewed"] });
@@ -112,9 +114,9 @@ export default function Shop() {
 
   const addToComparisonMutation = useMutation({
     mutationFn: (productIds: number[]) =>
-      apiRequest("/api/comparison", { 
-        method: "POST", 
-        body: JSON.stringify({ productIds }) 
+      apiRequest("/api/comparison", {
+        method: "POST",
+        body: JSON.stringify({ productIds })
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/comparison"] });
@@ -143,17 +145,17 @@ export default function Shop() {
   const filteredAndSortedProducts = products
     .filter(product => {
       const matchesSearch = product.name.toLowerCase().includes(filters.query.toLowerCase()) ||
-                           product.description.toLowerCase().includes(filters.query.toLowerCase());
-      
+        product.description.toLowerCase().includes(filters.query.toLowerCase());
+
       const matchesCategory = selectedCategory === "All Products" ||
-                             (selectedCategory === "Featured" && product.featured) ||
-                             product.category === selectedCategory ||
-                             filters.categories.includes(product.category);
-      
+        (selectedCategory === "Featured" && product.featured) ||
+        product.category === selectedCategory ||
+        filters.categories.includes(product.category);
+
       const matchesPrice = product.price >= filters.priceRange[0] && product.price <= filters.priceRange[1];
-      
+
       const matchesStock = !filters.inStockOnly || product.inStock;
-      
+
       return matchesSearch && matchesCategory && matchesPrice && matchesStock;
     })
     .sort((a, b) => {
@@ -191,26 +193,26 @@ export default function Shop() {
 
   return (
     <div className="min-h-screen relative">
-      <SEO 
+      <SEO
         title="Shop - Premium Products"
         description="Browse our curated collection of premium electronics, accessories, and innovative tech solutions. Find quality products with detailed reviews and competitive prices."
         keywords="shop, electronics, gadgets, premium products, tech accessories, online shopping"
       />
       {/* Shop Header */}
-      <section 
+      <section
         className="relative py-20 bg-cover bg-center"
         style={{ backgroundImage: `url(${shopBannerImage})` }}
       >
         {/* Overlay */}
         <div className="absolute inset-0 bg-white/50"></div>
-        
+
         {/* Content */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-6xl font-bold mb-6 drop-shadow-lg text-[#2563eb]">
             Shop
           </h1>
           <p className="text-xl max-w-2xl mx-auto leading-relaxed drop-shadow-md text-[black]">
-            Discover our collection of high-quality products designed with care and precision. 
+            Discover our collection of high-quality products designed with care and precision.
             From essentials to specialty items, we have something for everyone.
           </p>
         </div>
@@ -291,7 +293,7 @@ export default function Shop() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div>
                     <h3 className="font-medium mb-2">Minimum Rating</h3>
                     <div className="flex gap-1">
@@ -308,7 +310,7 @@ export default function Shop() {
                       ))}
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center space-x-2">
                     <Checkbox
                       id="in-stock"
@@ -319,7 +321,7 @@ export default function Shop() {
                       In stock only
                     </label>
                   </div>
-                  
+
                   <div className="flex gap-2">
                     <Button
                       variant="outline"
@@ -355,11 +357,10 @@ export default function Shop() {
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
-                className={`px-4 py-2 rounded-full font-medium transition-all ${
-                  selectedCategory === category
+                className={`px-4 py-2 rounded-full font-medium transition-all ${selectedCategory === category
                     ? "bg-blue-600 text-white backdrop-blur-sm"
                     : "bg-white/80 backdrop-blur-sm text-blue-600 hover:bg-blue-50/80 border border-blue-200"
-                }`}
+                  }`}
               >
                 {category}
               </button>
@@ -406,99 +407,99 @@ export default function Shop() {
         {!isLoading && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredAndSortedProducts.map((product) => (
-            <div key={product.id} className="product-card group hover:shadow-2xl hover:shadow-blue-500/20 hover:-translate-y-2 transition-all duration-300">
-              <Link href={`/product/${product.id}`}>
-                <div className="relative overflow-hidden cursor-pointer">
-                  {product.name === "Smart Home Assistant" ? (
-                    isDesktop ? (
-                      /* Desktop: Video (12 MB) - only rendered/downloaded on large screens */
-                      <video
-                        src={smartHomeVideo}
-                        className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                      />
+              <div key={product.id} className="product-card group hover:shadow-2xl hover:shadow-blue-500/20 hover:-translate-y-2 transition-all duration-300">
+                <Link href={`/product/${product.id}`}>
+                  <div className="relative overflow-hidden cursor-pointer">
+                    {product.name === "Smart Home Assistant" ? (
+                      isDesktop ? (
+                        /* Desktop: Video (12 MB) - only rendered/downloaded on large screens */
+                        <video
+                          src={smartHomeVideo}
+                          className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                          autoPlay
+                          loop
+                          muted
+                          playsInline
+                        />
+                      ) : (
+                        /* Mobile: Static image (1.2 MB) - video never downloads */
+                        <img
+                          src={smartHomeImage}
+                          alt={product.name}
+                          loading="lazy"
+                          className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      )
                     ) : (
-                      /* Mobile: Static image (1.2 MB) - video never downloads */
                       <img
-                        src={smartHomeImage}
+                        src={getProductImage(product.image, product.name)}
                         alt={product.name}
                         loading="lazy"
                         className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                        onError={(e) => {
+                          console.log('Image failed to load:', product.image);
+                          e.currentTarget.src = 'https://via.placeholder.com/500x500/e2e8f0/64748b?text=' + encodeURIComponent(product.name);
+                        }}
+                        onLoad={() => console.log('Image loaded:', product.image)}
                       />
-                    )
-                  ) : (
-                    <img 
-                      src={getProductImage(product.image, product.name)} 
-                      alt={product.name}
-                      loading="lazy"
-                      className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
-                      onError={(e) => {
-                        console.log('Image failed to load:', product.image);
-                        e.currentTarget.src = 'https://via.placeholder.com/500x500/e2e8f0/64748b?text=' + encodeURIComponent(product.name);
-                      }}
-                      onLoad={() => console.log('Image loaded:', product.image)}
-                    />
-                  )}
-                  {product.originalPrice && (
-                    <div className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
-                      SALE
-                    </div>
-                  )}
-                  {product.tags?.includes("new") && (
-                    <div className="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold">
-                      NEW
-                    </div>
-                  )}
-                  {!product.inStock && (
-                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                      <span className="bg-gray-800 text-white px-4 py-2 rounded-lg font-bold text-lg">
-                        OUT OF STOCK
-                      </span>
-                    </div>
-                  )}
-                </div>
-                
-                <div className="p-6">
-                  <ProductHoverCard product={product}>
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 cursor-help">{product.name}</h3>
-                  </ProductHoverCard>
-                  <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-2">{product.description}</p>
-                  <p className="text-sm text-blue-600 dark:text-blue-400 font-medium mb-4">{product.category}</p>
-                  
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center space-x-2">
-                      {product.originalPrice && (
-                        <span className="text-gray-400 dark:text-gray-500 line-through text-lg" data-testid={`original-price-${product.id}`}>${product.originalPrice}</span>
-                      )}
-                      <span className="text-2xl font-bold text-blue-600 dark:text-blue-400" data-testid={`price-${product.id}`}>${product.price}</span>
-                    </div>
+                    )}
+                    {product.originalPrice && (
+                      <div className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                        SALE
+                      </div>
+                    )}
+                    {product.tags?.includes("new") && (
+                      <div className="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                        NEW
+                      </div>
+                    )}
+                    {!product.inStock && (
+                      <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                        <span className="bg-gray-800 text-white px-4 py-2 rounded-lg font-bold text-lg">
+                          OUT OF STOCK
+                        </span>
+                      </div>
+                    )}
                   </div>
-                  
-                  <div className="mb-4">
-                    <ProductRating productId={product.id} productName={product.name} />
-                  </div>
-                </div>
-              </Link>
 
-              <div className="px-6 pb-6">
-                <Button 
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleAddToCart(product);
-                  }}
-                  disabled={!product.inStock}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300"
-                  data-testid={`button-add-to-cart-${product.id}`}
-                >
-                  <ShoppingCart className="h-5 w-5 mr-2" />
-                  {product.inStock ? "Add to Cart" : "Out of Stock"}
-                </Button>
+                  <div className="p-6">
+                    <ProductHoverCard product={product}>
+                      <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 cursor-help">{product.name}</h3>
+                    </ProductHoverCard>
+                    <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-2">{product.description}</p>
+                    <p className="text-sm text-blue-600 dark:text-blue-400 font-medium mb-4">{product.category}</p>
+
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center space-x-2">
+                        {product.originalPrice && (
+                          <span className="text-gray-400 dark:text-gray-500 line-through text-lg" data-testid={`original-price-${product.id}`}>${product.originalPrice}</span>
+                        )}
+                        <span className="text-2xl font-bold text-blue-600 dark:text-blue-400" data-testid={`price-${product.id}`}>${product.price}</span>
+                      </div>
+                    </div>
+
+                    <div className="mb-4">
+                      <ProductRating productId={product.id} productName={product.name} />
+                    </div>
+                  </div>
+                </Link>
+
+                <div className="px-6 pb-6">
+                  <Button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleAddToCart(product);
+                    }}
+                    disabled={!product.inStock}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300"
+                    data-testid={`button-add-to-cart-${product.id}`}
+                  >
+                    <ShoppingCart className="h-5 w-5 mr-2" />
+                    {product.inStock ? "Add to Cart" : "Out of Stock"}
+                  </Button>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
           </div>
         )}
 
@@ -508,8 +509,8 @@ export default function Shop() {
             <div className="text-6xl mb-4">🔍</div>
             <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">No products found</h3>
             <p className="text-gray-600 dark:text-gray-300 mb-6">Try adjusting your search or filter criteria</p>
-            <Button onClick={() => { 
-              setSearchTerm(""); 
+            <Button onClick={() => {
+              setSearchTerm("");
               setSelectedCategory("All Products");
               setUseSemanticSearch(false);
               setFilters({
@@ -545,7 +546,7 @@ export default function Shop() {
           </div>
         )}
       </div>
-      
+
       <Footer />
     </div>
   );

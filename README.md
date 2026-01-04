@@ -155,6 +155,22 @@ See `.env.example` for complete list with descriptions.
 - ✅ Asset optimization implemented (14.6 MB mobile savings)
 - ✅ Migration preparation finalized
 
+## 🔐 Admin Login
+
+To manage products, you can log in as an administrator:
+
+1.  Navigate to `/login`.
+2.  Use the default credentials:
+    *   **Username**: `admin`
+    *   **Password**: `admin123`
+3.  After logging in, you will be redirected to the `/admin` dashboard where you can:
+    *   View all products.
+    *   Add new products.
+    *   Edit existing products.
+    *   Delete products.
+
+**Note**: Ensure you have run the seed script (`npm run db:seed`) to create the default admin user.
+
 ## 🧪 Testing
 
 The application includes:

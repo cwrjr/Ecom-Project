@@ -58,6 +58,8 @@ export interface IStorage {
   getFeaturedProducts(): Promise<Product[]>;
   getProduct(id: number): Promise<Product | undefined>;
   createProduct(product: InsertProduct): Promise<Product>;
+  updateProduct(id: number, product: Partial<InsertProduct>): Promise<Product | undefined>;
+  deleteProduct(id: number): Promise<boolean>;
 
   // Category operations
   getCategories(): Promise<Category[]>;
@@ -84,10 +86,12 @@ export interface IStorage {
 
   // User operations
   getUser(id: string): Promise<User | undefined>;
-  upsertUser(user: UpsertUser): Promise<User>;
+  getUserByUsername(username: string): Promise<User | undefined>;
+  createUser(user: UpsertUser): Promise<User>;
 
   // Favorites operations
   getUserFavorites(userId: string): Promise<Favorite[]>;
+
   addToFavorites(userId: string, productId: number): Promise<Favorite>;
   removeFromFavorites(userId: string, productId: number): Promise<boolean>;
 
@@ -149,6 +153,22 @@ export class DatabaseStorage implements IStorage {
     const [product] = await db.insert(products).values(insertProduct).returning();
     return product;
   }
+
+  async updateProduct(id: number, productUpdate: Partial<InsertProduct>): Promise<Product | undefined> {
+    const [updatedProduct] = await db.update(products)
+      .set(productUpdate)
+      .where(eq(products.id, id))
+      .returning();
+    return updatedProduct;
+  }
+
+  async deleteProduct(id: number): Promise<boolean> {
+    const [deletedProduct] = await db.delete(products)
+      .where(eq(products.id, id))
+      .returning();
+    return !!deletedProduct;
+  }
+
 
   // Category operations
   async getCategories(): Promise<Category[]> {
@@ -241,6 +261,16 @@ export class DatabaseStorage implements IStorage {
   // User operations
   async getUser(id: string): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user;
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user;
+  }
+
+  async createUser(insertUser: UpsertUser): Promise<User> {
+    const [user] = await db.insert(users).values(insertUser).returning();
     return user;
   }
 

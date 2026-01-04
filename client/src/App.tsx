@@ -9,6 +9,8 @@ import Shop from "@/pages/Shop";
 import Contact from "@/pages/Contact";
 import Cart from "@/pages/Cart";
 import ProductDetail from "@/pages/ProductDetail";
+import Login from "@/pages/Login";
+import Admin from "@/pages/Admin";
 import NotFound from "@/pages/not-found";
 import Navigation from "@/components/Navigation";
 import { CartProvider } from "@/components/CartContext";
@@ -37,7 +39,7 @@ function Router() {
 
   const handleTouchEnd = () => {
     if (!touchStart || !touchEnd) return;
-    
+
     const distance = touchStart - touchEnd;
     const minSwipeDistance = 50;
 
@@ -75,15 +77,15 @@ function Router() {
     <div className="min-h-screen w-full overflow-x-hidden relative">
       {/* Animated Background */}
       <div className="animated-bg"></div>
-      
+
       {/* Floating Shapes */}
       <div className="floating-shape" style={{ zIndex: -1 }}></div>
       <div className="floating-shape" style={{ zIndex: -1 }}></div>
       <div className="floating-shape" style={{ zIndex: -1 }}></div>
-      
+
       {/* Cursor Glow */}
       <div ref={cursorGlowRef} className="cursor-glow"></div>
-      
+
       <Navigation />
       <CommandMenu />
       <div className="w-full relative">
@@ -93,6 +95,8 @@ function Router() {
           <Route path="/product/:id" component={ProductDetail} />
           <Route path="/contact" component={Contact} />
           <Route path="/cart" component={Cart} />
+          <Route path="/login" component={Login} />
+          <Route path="/admin" component={Admin} />
           <Route component={NotFound} />
         </Switch>
       </div>

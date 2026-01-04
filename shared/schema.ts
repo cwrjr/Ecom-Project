@@ -57,7 +57,10 @@ export const ratings = pgTable("ratings", {
 });
 
 export const users = pgTable("users", {
-  id: text("id").primaryKey(), // Using text ID for external auth provider IDs
+  id: text("id").primaryKey(),
+  username: text("username").notNull().unique(),
+  password: text("password").notNull(),
+  isAdmin: boolean("is_admin").default(false),
   email: text("email"),
   firstName: text("first_name"),
   lastName: text("last_name"),

@@ -1,11 +1,11 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { 
-  insertProductSchema, 
-  insertCategorySchema, 
-  insertCartItemSchema, 
-  insertOrderSchema, 
+import {
+  insertProductSchema,
+  insertCategorySchema,
+  insertCartItemSchema,
+  insertOrderSchema,
   insertContactSubmissionSchema,
   insertRatingSchema,
   insertProductSpecSchema,
@@ -13,7 +13,7 @@ import {
   insertRecentlyViewedSchema,
   insertComparisonSchema
 } from "@shared/schema";
-import { setupAuth, isAuthenticated } from "./auth";
+import { setupAuth, isAuthenticated, isAdmin } from "./auth";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
@@ -23,13 +23,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { category } = req.query;
       let products;
-      
+
       if (category && typeof category === 'string') {
         products = await storage.getProductsByCategory(category);
       } else {
         products = await storage.getProducts();
       }
-      
+
       res.json(products);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch products" });
@@ -51,30 +51,72 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (isNaN(id)) {
         return res.status(400).json({ error: "Invalid product ID" });
       }
-      
+
       const product = await storage.getProduct(id);
       if (!product) {
         return res.status(404).json({ error: "Product not found" });
       }
-      
+
       res.json(product);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch product" });
     }
   });
 
-  // Admin only - creating products requires authentication
-  app.post("/api/products", isAuthenticated, async (req, res) => {
+  // Admin only - product management
+  app.post("/api/products", isAdmin, async (req, res) => {
     try {
       const result = insertProductSchema.safeParse(req.body);
       if (!result.success) {
         return res.status(400).json({ error: "Invalid product data", issues: result.error.issues });
       }
-      
+
       const product = await storage.createProduct(result.data);
       res.status(201).json(product);
+
     } catch (error) {
       res.status(500).json({ error: "Failed to create product" });
+    }
+  });
+
+  app.put("/api/products/:id", isAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ error: "Invalid product ID" });
+      }
+
+      const result = insertProductSchema.partial().safeParse(req.body);
+      if (!result.success) {
+        return res.status(400).json({ error: "Invalid product data", issues: result.error.issues });
+      }
+
+      const product = await storage.updateProduct(id, result.data);
+      if (!product) {
+        return res.status(404).json({ error: "Product not found" });
+      }
+
+      res.json(product);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to update product" });
+    }
+  });
+
+  app.delete("/api/products/:id", isAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ error: "Invalid product ID" });
+      }
+
+      const success = await storage.deleteProduct(id);
+      if (!success) {
+        return res.status(404).json({ error: "Product not found" });
+      }
+
+      res.json({ success: true });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to delete product" });
     }
   });
 
@@ -105,7 +147,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!result.success) {
         return res.status(400).json({ error: "Invalid cart item data", issues: result.error.issues });
       }
-      
+
       const cartItem = await storage.addToCart(result.data);
       res.status(201).json(cartItem);
     } catch (error) {
@@ -117,16 +159,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const { quantity } = req.body;
-      
+
       if (isNaN(id) || typeof quantity !== 'number' || quantity < 1) {
         return res.status(400).json({ error: "Invalid cart item ID or quantity" });
       }
-      
+
       const cartItem = await storage.updateCartItem(id, quantity);
       if (!cartItem) {
         return res.status(404).json({ error: "Cart item not found" });
       }
-      
+
       res.json(cartItem);
     } catch (error) {
       res.status(500).json({ error: "Failed to update cart item" });
@@ -139,12 +181,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (isNaN(id)) {
         return res.status(400).json({ error: "Invalid cart item ID" });
       }
-      
+
       const success = await storage.removeFromCart(id);
       if (!success) {
         return res.status(404).json({ error: "Cart item not found" });
       }
-      
+
       res.json({ success: true });
     } catch (error) {
       res.status(500).json({ error: "Failed to remove cart item" });
@@ -168,11 +210,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!result.success) {
         return res.status(400).json({ error: "Invalid order data", issues: result.error.issues });
       }
-      
+
       // Security: Override userId with authenticated user to prevent forged ownership
       const userId = req.user.claims.sub;
       const orderData = { ...result.data, userId };
-      
+
       const order = await storage.createOrder(orderData);
       res.status(201).json(order);
     } catch (error) {
@@ -197,7 +239,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (isNaN(productId)) {
         return res.status(400).json({ error: "Invalid product ID" });
       }
-      
+
       const ratings = await storage.getRatings(productId);
       res.json(ratings);
     } catch (error) {
@@ -217,7 +259,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!result.success) {
         return res.status(400).json({ error: "Invalid rating data", issues: result.error.issues });
       }
-      
+
       const rating = await storage.addRating(result.data);
       res.status(201).json(rating);
     } catch (error) {
@@ -231,7 +273,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (isNaN(productId)) {
         return res.status(400).json({ error: "Invalid product ID" });
       }
-      
+
       const averageRating = await storage.getAverageRating(productId);
       res.json({ averageRating });
     } catch (error) {
@@ -246,7 +288,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!result.success) {
         return res.status(400).json({ error: "Invalid contact data", issues: result.error.issues });
       }
-      
+
       const submission = await storage.createContactSubmission(result.data);
       res.status(201).json(submission);
     } catch (error) {
@@ -273,7 +315,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (isNaN(productId)) {
         return res.status(400).json({ error: "Invalid product ID" });
       }
-      
+
       const specs = await storage.getProductSpecs(productId);
       res.json(specs);
     } catch (error) {
@@ -287,7 +329,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!result.success) {
         return res.status(400).json({ error: "Invalid spec data", issues: result.error.issues });
       }
-      
+
       const spec = await storage.addProductSpec(result.data);
       res.status(201).json(spec);
     } catch (error) {
@@ -310,11 +352,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user.claims.sub;
       const { productId } = req.body;
-      
+
       if (!productId || isNaN(parseInt(productId))) {
         return res.status(400).json({ error: "Invalid product ID" });
       }
-      
+
       const favorite = await storage.addToFavorites(userId, parseInt(productId));
       res.status(201).json(favorite);
     } catch (error) {
@@ -326,11 +368,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user.claims.sub;
       const productId = parseInt(req.params.productId);
-      
+
       if (isNaN(productId)) {
         return res.status(400).json({ error: "Invalid product ID" });
       }
-      
+
       const success = await storage.removeFromFavorites(userId, productId);
       if (success) {
         res.json({ message: "Removed from favorites" });
@@ -347,7 +389,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.isAuthenticated() ? req.user.claims.sub : undefined;
       const sessionId = req.session?.id;
-      
+
       const recentlyViewed = await storage.getRecentlyViewed(userId, sessionId);
       res.json(recentlyViewed);
     } catch (error) {
@@ -360,11 +402,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userId = req.isAuthenticated() ? req.user.claims.sub : undefined;
       const sessionId = req.session?.id || 'anonymous';
       const { productId } = req.body;
-      
+
       if (!productId || isNaN(parseInt(productId))) {
         return res.status(400).json({ error: "Invalid product ID" });
       }
-      
+
       const viewed = await storage.addToRecentlyViewed({
         userId,
         sessionId,
@@ -381,7 +423,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.isAuthenticated() ? req.user.claims.sub : undefined;
       const sessionId = req.session?.id || 'anonymous';
-      
+
       const comparison = await storage.getComparison(userId, sessionId);
       res.json(comparison || { productIds: [] });
     } catch (error) {
@@ -394,11 +436,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userId = req.isAuthenticated() ? req.user.claims.sub : undefined;
       const sessionId = req.session?.id || 'anonymous';
       const { productIds } = req.body;
-      
+
       if (!Array.isArray(productIds) || productIds.length > 3) {
         return res.status(400).json({ error: "Invalid product IDs (max 3 allowed)" });
       }
-      
+
       const comparison = await storage.saveComparison({
         userId,
         sessionId,
@@ -417,7 +459,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (isNaN(productId)) {
         return res.status(400).json({ error: "Invalid product ID" });
       }
-      
+
       const average = await storage.getAverageRating(productId);
       res.json(average);
     } catch (error) {
@@ -483,7 +525,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const allEmbeddings = await storage.getAllProductEmbeddings();
-      
+
       if (allEmbeddings.length === 0) {
         const products = await storage.getProducts();
         for (const product of products) {

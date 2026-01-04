@@ -1,18 +1,31 @@
 import OpenAI from "openai";
 
-// Using gpt-4o as the primary model for chat completions
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+// using gpt-4o as the primary model for chat completions
+// the client will be initialized lazily to check for the api key
+const getOpenAIClient = () => {
+  if (!process.env.OPENAI_API_KEY) {
+    // Return a mock or throw a handled error depending on context, 
+    // or just let it fail at call time rather than boot time.
+    // For now, let's throw but catch it at the unexpected places.
+    // Better yet, just throw here, but only when CALLED.
+    throw new Error("OPENAI_API_KEY environment variable is not set");
+  }
+  return new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+};
 
 // Generate embeddings for product text
 export async function generateEmbedding(text: string): Promise<number[]> {
   try {
-    const response = await openai.embeddings.create({
+    const response = await getOpenAIClient().embeddings.create({
       model: "text-embedding-3-small",
       input: text,
     });
     return response.data[0].embedding;
   } catch (error) {
     console.error("Error generating embedding:", error);
+    // Return empty array or handle gracefully? 
+    // Throwing might break the flow if not caught upstream.
+    // Let's throw for now as it was before.
     throw new Error("Failed to generate embedding");
   }
 }
@@ -31,7 +44,7 @@ export async function generateSEOMeta(productName: string, productDescription: s
   metaDescription: string;
 }> {
   try {
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAIClient().chat.completions.create({
       model: "gpt-4o",
       messages: [
         {
@@ -73,7 +86,7 @@ ${knowledgeBase}
 
 Be friendly, professional, and helpful. If you don't know something, suggest contacting support directly.`;
 
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAIClient().chat.completions.create({
       model: "gpt-4o",
       messages: [
         { role: "system", content: systemPrompt },
@@ -85,7 +98,7 @@ Be friendly, professional, and helpful. If you don't know something, suggest con
     return response.choices[0].message.content || "I'm sorry, I couldn't process that request.";
   } catch (error) {
     console.error("Error in AI chat:", error);
-    throw new Error("Failed to process chat request");
+    return "I'm currently unable to access my AI capabilities. Please contact support.";
   }
 }
 
@@ -97,11 +110,11 @@ export async function compareProducts(products: Array<{
   category: string;
 }>): Promise<string> {
   try {
-    const productsText = products.map((p, i) => 
+    const productsText = products.map((p, i) =>
       `Product ${i + 1}: ${p.name}\nPrice: $${p.price}\nCategory: ${p.category}\nDescription: ${p.description}`
     ).join("\n\n");
 
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAIClient().chat.completions.create({
       model: "gpt-4o",
       messages: [
         {
@@ -131,7 +144,7 @@ export async function semanticSearch(
 ): Promise<Array<{ productId: number; similarity: number }>> {
   try {
     const queryEmbedding = await generateEmbedding(query);
-    
+
     const results = productEmbeddings.map(pe => ({
       productId: pe.productId,
       similarity: cosineSimilarity(queryEmbedding, pe.embedding),
@@ -142,6 +155,6 @@ export async function semanticSearch(
       .sort((a, b) => b.similarity - a.similarity);
   } catch (error) {
     console.error("Error in semantic search:", error);
-    throw new Error("Failed to perform semantic search");
+    return [];
   }
 }

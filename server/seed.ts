@@ -205,15 +205,35 @@ async function seed() {
             review: r.review
         }));
 
-        await db.insert(ratings).values(sampleRatings);
-        console.log(`Seeded ratings`);
+        // Only insert ratings if they don't already exist
+        let ratingsInserted = 0;
+        for (const rating of sampleRatings) {
+            const existing = await db.select().from(ratings)
+                .where(eq(ratings.productId, rating.productId))
+                .where(eq(ratings.userName, rating.userName));
+            if (existing.length === 0) {
+                await db.insert(ratings).values(rating);
+                ratingsInserted++;
+            }
+        }
+        console.log(`Seeded ${ratingsInserted} ratings`);
 
         console.log("Seeding complete!");
-        process.exit(0);
+        return { success: true, message: "Seeding complete!" };
     } catch (error) {
         console.error("Error seeding database:", error);
-        process.exit(1);
+        return { success: false, error };
     }
 }
 
-seed();
+if (import.meta.url === `file://${process.argv[1]}`) {
+    seed().then((result) => {
+        if (result.success) {
+            process.exit(0);
+        } else {
+            process.exit(1);
+        }
+    });
+}
+
+export { seed };
